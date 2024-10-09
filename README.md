@@ -28,7 +28,7 @@ Untuk itulah WaraWarung hadir, memberikan solusi bagi wisatawan yang ingin meras
 | Daftar Modul | Penjelasan | Nama Pengembang |
 |  :----  |  :----  |  :----  |
 | Authentication (Login & Logout) | Halaman untuk user melakukan sign up dan log in ke dalam aplikasi. | Luthfi Febriyan |
-| Menu favorit | Fitur untuk menambahkan atau menghapus suatu menu pada daftar favorit pengguna. | Luthfi Febriyan |
+| Menu Wishlist | Fitur untuk menambahkan atau menghapus suatu menu pada daftar wishlist pengguna. Pengguna dapat membuat maupun mengganti nama dari wishlist tersebut. | Luthfi Febriyan |
 | User Dashboard (Edit profile & Halaman profile) | Halaman yang menampilkan informasi user yang sedang login. Pengguna juga dapat mengedit atau mengatur ulang informasi pribadinya pada laman ini. | Rania Berliana |
 | Homepage (Landing page) | Halaman utama yang berisi fitur-fitur aplikasi kami, seperti searching berdasarkan kata kunci dan fitur lainnya. | Dhania Tiaraputri H |
 | Menu planning | Fitur dimana pengguna bisa melakukan pengaturan budget di warung pilihan mereka, kemudian dapat melihat dan memilih menu pada warung tersebut yang sesuai dengan budget yang dimiliki pengguna. | Dhania Tiaraputri H |
@@ -41,7 +41,7 @@ Untuk itulah WaraWarung hadir, memberikan solusi bagi wisatawan yang ingin meras
 
 **Data Warung di Denpasar (Ada menunya) :** [https://ppid.denpasarkota.go.id/files/resource/data%20kuliner%20di%20Kota%20Denpasar.pdf](https://ppid.denpasarkota.go.id/files/resource/data%20kuliner%20di%20Kota%20Denpasar.pdf)
 
-*\* Note : Data tersebut akan diproses dan dirapikan kembali agar sesuai dengan format data yang diinginkan oleh kelompok kami.*
+**Data yang sudah di proses :** [https://docs.google.com/spreadsheets/d/1tYzChmxiDQ-cLoarDDSe6ivMk4kg6eXhjOx0c_xG-gU/edit?usp=sharing](https://docs.google.com/spreadsheets/d/1tYzChmxiDQ-cLoarDDSe6ivMk4kg6eXhjOx0c_xG-gU/edit?usp=sharing)
 
 
 ## 🧑‍💻 Role atau peran pengguna beserta deskripsinya
