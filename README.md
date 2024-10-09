@@ -28,7 +28,7 @@ Untuk itulah WaraWarung hadir, memberikan solusi bagi wisatawan yang ingin meras
 | Daftar Modul | Penjelasan | Nama Pengembang |
 |  :----  |  :----  |  :----  |
 | Authentication (Login & Logout) | Halaman untuk user melakukan sign up dan log in ke dalam aplikasi. | Luthfi Febriyan |
-| Menu Wishlist | Fitur untuk menambahkan atau menghapus suatu menu pada daftar wishlist pengguna. Pengguna dapat membuat maupun mengganti nama dari wishlist tersebut. | Luthfi Febriyan |
+| Menu Favorit | Fitur untuk menambahkan atau menghapus suatu menu pada daftar favorit pengguna. Pengguna dapat membuat maupun mengganti nama dari daftar favorit tersebut. | Luthfi Febriyan |
 | User Dashboard (Edit profile & Halaman profile) | Halaman yang menampilkan informasi user yang sedang login. Pengguna juga dapat mengedit atau mengatur ulang informasi pribadinya pada laman ini. | Rania Berliana |
 | Homepage (Landing page) | Halaman utama yang berisi fitur-fitur aplikasi kami, seperti searching berdasarkan kata kunci dan fitur lainnya. | Dhania Tiaraputri H |
 | Menu planning | Fitur dimana pengguna bisa melakukan pengaturan budget di warung pilihan mereka, kemudian dapat melihat dan memilih menu pada warung tersebut yang sesuai dengan budget yang dimiliki pengguna. | Dhania Tiaraputri H |
