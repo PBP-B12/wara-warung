@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Search Menu</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+      <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">Cari Menu</h1>
+      <div class="w-full max-w-md mx-auto">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Cari Menu..."
+          class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <div
+          id="menu-results"
+          class="space-y-4"
+        ></div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#search-input').keyup(function () {
+          var query = $(this).val();
+          if (query.length > 0) {
+            $.ajax({
+              url: '/search-menu/',
+              data: {
+                query: query,
+              },
+              dataType: 'json',
+              success: function (data) {
+                $('#menu-results').empty();
+                data.results.forEach(function (menu) {
+                  $('#menu-results').append(`
+                  <div class="bg-white p-4 rounded-lg shadow-lg flex items-center justify-between space-x-4">
+                    <img src="${menu.gambar}" alt="${menu.menu}" class="w-24 h-24 object-cover rounded-lg">
+                    <div class="flex-grow">
+                      <h4 class="text-xl font-bold text-gray-800">${menu.menu}</h4>
+                      <p class="text-blue-500 text-md font-bold">${menu.warung}</p>
+                      <p class="text-green-600 font-semibold text-md">Rp ${menu.harga}</p>
+                    </div>
+                    <div>
+                      <a href="/warung/${menu.warung}" class="text-white text-sm font-medium bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded-lg whitespace-nowrap">Lihat Warung</a>
+                    </div>
+                  </div>
+                  `);
+                });
+              },
+            });
+          } else {
+            $('#menu-results').empty();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
