@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "menu",
     "warung",
+    "user_dashboard",
 ]
 
 MIDDLEWARE = [
