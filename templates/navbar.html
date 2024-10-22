@@ -1,0 +1,53 @@
+{% load static %}
+<body>
+    <div class="w-screen flex justify-center">
+
+      <div class="w-11/12 h-16 mt-6 absolute bg-white rounded-full shadow-lg flex items-center justify-between px-6">
+        
+        <!-- Logo and Brand Name -->
+        <div class="flex items-center">
+          <img class="h-10 w-10 rounded-full" src="{% static 'images/logo.png' %}" alt="WaraWarung Logo" />
+          <h1 class="mx-4 text-black text-2xl font-bold">WaraWarung</h1>
+        </div>
+        
+        <div class="hidden lg:flex space-x-8">
+          <a href="#" class="text-black text-base">Home</a>
+          <a href="#" class="text-black text-base">Search</a>
+          <a href="#" class="text-black text-base">My Account</a>
+        </div>
+
+        <!-- Log Out Button -->
+        <div class="hidden lg:flex bg-[#ff583e] rounded-full px-4 py-2">
+          <button class="text-white">Log Out</button>
+        </div>
+
+
+        <div class="lg:hidden flex items-center">
+          <button id="burger" class="focus:outline-none">
+
+            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu (hidden by default) -->
+      <div id="mobileMenu" class="absolute top-16 left-0 w-full bg-white hidden lg:hidden flex-col items-center space-y-4 py-4 shadow-lg">
+        <a href="#" class="text-black text-base">Home</a>
+        <a href="#" class="text-black text-base">Search</a>
+        <a href="#" class="text-black text-base">My Account</a>
+        <button class="bg-[#ff583e] text-white px-6 py-2 rounded-full w-max">Log Out</button>
+      </div>
+      
+      <!-- JavaScript to toggle the mobile menu -->
+      <script>
+        const burger = document.getElementById('burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        burger.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+      </script>
+    </div>
+</body>
