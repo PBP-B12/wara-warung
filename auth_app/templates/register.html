@@ -1,35 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
-  <!-- Tambahkan link CSS jika diperlukan -->
-</head>
-<body>
-
-<div class="login">
-  <h1>Register</h1>
-
-  <form method="POST">
+<h2>Register</h2>
+<form method="POST">
     {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input type="submit" name="submit" value="Daftar" /></td>
-      </tr>
-    </table>
-  </form>
-
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-</div>
-
-</body>
-</html>
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
