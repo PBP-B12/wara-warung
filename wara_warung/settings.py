@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'auth_app', #install app authentication
+    "menu",
+    "warung",
 ]
 
 MIDDLEWARE = [
