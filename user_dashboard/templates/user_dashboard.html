@@ -1,1 +1,31 @@
+{% block content %}
+
 <h1>User Dashboard</h1>
+
+<h5>Username: </h5>
+<p>{{ username }}<p>
+
+<h5>Password: </h5>
+<p>{{ password }}<p>
+
+<h5>Email: </h5>
+<p>{{ email }}</p>
+
+<h5>Phone Number: </h5>
+<p>{{ phone_number }}</p>
+
+<h5>Address: </h5>
+<p>{{ address }}</p>
+
+<h5>Date of Birth: </h5>
+<p>{{ date_of_birth }}</p>
+
+<h5>Budget: </h5>
+<p>{{ budget }}</p>
+
+<a href="{% url 'main:edit_user' user.pk %}">
+    <button>
+        Edit Info
+    </button>
+</a>
+{% endblock content %}
