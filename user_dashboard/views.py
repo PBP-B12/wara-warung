@@ -1,36 +1,42 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from user_dashboard.models import UserDashboard
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from .models import UserDashboard
+from .forms import EditUserProfileForm  # You will need to create this form
 
+@login_required
 def show_user_dashboard(request):
+    # Get the user profile information
+    user_dashboard = get_object_or_404(UserDashboard, user=request.user)
+    
     context = {
-        'username': 'John Doe',
-        'password': 'password',
-        'email': 'email',
-        'phone_number': 'phone_number',
-        'address': 'address',
-        'date_of_birth': 'date_of_birth',
-        'budget': 'budget',
+        'username': request.user.username,
+        'email': user_dashboard.email,
+        'phone_number': user_dashboard.phone_number,
+        'address': user_dashboard.address,
+        'date_of_birth': user_dashboard.date_of_birth,
+        'budget': user_dashboard.budget,
     }
 
     return render(request, "user_dashboard.html", context)
 
 @csrf_exempt
 @require_POST
-def edit_user(request, id):
-    # Get mood entry berdasarkan id
-    user = UserDashboard.objects.get(pk = id)
+@login_required
+def edit_user(request):
+    # Get the user dashboard object for the current user
+    user_dashboard = get_object_or_404(UserDashboard, user=request.user)
 
-    # Set mood entry sebagai instance dari form
-    form = MoodEntryForm(request.POST or None, instance=user)
+    if request.method == "POST" and request.is_ajax():
+        form = EditUserProfileForm(request.POST, instance=user_dashboard)
+        
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True, 'message': 'Profile updated successfully'})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
 
-    if form.is_valid() and request.method == "POST":
-        # Simpan form dan kembali ke halaman awal
-        form.save()
-        return HttpResponseRedirect(reverse('main:show_main'))
-
-    context = {'form': form}
-    return render(request, "edit_user.html", context)
+    return JsonResponse({'success': False, 'message': 'Invalid request'}, status=400)
