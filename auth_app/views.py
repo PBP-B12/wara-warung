@@ -44,7 +44,3 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('auth_app:main')  # Gunakan namespace jika ada
-
-@login_required
-def profile_view(request):
-    return render(request, 'profile.html', {'user': request.user})
