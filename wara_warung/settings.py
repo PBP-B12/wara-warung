@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'homepage',
     "menu",
     "warung",
+    'menuplanning'
 ]
 
 MIDDLEWARE = [
@@ -57,8 +58,8 @@ ROOT_URLCONF = 'wara_warung.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / 'templates'],  
+        'APP_DIRS': True,  
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -69,6 +70,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'wara_warung.wsgi.application'
 
