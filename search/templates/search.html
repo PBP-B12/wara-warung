@@ -6,28 +6,164 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
-    <title>Search Menu</title>
+    <title>Document</title>
+    <!-- Import Poppins font from Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-gray-100">
-    <div class="container mx-auto p-6">
-      <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">Cari Menu</h1>
-      <div class="w-full max-w-md mx-auto">
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Cari Menu..."
-          class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <div
-          id="menu-results"
-          class="space-y-4"
-        ></div>
+  <body class="bg-[url('/asset/background.svg')] w-full overflow-x-hidden font-['Poppins']">
+    <div class="flex flex-col w-screen justify-item-center">
+      <!-- Navbar -->
+      <div class="flex justify-center relative">
+        <div class="w-11/12 h-16 mt-6 bg-white rounded-[38px] shadow flex">
+          <img
+            class="mx-5 py-2"
+            src="asset/logo.png"
+          />
+          <h1 class="mx-2 my-auto text-black text-2xl font-bold">WaraWarung</h1>
+          <div class="flex justify-center ml-auto my-auto space-x-10">
+            <a
+              href=""
+              class="text-black text-base"
+              >Home</a
+            >
+            <a
+              href=""
+              class="text-black text-base"
+              >Search</a
+            >
+            <a
+              href=""
+              class="text-black text-base"
+              >My Account</a
+            >
+          </div>
+          <div class="bg-[#ff583e] rounded-[19px] w-20 flex justify-center h-8 my-auto ml-auto mr-10">
+            <button class="text-white">Log In</button>
+          </div>
+        </div>
       </div>
+
+      <!-- Search Menu Section -->
+      <div class="flex flex-col items-center mt-10 text-center">
+        <h1 class="text-5xl font-bold">Search Menu</h1>
+        <h2 class="text-2xl mt-2">What you want to eat?</h2>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="flex flex-col items-center mt-10">
+        <div class="relative w-full max-w-2xl">
+          <div class="absolute inset-y-0 left-0 flex items-center pl-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-search text-red-500 h-6 w-6"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Search"
+            id="search-input"
+            class="w-full py-4 pl-12 pr-28 text-lg border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-red-400 shadow-sm"
+          />
+          <!-- Dropdown for Budget -->
+          <div class="absolute inset-y-0 right-0 flex items-center pr-4">
+            <div class="relative">
+              <button
+                id="dropdownButton"
+                class="text-red-500 font-medium focus:outline-none"
+              >
+                Budget
+
+                <span class="ml-1 inline-flex items-baseline">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-chevron-down"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+                    />
+                  </svg>
+                </span>
+              </button>
+              <!-- Dropdown Menu -->
+              <div
+                id="dropdownMenu"
+                class="hidden absolute right-0 mt-2 w-36 bg-white border border-gray-300 rounded-lg shadow-lg z-40"
+              >
+                <a
+                  href="#"
+                  data-value="Low"
+                  class="dropdown-option block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >Low</a
+                >
+                <a
+                  href="#"
+                  data-value="Medium"
+                  class="dropdown-option block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >Medium</a
+                >
+                <a
+                  href="#"
+                  data-value="High"
+                  class="dropdown-option block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >High</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col items-start mt-5 mx-80"><h1 class="text-2xl">Results :</h1></div>
+
+      <!-- Menu Card -->
+      <div
+        class="flex flex-wrap justify-center gap-6 mt-10 mb-8"
+        id="menu-results"
+      ></div>
     </div>
 
-    <script type="text/javascript">
+    <script>
+      // Toggle dropdown visibility
+      document.getElementById('dropdownButton').addEventListener('click', function (event) {
+        event.stopPropagation();
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        dropdownMenu.classList.toggle('hidden');
+      });
+
+      // Update button text based on selection
+      document.querySelectorAll('.dropdown-option').forEach(function (option) {
+        option.addEventListener('click', function (event) {
+          event.preventDefault();
+          const value = this.getAttribute('data-value');
+          document.getElementById('dropdownButton').innerHTML = value + ' <span class="ml-1">&#9662;</span>';
+          document.getElementById('dropdownMenu').classList.add('hidden');
+        });
+      });
+
+      // Close dropdown when clicking outside
+      window.addEventListener('click', function (e) {
+        const dropdownButton = document.getElementById('dropdownButton');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        if (!dropdownButton.contains(e.target)) {
+          dropdownMenu.classList.add('hidden');
+        }
+      });
+
       $(document).ready(function () {
         $('#search-input').keyup(function () {
           var query = $(this).val();
@@ -42,15 +178,36 @@
                 $('#menu-results').empty();
                 data.results.forEach(function (menu) {
                   $('#menu-results').append(`
-                  <div class="bg-white p-4 rounded-lg shadow-lg flex items-center justify-between space-x-4">
-                    <img src="${menu.gambar}" alt="${menu.menu}" class="w-24 h-24 object-cover rounded-lg">
-                    <div class="flex-grow">
-                      <h4 class="text-xl font-bold text-gray-800">${menu.menu}</h4>
-                      <p class="text-blue-500 text-md font-bold">${menu.warung}</p>
-                      <p class="text-green-600 font-semibold text-md">Rp ${menu.harga}</p>
+                  <div class="max-w-xs w-full sm:w-1/3 rounded-3xl shadow-lg overflow-hidden bg-gradient-to-b from-[#ffe9cf] to-[#ffd8b5]">
+                    <!-- Image Section -->
+                    <div class="w-11/12 mx-auto mt-4 rounded-xl overflow-hidden">
+                      <img
+                        src="${menu.gambar}"
+                        alt="${menu.menu}"
+                        class="w-full h-40 object-cover rounded-xl"
+                      />
                     </div>
-                    <div>
-                      <a href="/warung/${menu.warung}" class="text-white text-sm font-medium bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded-lg whitespace-nowrap">Lihat Warung</a>
+
+                    <!-- Content Section -->
+                    <div class="p-6">
+                      <h2 class="font-bold text-2xl text-gray-800">${menu.menu}</h2>
+                      <p class="text-lg text-gray-600 mt-2">Rp ${menu.harga}</p>
+                      <div class="flex items-center mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt text-orange-500 h-5 w-5" viewBox="0 0 16 16">
+                          <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+                          <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                        </svg>
+                        </svg>
+                        <p class="ml-2">${menu.warung}</p>
+                      </div>
+                      <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> 3 out of 5</p>
+                    </div>
+
+                    <!-- Button Section -->
+                    <div class="flex justify-center items-center">
+                      <div class="bg-[#ff583e] rounded-[19px] w-28 flex justify-center max-w-xs h-8 mb-3 flex items-center">
+                        <a class="text-white font-semibold" href="/warung/${menu.warung}">See Warung</a>
+                      </div>
                     </div>
                   </div>
                   `);
