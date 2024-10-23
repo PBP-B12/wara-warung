@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("menu/", include('menu.urls')),
     path("warung/", include('warung.urls')),
-    path('', include('search.urls')),
+    path('search-menu/', include('search.urls')),
+    path('', include('homepage.urls')),
 ]
