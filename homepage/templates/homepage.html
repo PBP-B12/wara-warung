@@ -1,125 +1,186 @@
-<!-- templates/main.html -->
-{% load static %} <!-- Load static for static files -->
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
     <title>Home Page</title>
-    
+
     <!-- Import Poppins font from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Include Tailwind CSS via CDN -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <style>
       body {
-        background-color: #FFFBF2;
+        background-color: #fffbf2;
         font-family: 'Poppins', sans-serif;
       }
 
       .custom-rounded-box {
-        background: linear-gradient(180deg, #FF6E1F 13.5%, #FF9D6B 100%);
-        width: 1280px;
-        height: 512px;
+        background: linear-gradient(180deg, #ff6e1f 13.5%, #ff9d6b 100%);
         border-radius: 50px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       }
     </style>
   </head>
-  <body class="relative">
+  <body class="relative overflow-x-hidden">
+    <nav class="absolute z-50">{% include 'navbar.html' %}</nav>
 
-    {% include 'navbar.html' %}
-    
     <!-- Main Content -->
-    <main class="relative w-full h-screen flex items-center justify-between px-4 lg:px-10 ">
-      <div class="flex flex-col space-y-4 z-10 justify-center ml-4 lg:ml-12 mt-5 lg:mt-10">
+    <main class="relative w-full h-screen flex items-center justify-between px-4 lg:px-10">
+      <div class="flex flex-col space-y-4 justify-center ml-4 lg:ml-12 mt-5 lg:mt-10">
         <h2 class="text-3xl lg:text-4xl font-bold text-left">Welcome to</h2>
         <h2 class="text-4xl lg:text-5xl font-bold text-left">WaraWarung</h2>
         <p class="text-base lg:text-lg text-left">Find food, read reviews, and personalize your chosen menu!</p>
-        <button class="bg-[#ff583e] text-white px-4 py-2 lg:px-6 lg:py-3 rounded-full w-max">Start</button>
+        <a
+          class="bg-[#ff583e] text-white px-4 py-2 lg:px-6 lg:py-3 rounded-full w-max transform hover:scale-105 transition-transform duration-300"
+          href="/menu"
+        >
+          Start
+        </a>
       </div>
-      
 
-      <div class="hidden md:block absolute right-0 lg:right-[-50px] top-0 w-72 h-72 sm:w-96 sm:h-96 lg:w-[1080px] lg:h-[1146px]">
-        <img src="{% static 'images/mainphoto.png' %}" alt="Main Photo" class="object-cover w-full h-full">
+      <div class="hidden md:block absolute z-10 right-0 lg:right-[-50px] top-0 w-72 h-72 sm:w-96 sm:h-96 lg:w-[1080px] lg:h-[1146px]">
+        <img
+          src="{% static 'images/mainphoto.png' %}"
+          alt="Main Photo"
+          class="object-cover w-full h-full"
+        />
       </div>
     </main>
 
     <!-- Section 2 -->
-    <div class="custom-rounded-box mt-10 mx-auto flex flex-col items-center justify-center py-12">
-
+    <div class="custom-rounded-box mt-10 mx-5 flex flex-col items-center justify-center py-20">
       <h2 class="text-3xl lg:text-4xl font-bold mb-8 text-white">What do you want to do?</h2>
 
       <!-- Box Container -->
-      <div class="flex justify-center space-x-16">
-        
+      <div class="flex justify-center space-x-16 z-50">
         <!-- Box 1: Search Menu -->
-        <div class="flex flex-col items-center bg-white rounded-lg shadow-lg" style="width: 295.538px; height: 293.906px; flex-shrink: 0;">
-          <img src="{% static 'images/search.png' %}" alt="Search Menu" class="h-32 w-32 mt-12" /> <!-- Moved lower with 15px margin -->
-          <p class="mt-4 font-bold text-lg">Search Menu</p>
-        </div>
+        <a href="/search-menu" >
+          <div
+            class="flex flex-col items-center bg-white rounded-[36px] shadow-lg transform hover:scale-105 transition-transform duration-300"
+            style="width: 295px; height: 295px; flex-shrink: 0;"
+          >
+            <img
+              src="{% static 'images/search.png' %}"
+              alt="Search Menu"
+              class="h-32 w-32 mt-14"
+            />
+            <p class="mt-4 font-bold text-lg">Search Menu</p>
+          </div>
+        </a>
 
         <!-- Box 2: Review -->
-        <div class="flex flex-col items-center bg-white rounded-lg shadow-lg" style="width: 295.538px; height: 293.906px; flex-shrink: 0;">
-          <img src="{% static 'images/review.png' %}" alt="Review" class="h-32 w-32 mt-12" />
-          <p class="mt-4 font-bold text-lg">Review</p>
-        </div>
+        <a href="/review">
+          <div
+            class="flex flex-col items-center bg-white rounded-[36px] shadow-lg transform hover:scale-105 transition-transform duration-300"
+            style="width: 295px; height: 295px; flex-shrink: 0;"
+          >
+            <img
+              src="{% static 'images/review.png' %}"
+              alt="Review"
+              class="h-32 w-32 mt-14"
+            />
+            <p class="mt-4 font-bold text-lg">Review</p>
+          </div>
+        </a>
 
         <!-- Box 3: Menu Planning -->
-        <div class="flex flex-col items-center bg-white rounded-lg shadow-lg" style="width: 295.538px; height: 293.906px; flex-shrink: 0;">
-          <img src="{% static 'images/calender.png' %}" alt="Menu Planning" class="h-32 w-32 mt-12" />
-          <p class="mt-4 font-bold text-lg">Menu Planning</p>
-        </div>
-
+        <a href="/menu-planning">
+          <div
+            class="flex flex-col items-center bg-white rounded-[36px] shadow-lg transform hover:scale-105 transition-transform duration-300"
+            style="width: 295px; height: 295px; flex-shrink: 0;"
+          >
+            <img
+              src="{% static 'images/calender.png' %}"
+              alt="Menu Planning"
+              class="h-32 w-32 mt-14"
+            />
+            <p class="mt-4 font-bold text-lg">Menu Planning</p>
+          </div>
+        </a>
       </div>
     </div>
 
     <!-- Section 3 -->
-    <div class="mt-40 mx-auto flex flex-col items-center pb-24">
-
+    <div class="mt-28 mx-auto flex flex-col items-center pb-24">
       <h2 class="text-3xl lg:text-4xl font-bold mb-16">Menus You Can Find in Bali</h2>
 
-      <div class="flex justify-center space-x-12"> 
-        
-        <!-- Card 1  -->
-        <div class="flex flex-col items-center rounded-[48px] shadow-lg" style="width: 326.595px; height: 444.187px; flex-shrink: 0; background: linear-gradient(180deg, #F5E6C5 0%, #FFC5A5 100%), #F5E6C5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">
-          <img src="{% static 'images/nasi_goreng.png' %}" alt="Nasi Goreng" class="rounded-t-lg w-full h-48 object-cover">
-          <div class="p-4">
-            <h3 class="font-bold text-xl">Nasi Goreng</h3>
-            <p class="text-lg">Rp20.000</p>
-            <p class="text-sm text-gray-600">Available at: Warung Lestari, Warung Man Luh, </p>
-            <button class="bg-[#000000] text-white mt-4 px-6 py-2 rounded-full">See Details</button>
+      <div class="flex justify-center space-x-12">
+
+        <!-- Card 1 -->
+        <div
+          class="bg-white rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300"
+          style="width: 325px; height: 420px; flex-shrink: 0; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)"
+        >
+          <img
+            src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg"
+            alt="Nasi Goreng"
+            class="w-full h-48 object-cover rounded-t-[36px]"
+          />
+          <div class="p-4 w-full flex flex-col">
+            <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
+            <p class="text-lg text-gray-600">Rp20.000</p>
+            <p class="text-sm text-gray-500">Available at:</p>
+            <p class="text-sm text-gray-500">Warung Lestari, ...</p>
+            <div class="w-full flex justify-center">
+              <button class="bg-[#252525] text-white mt-8 px-6 py-2 rounded-full">See Details</button>
+            </div>
           </div>
         </div>
 
-        <!-- Card 2  -->
-        <div class="flex flex-col items-center rounded-[48px] shadow-lg" style="width: 326.595px; height: 444.187px; flex-shrink: 0; background: linear-gradient(180deg, #F5E6C5 0%, #FFC5A5 100%), #F5E6C5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">
-          <img src="{% static 'images/es_cendol.png' %}" alt="Es Cendol" class="rounded-t-lg w-full h-48 object-cover">
-          <div class="p-4">
-            <h3 class="font-bold text-xl">Es Cendol</h3>
-            <p class="text-lg">Rp12.000</p>
-            <p class="text-sm text-gray-600">Available at: Warung Lestari, Warung Man Luh, ...</p>
-            <button class="bg-[#000000] text-white mt-4 px-6 py-2 rounded-full">See Details</button>
+        <!-- Card 2 -->
+        <div
+          class="bg-white rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300"
+          style="width: 325px; height: 420px; flex-shrink: 0; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)"
+        >
+          <img
+            src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg"
+            alt="Es Cendol"
+            class="w-full h-48 object-cover rounded-t-[36px]"
+          />
+          <div class="p-4 w-full flex flex-col">
+            <h3 class="font-bold text-xl text-gray-800 mt-2">Es Cendol</h3>
+            <p class="text-lg text-gray-600">Rp12.000</p>
+            <p class="text-sm text-gray-500">Available at:</p>
+            <p class="text-sm text-gray-500">Warung Lestari, ...</p>
+            <div class="w-full flex justify-center">
+              <button class="bg-[#252525] text-white mt-8 px-6 py-2 rounded-full">See Details</button>
+            </div>
           </div>
         </div>
 
-        <!-- Card 3  -->
-        <div class="flex flex-col items-center rounded-[48px] shadow-lg" style="width: 326.595px; height: 444.187px; flex-shrink: 0; background: linear-gradient(180deg, #F5E6C5 0%, #FFC5A5 100%), #F5E6C5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">
-          <img src="{% static 'images/nasi_ayam_goreng.png' %}" alt="Nasi Ayam Goreng" class="rounded-t-lg w-full h-48 object-cover">
-          <div class="p-4">
-            <h3 class="font-bold text-xl">Nasi Ayam Goreng</h3>
-            <p class="text-lg">Rp25.000</p>
-            <p class="text-sm text-gray-600">Available at: Warung Lestari, Warung Man Luh, ...</p>
-            <button class="bg-[#000000] text-white mt-4 px-6 py-2 rounded-full">See Details</button>
+        <!-- Card 3 -->
+        <div
+          class="bg-white rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300"
+          style="width: 325px; height: 420px; flex-shrink: 0; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)"
+        >
+          <img
+            src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg"
+            alt="Nasi Ayam Goreng"
+            class="w-full h-48 object-cover rounded-t-[36px]"
+          />
+          <div class="p-4 w-full flex flex-col">
+            <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Ayam Goreng</h3>
+            <p class="text-lg text-gray-600">Rp25.000</p>
+            <p class="text-sm text-gray-500">Available at:</p>
+            <p class="text-sm text-gray-500">Warung Lestari, ...</p>
+            <div class="w-full flex justify-center">
+              <button class="bg-[#252525] text-white mt-8 px-6 py-2 rounded-full">See Details</button>
+            </div>
           </div>
         </div>
-
       </div>
-      
     </div>
+
 
     <!-- Footer -->
     {% include 'footer.html' %}
