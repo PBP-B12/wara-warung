@@ -19,7 +19,7 @@ def register_view(request):
             
             # Login pengguna setelah registrasi berhasil
             login(request, user)
-            return redirect('auth_app:profile')  # Gunakan namespace jika ada
+            return redirect('auth_app:login')  # Gunakan namespace jika ada
     else:
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
