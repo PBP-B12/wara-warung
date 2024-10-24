@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Your Wishlist</h1>
+
+<div class="wishlist-container">
+    {% for item in wishlist_items %}
+    <div class="wishlist-item">
+        <h2>{{ item.menu.menu }}</h2>
+        <p>{{ item.menu.harga }} IDR</p>
+        <img src="{{ item.menu.gambar }}" alt="{{ item.menu.menu }}" width="150px">
+        <form method="POST" action="{% url 'remove_from_wishlist' item.menu.id %}">
+            {% csrf_token %}
+            <button type="submit" class="remove-button">Remove from Wishlist</button>
+        </form>
+    </div>
+    {% empty %}
+    <p>No items in your wishlist.</p>
+    {% endfor %}
+</div>
+{% endblock %}

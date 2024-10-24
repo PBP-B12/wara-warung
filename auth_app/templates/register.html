@@ -112,21 +112,56 @@
       <div class="form-container">
         <h2 class="form-title">Create an account</h2>
         <p class="form-subtitle">Join us to discover the true taste of local cuisine!</p>
+
+        <!-- Menampilkan pesan kesalahan global -->
+        {% if messages %}
+          <div>
+            {% for message in messages %}
+              <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative mt-4" role="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
   
         <form method="POST" class="space-y-4">
           {% csrf_token %}
           
           <!-- Username Input -->
-          <input type="text" name="username" class="form-input" placeholder="Username" required>
+          <div>
+            <input type="text" name="username" class="form-input" placeholder="Username" required>
+            <!-- Tampilkan error untuk field username -->
+            {% if form.username.errors %}
+              <p class="text-red-600 text-sm mt-1">{{ form.username.errors.0 }}</p>
+            {% endif %}
+          </div>
   
           <!-- Email Input -->
-          <input type="email" name="email" class="form-input" placeholder="Email" required>
+          <div>
+            <input type="email" name="email" class="form-input" placeholder="Email" required>
+            <!-- Tampilkan error untuk field email -->
+            {% if form.email.errors %}
+              <p class="text-red-600 text-sm mt-1">{{ form.email.errors.0 }}</p>
+            {% endif %}
+          </div>
   
           <!-- Password Input -->
-          <input type="password" name="password1" class="form-input" placeholder="Password" required>
+          <div>
+            <input type="password" name="password1" class="form-input" placeholder="Password" required>
+            <!-- Tampilkan error untuk field password1 -->
+            {% if form.password1.errors %}
+              <p class="text-red-600 text-sm mt-1">{{ form.password1.errors.0 }}</p>
+            {% endif %}
+          </div>
   
           <!-- Password Confirmation Input -->
-          <input type="password" name="password2" class="form-input" placeholder="Confirm Password" required>
+          <div>
+            <input type="password" name="password2" class="form-input" placeholder="Confirm Password" required>
+            <!-- Tampilkan error untuk field password2 -->
+            {% if form.password2.errors %}
+              <p class="text-red-600 text-sm mt-1">{{ form.password2.errors.0 }}</p>
+            {% endif %}
+          </div>
   
           <button type="submit" class="register-button">Create Account</button>
         </form>
@@ -137,6 +172,5 @@
       </div>
     </div>
   </body>
-  
-  
+  {% include 'footer.html' %}
 </html>
