@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render
-from .models import Menu
+from menu.models import Menu
 
 def search_menu(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -22,6 +22,7 @@ def search_menu(request):
                 'harga': menu.harga,
                 'warung': menu.warung,
                 'gambar': menu.gambar,
+                'id': menu.id,
             }
             for menu in results
         ]
