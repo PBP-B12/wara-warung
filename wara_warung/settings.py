@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "menu",
     "warung",
     "search",
-    "menufavorite"
+    "wishlist",
     
 ]
 

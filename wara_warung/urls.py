@@ -24,6 +24,5 @@ urlpatterns = [
     path("menu/", include('menu.urls')),
     path("warung/", include('warung.urls')),
     path('', include('search.urls')),
-    path('menufavorite/', include('menufavorite.urls')),
-
+    path('wishlist/', include('wishlist.urls')),  # Include wishlist URLs
 ]
