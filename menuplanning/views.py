@@ -88,21 +88,21 @@ def update_cart(request):
 @login_required
 @csrf_exempt
 def save_cart(request):
-    cart = Cart.objects.get(user=request.user)
+    cart = get_user_cart(request.user)
     cart_items = CartItem.objects.filter(cart=cart)
+    budget = int(request.POST.get('budget', 100000))  # Use budget from POST
 
-    # Calculate total price for each item and pass to template
     for item in cart_items:
         item.total_price = item.quantity * item.item_price
 
     total_price = sum(item.total_price for item in cart_items)
 
-    if total_price > 100000:
+    if total_price > budget:
         error_message = render_to_string('menuplanning/confirm.html', {
             'cart_items': cart_items,
             'total_price': total_price,
             'cart_name': cart.name,
-            'budget': cart.budget,
+            'budget': budget,  # Pass budget here
             'exceeded_budget': True
         })
         return JsonResponse({'saved_cart_html': error_message, 'error': 'Budget exceeded!'}, status=400)
@@ -111,10 +111,11 @@ def save_cart(request):
         'cart_items': cart_items,
         'total_price': total_price,
         'cart_name': cart.name,
-        'budget': cart.budget,
+        'budget': budget,  # Pass budget here
     })
 
     return JsonResponse({'saved_cart_html': saved_cart_html})
+
 
 # Untuk nunjukkin popup message confirm.html
 def save_cart_view(request):
@@ -147,9 +148,6 @@ def saved_menu_planning_page(request):
 
     menu_plans = list(menu_plans_dict.values())
     return render(request, 'menuplanning/saved_menu_plans.html', {'menu_plans': menu_plans})
-
-
-
 
 
 @login_required

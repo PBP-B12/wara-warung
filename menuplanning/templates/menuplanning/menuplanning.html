@@ -328,15 +328,16 @@
 
 
         function saveCart() {
-        // Send AJAX request to save the current cart state
+            let budget = parseInt(document.getElementById("budget").value) || 100000; // Get budget input
+
             $.ajax({
                 url: '{% url "menuplanning:save_cart" %}',
                 type: 'POST',
                 data: {
+                    'budget': budget, // Include budget in the request
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },
                 success: function(response) {
-                    // Show the confirmation popup with cart items
                     displayConfirmationPopup(response.saved_cart_html);
                 },
                 error: function(xhr, status, error) {
@@ -344,6 +345,7 @@
                 }
             });
         }
+
 
         function displayConfirmationPopup(cartHtml) {
             // Create the overlay for the confirmation popup
