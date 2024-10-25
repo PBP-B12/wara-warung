@@ -1,83 +1,260 @@
 {% block content %}
+{% load static %}
 
-<h1>User Dashboard</h1>
+<head>
+    {% block meta %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<h5>Username: </h5>
-<p>{{ username }}</p>
+        <title>User Dashboard</title>
+    {% endblock meta %}
 
-<h5>Password: </h5>
-<p>{{ password }}</p>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url("{% static 'images/background02.png' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
 
-<h5>Email: </h5>
-<p>{{ email }}</p>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center; 
+            flex-direction: row;
+            padding: 50px;
+            margin: 80px; 
+            margin-top: 10px;
+            width: fit-content;
+        }
 
-<h5>Phone Number: </h5>
-<p>{{ phone_number }}</p>
+        .profile-card {
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+            max-width: 700px; 
+            background: linear-gradient(180deg, #F5E6C5 0%, #FFC5A5 100%);
+            border-radius: 24px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 2rem; 
+            gap: 1rem;
+        }
 
-<h5>Address: </h5>
-<p>{{ address }}</p>
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            padding-left: 20px;
+            width: 100%;
+        }
 
-<h5>Date of Birth: </h5>
-<p>{{ date_of_birth }}</p>
+        .profile-info h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
 
-<h5>Budget: </h5>
-<p>{{ budget }}</p>
+        .profile-info p {
+            font-size: 1.125rem;
+            margin: 0.5rem 0;
+        }
 
-<!-- Edit Button to Open a Modal or Directly Edit Info -->
-<button id="editInfoButton">Edit Info</button>
+        .avatar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
 
-<!-- Edit Profile Form (Initially Hidden) -->
-<form id="editProfileForm" method="POST" style="display:none;">
-    {% csrf_token %}
-    <label>Email:</label>
-    <input type="email" name="email" value="{{ email }}"><br>
+        .avatar img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-    <label>Phone Number:</label>
-    <input type="text" name="phone_number" value="{{ phone_number }}"><br>
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
 
-    <label>Address:</label>
-    <input type="text" name="address" value="{{ address }}"><br>
+        .edit-profile-button, .delete-profile-button {
+            width: auto;
+            padding: 12px;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;  
+            white-space: nowrap;
+        }
 
-    <label>Date of Birth:</label>
-    <input type="date" name="date_of_birth" value="{{ date_of_birth }}"><br>
+        .edit-profile-button {
+            color: #FF6E1F;
+            background-color: white;
+        }
 
-    <label>Budget:</label>
-    <input type="number" name="budget" value="{{ budget }}"><br>
+        .delete-profile-button {
+            background-color: #FF6347;
+            color: white;
+            justify-content: space-between;
+        }
 
-    <button type="submit">Save Changes</button>
-</form>
+        .edit-profile-button:hover {
+            background-color: #F9F6EE;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .delete-profile-button:hover {
+            background-color: #FF8675;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-button {
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;  
+            color: #FF6E1F;
+            width: auto;
+        }
+
+        .info-button:hover {
+            transform: translateY(-2px);
+            text-decoration: underline
+        }
+
+        .info-button::before {
+            font-size: 1.2rem;
+            color: #FF6E1F;
+            margin-right: 8px;
+        }
+
+        .menu-button::before {
+            content: "\2630"; 
+        }
+
+        .wishlist-button::before {
+            content: "\2665"; 
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .detail-title{
+            margin-bottom: 15px;
+        }
+
+        .username{
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .input-field {
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+    </style>
+</head>
+
+{% include 'navbar.html' %}
+
+<div class="form-title">
+    <h1>My Account</h1>
+</div>
+
+<div class="container">
+    
+    <div class="avatar">
+        <img src="{% static 'images/user-avatar.png' %}" alt="Avatar">
+        <h3>Welcome,</h3> 
+        <p class="username">{{ username }}</p>
+        <div class="buttons">
+            <button class="info-button menu-button">
+                See Menu Plans
+            </button>
+            <button class="info-button wishlist-button">
+                See Wishlist
+            </button>
+        </div>
+    </div>
+
+    <div class="profile-card">
+        <div class="profile-info">
+            <h2 class="detail-title">Account details</h2>
+            <p><strong>Email:</strong> </p>
+            <input type="text" class="input-field" value="{{ email }}" id="profileEmail" readonly>
+
+            <p><strong>Phone Number:</strong> </p>
+            <input type="text" class="input-field" value="{{ phone_number }}" id="profilePhoneNumber" readonly>
+
+            <p><strong>Date of Birth:</strong> </p>
+            <input type="text" class="input-field" value="{{ date_of_birth }}" id="profileDateOfBirth" readonly>
+
+            <p><strong>Address:</strong> </p>
+            <input type="text" class="input-field full-width" value="{{ address }}" id="profileAddress" readonly>
+            <div class="button-group">
+                <button class="edit-profile-button" onclick="toggleEditProfileModal()">Edit Details</button>
+                <button class="delete-profile-button" onclick="confirmDeleteAccount()">Delete Account</button>
+            </div>
+        </div>
+    </div>    
+</div>
+
+{% include 'edit_user.html' %}
+
+<script>
+function toggleEditProfileModal() {
+    const modal = document.getElementById("editProfileModal");
+    modal.classList.toggle("hidden");
+}
+</script>
+
+<script>
+    function confirmDeleteAccount() {
+        const userConfirmed = confirm("Are you sure you want to delete your account? This action cannot be undone.");
+        
+        if (userConfirmed) {
+            deleteUserAccount();
+        }
+    }
+
+    function deleteUserAccount() {
+        fetch("{% url 'user_dashboard:delete_user_account' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+                window.location.href = '{% url "auth_app:login" %}';  // Redirect to login page after logout
+            } else {
+                alert("Failed to delete account. Please try again.");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("An error occurred. Please try again.");
+        });
+    }
+</script>
 
 {% endblock content %}
-
-<!-- JavaScript Section for AJAX -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Show the form when the edit button is clicked
-        $('#editInfoButton').on('click', function() {
-            $('#editProfileForm').toggle();  // Toggle form visibility
-        });
-
-        // AJAX form submission
-        $('#editProfileForm').on('submit', function(event) {
-            event.preventDefault();  // Prevent the default form submission
-
-            $.ajax({
-                type: 'POST',
-                url: '/user_dashboard/edit_user/',  // Make sure the URL matches the URL in your view
-                data: $(this).serialize(),  // Serialize the form data
-                success: function(response) {
-                    if (response.success) {
-                        alert('Profile updated successfully!');
-                        location.reload();  // Reload the page to show updated data
-                    } else {
-                        alert('Error: ' + response.message);
-                    }
-                },
-                error: function(response) {
-                    alert('An error occurred. Please try again.');
-                }
-            });
-        });
-    });
-</script>
