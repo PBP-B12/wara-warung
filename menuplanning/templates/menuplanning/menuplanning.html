@@ -5,12 +5,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
     <title>Menu Planning</title>
 
     <!-- Import Poppins font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
-
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
       body {
@@ -30,14 +32,12 @@
         height: 64px;
       }
 
-
       .input-label {
         font-size: 1.2rem;
         font-weight: bold;
         color: white;
         margin-right: 10px;
       }
-
 
       .input-field {
         background-color: white;
@@ -50,7 +50,6 @@
         font-size: 1.1rem;
         color: black;
       }
-
 
       .flex-inputs {
         display: flex;
@@ -70,7 +69,7 @@
         margin-right: 100px; 
       }
 
-        .card {
+      .card {
         background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%);
         width: 325px;
         height: 420px;
@@ -109,6 +108,13 @@
         flex: 1; 
         padding-bottom: 400px; 
       }
+
+      .total-price {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-top: 1rem;
+      }
+
     </style>
   </head>
 
@@ -139,65 +145,247 @@
         </div>
     </section>
 
-    <!-- Cards Section (underneath Budget and Warung inputs) -->
+    <!-- Cards Section -->
     <div class="mt-10 mx-auto flex flex-col items-center pb-24">
 
         <div class="flex justify-center space-x-12">
 
-         <!-- Card 1 -->
-         <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
+        <!-- Card 1 -->
+        <div class="bg-white rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300"
+            style="width: 325px; height: 420px; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5;">
+        
             <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
-                 alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
+                alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
+                
             <div class="p-4 w-full flex flex-col">
-              <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
-              <p class="text-lg text-gray-800">Rp20.000</p>
-              <p class="text-sm text-gray-800"><i class="fas fa-map-marker-alt"></i> Warung Lestari</p>
-              <p class="text-sm text-gray-800">Rate: <span class="text-[#FF6E1F]">3 out of 5</span></p>
-              <div class="quantity-wrapper">
-                <button class="quantity-control">-</button>
-                <span class="quantity-display">0</span>
-                <button class="quantity-control">+</button>
-              </div>
+                <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
+                <p class="text-lg text-gray-600">Rp20.000</p>
+                <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
+                <div class="quantity-wrapper">
+                    <button class="quantity-control" onclick="updateCart(-1, 1, 20000)">-</button>
+                    <span class="quantity-display" id="quantity-1">0</span>
+                    <button class="quantity-control" onclick="updateCart(1, 1, 20000)">+</button>
+                </div>
             </div>
-          </div>
+        </div>
 
-          <!-- Card 2 -->
-          <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
+        <!-- Card 2 -->
+        <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
             <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
-                 alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
+                    alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
             <div class="p-4 w-full flex flex-col">
-              <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
-              <p class="text-lg text-gray-800">Rp20.000</p>
-              <p class="text-sm text-gray-800"><i class="fas fa-map-marker-alt"></i> Warung Lestari</p>
-              <p class="text-sm text-gray-800">Rate: <span class="text-[#FF6E1F]">3 out of 5</span></p>
-              <div class="quantity-wrapper">
-                <button class="quantity-control">-</button>
-                <span class="quantity-display">0</span>
-                <button class="quantity-control">+</button>
-              </div>
+                <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
+                <p class="text-lg text-gray-800">Rp20.000</p>
+                <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
+                <div class="quantity-wrapper">
+                    <button class="quantity-control" onclick="updateCart(-1, 2, 20000)">-</button>
+                    <span class="quantity-display" id="quantity-2">0</span>
+                    <button class="quantity-control" onclick="updateCart(1, 2, 20000)">+</button>
+                </div>
             </div>
-          </div>
+        </div>
 
-          <!-- Card 3 -->
-          <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
+        <!-- Card 3 -->
+        <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
             <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
-                 alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
+                alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
             <div class="p-4 w-full flex flex-col">
-              <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
-              <p class="text-lg text-gray-800">Rp20.000</p>
-              <p class="text-sm text-gray-800"><i class="fas fa-map-marker-alt"></i> Warung Lestari</p>
-              <p class="text-sm text-gray-800">Rate: <span class="text-[#FF6E1F]">3 out of 5</span></p>
-              <div class="quantity-wrapper">
-                <button class="quantity-control">-</button>
-                <span class="quantity-display">0</span>
-                <button class="quantity-control">+</button>
-              </div>
+                <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
+                <p class="text-lg text-gray-800">Rp20.000</p>
+                <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
+                <div class="quantity-wrapper">
+                    <button class="quantity-control" onclick="updateCart(-1, 3, 20000)">-</button>
+                    <span class="quantity-display" id="quantity-3">0</span>
+                    <button class="quantity-control" onclick="updateCart(1, 3, 20000)">+</button>
+                </div>
             </div>
-          </div>
+        </div>
     </div>
 
-    <!-- <footer class="w-full" style="background-color: #252525;">
-        {% include 'footer.html' %}
-    </footer> -->
+    <!-- Show Current Cart Items and Total Price -->
+    <section class="mt-10 mx-auto text-center">
+        <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
+    
+        <div id="cart-items">
+            {% include 'menuplanning/cart_items.html' %}
+        </div>
+        <p class="total-price" id="total-price">Total Price: Rp0</p>
+    </section>
+    
+    <script>
+    function updateCart(change, itemId, price) {
+        let quantityElement = document.getElementById('quantity-' + itemId);
+        let currentQuantity = parseInt(quantityElement.textContent);
+        let newQuantity = currentQuantity + change;
+
+        if (newQuantity < 0) {
+            newQuantity = 0;
+        }
+
+        // Update the quantity on the page
+        quantityElement.textContent = newQuantity;
+
+        // Send AJAX request to update the cart on the server
+        $.ajax({
+        url: '{% url "menuplanning:update_cart" %}',
+        type: 'POST',
+        data: {
+            'item_id': itemId,
+            'quantity': newQuantity,
+            'price': price,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure this token is included
+            },
+            success: function(response) {
+                $('#cart-items').html(response.updated_cart_html);
+                $('#total-price').text('Total Price: Rp' + response.total_price);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating cart:', error);
+            }
+        });
+
+    }
+    </script>
+
+    <!-- Save button to save the cart state -->
+    <button id="save-button" onclick="saveCart()" class="bg-green-500 text-white font-bold py-2 px-4 rounded mt-4">
+        Save Menu
+    </button>
+
+
+    <script>
+    function saveCart() {
+        // Send AJAX request to save the current cart state
+        $.ajax({
+            url: '{% url "menuplanning:save_cart" %}',
+            type: 'POST',
+            data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                // Show the confirmation popup with cart items
+                displayConfirmationPopup(response.saved_cart_html);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error saving cart:', error);
+            }
+        });
+    }
+
+    function displayConfirmationPopup(cartHtml) {
+        // Create the overlay for the confirmation popup
+        let overlay = document.createElement('div');
+        overlay.id = 'cart-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '1000';
+
+        // Create the modal container for the cart confirmation
+        let modal = document.createElement('div');
+        modal.id = 'saved-cart-modal';
+        modal.style.backgroundColor = 'white';
+        modal.style.padding = '20px';
+        modal.style.borderRadius = '10px';
+        modal.style.width = '50%';
+
+        // Add the cart content to the modal
+        modal.innerHTML = cartHtml;
+
+        // Add the Save and Edit buttons
+        let buttonsContainer = document.createElement('div');
+        buttonsContainer.style.marginTop = '20px';
+
+        let saveButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+        saveButton.style.padding = '10px 20px';
+        saveButton.style.backgroundColor = '#4CAF50'; // Green for Save
+        saveButton.style.color = 'white';
+        saveButton.style.border = 'none';
+        saveButton.style.borderRadius = '5px';
+        saveButton.style.marginRight = '10px';
+        saveButton.style.cursor = 'pointer';
+
+        let editButton = document.createElement('button');
+        editButton.textContent = 'Back';
+        editButton.style.padding = '10px 20px';
+        editButton.style.backgroundColor = '#ff6e1f'; // Orange for Edit
+        editButton.style.color = 'white';
+        editButton.style.border = 'none';
+        editButton.style.borderRadius = '5px';
+        editButton.style.cursor = 'pointer';
+
+        buttonsContainer.appendChild(saveButton);
+        buttonsContainer.appendChild(editButton);
+
+        modal.appendChild(buttonsContainer);
+
+        // Append the modal to the overlay
+        overlay.appendChild(modal);
+
+        // Append the overlay to the body
+        document.body.appendChild(overlay);
+
+        // Handle Save and Edit button actions
+        saveButton.onclick = function() {
+            confirmSaveCart(); // Call the function to confirm save
+        };
+
+        editButton.onclick = function() {
+            document.body.removeChild(overlay); // Close the popup and allow editing
+        };
+    }
+
+    function confirmSaveCart() {
+        // Send the final confirmation AJAX request to save the cart to the user's database
+            $.ajax({
+            url: '{% url "menuplanning:confirm_save_cart" %}',  // This should now resolve correctly
+            type: 'POST',
+            data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                alert('Cart saved successfully!');
+                document.body.removeChild(document.getElementById('cart-overlay')); // Close the popup
+            },
+            error: function(xhr, status, error) {
+                console.error('Error confirming cart save:', error);
+            }
+        });
+
+    }
+    </script>
+
+
+    <!-- Add a new button to see saved menu plans -->
+    <button onclick="seeMyMenuPlans()" class="bg-blue-500 text-white font-bold py-2 px-4 rounded mt-4">
+        See My Menu Plans
+    </button>
+
+    <!-- Placeholder for displaying the saved menu plans -->
+    <div id="saved-menu-plans" class="mt-8"></div>
+
+    <script>
+        function seeMyMenuPlans() {
+            // Send AJAX request to get saved menu plans
+            $.ajax({
+                url: '{% url "menuplanning:saved_menus" %}', // Make sure the URL points to the correct view
+                type: 'GET',
+                success: function(response) {
+                    // Insert the response (which contains the saved menus) into the saved-menu-plans div
+                    $('#saved-menu-plans').html(response.saved_menus_html);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading saved menu plans:', error);
+                }
+            });
+        }
+    </script>
   </body>
 </html>

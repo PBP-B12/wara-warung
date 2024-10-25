@@ -22,6 +22,7 @@ urlpatterns = [
     path('', include('homepage.urls')),
     path("menu/", include('menu.urls')),
     path("warung/", include('warung.urls')),
+    path('', include('auth_app.urls')),
     path('menuplanning/', include('menuplanning.urls')),
 ]
 

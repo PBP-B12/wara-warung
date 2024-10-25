@@ -1,0 +1,7 @@
+<!-- saved_menu_plans.html -->
+<h2>Saved Menus</h2>
+<ul>
+    {% for menu in chosen_menus %}
+        <li>{{ menu.quantity }} x {{ menu.item_name }} - Rp {{ menu.price }} each</li>
+    {% endfor %}
+</ul>
