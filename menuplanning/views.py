@@ -55,7 +55,7 @@ def update_cart(request):
         # Try to get the cart item by name within this specific cart, or create a new one if it doesn't exist
         cart_item, created = CartItem.objects.get_or_create(
             cart=cart,
-            item_name=item_id,  # Use a unique identifier like item name or ID from the frontend
+            item_name=item_id,  # Nama menu nya
             defaults={'quantity': quantity, 'item_price': price}
         )
 

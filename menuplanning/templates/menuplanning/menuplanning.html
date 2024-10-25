@@ -106,7 +106,6 @@
 
       main {
         flex: 1; 
-        padding-bottom: 400px; 
       }
 
       .total-price {
@@ -114,104 +113,114 @@
         font-weight: bold;
         margin-top: 1rem;
       }
-
     </style>
   </head>
 
-  <body class="relative overflow-x-hidden">
+  <body class="flex flex-col min-h-screen bg-[#fffbf2] font-poppins">
 
     <nav class="absolute z-50">{% include 'navbar.html' %}</nav>
-
-    <div class="navbar-height"></div>
+    <div class="h-16"></div>
 
     <!-- Menu Planning Section -->
-    <section class="text-center mt-20">
-        <h1 class="text-4xl font-bold mb-2">Menu Planning</h1>
-        <p class="text-lg text-gray-700 mb-8">Choose your warung and plan your menu with your preferred budget!</p>
+    <main class="flex-1">
+        <section class="text-center mt-20">
+            <h1 class="text-4xl font-bold mb-2">Menu Planning</h1>
+            <p class="text-lg text-gray-700 mb-8">Choose your warung and plan your menu with your preferred budget!</p>
 
-        <!-- Inputs -->
-        <div class="flex-inputs">
-            <!-- Warung Input -->
-            <div class="input-container warung-container">
-              <label for="warung" class="input-label">Warung:</label>
-              <input type="text" id="warung" value="Warung Lestari" class="input-field" />
+            <div class="flex justify-center space-x-8 mt-8">
+                <div class="input-container warung-container">
+                <label for="warung" class="input-label">Warung:</label>
+                <input type="text" id="warung" value="Warung Lestari" class="input-field" />
+                </div>
+
+                <!-- Budget Input -->
+                <div class="input-container budget-container">
+                <label for="budget" class="input-label">Budget:</label>
+                <input type="text" id="budget" value="50.000" class="input-field" />
+                </div>
             </div>
 
-            <!-- Budget Input -->
-            <div class="input-container budget-container">
-              <label for="budget" class="input-label">Budget:</label>
-              <input type="text" id="budget" value="50.000" class="input-field" />
+
+            <!-- Cards Section untuk menampilkan menus di warung (masih data manual dummy)-->
+            <div class="mt-10 mx-auto flex flex-col items-center pb-8">
+                <div class="flex justify-center space-x-12">
+
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300"
+                        style="width: 325px; height: 420px; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5;">
+                    
+                        <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
+                            alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
+                            
+                        <div class="p-4 w-full flex flex-col">
+                            <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
+                            <p class="text-lg text-gray-600">Rp20.000</p>
+                            <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
+                            <div class="quantity-wrapper">
+                                <button class="quantity-control" onclick="updateCart(-1, 1, 20000)">-</button>
+                                <span class="quantity-display" id="quantity-1">0</span>
+                                <button class="quantity-control" onclick="updateCart(1, 1, 20000)">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
+                                alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
+                        <div class="p-4 w-full flex flex-col">
+                            <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
+                            <p class="text-lg text-gray-800">Rp20.000</p>
+                            <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
+                            <div class="quantity-wrapper">
+                                <button class="quantity-control" onclick="updateCart(-1, 2, 20000)">-</button>
+                                <span class="quantity-display" id="quantity-2">0</span>
+                                <button class="quantity-control" onclick="updateCart(1, 2, 20000)">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
+                            alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
+                        <div class="p-4 w-full flex flex-col">
+                            <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
+                            <p class="text-lg text-gray-800">Rp20.000</p>
+                            <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
+                            <div class="quantity-wrapper">
+                                <button class="quantity-control" onclick="updateCart(-1, 3, 20000)">-</button>
+                                <span class="quantity-display" id="quantity-3">0</span>
+                                <button class="quantity-control" onclick="updateCart(1, 3, 20000)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+    
+            <!-- Cart and Save Buttons -->
+            <div class="mt-2 mx-auto text-center">
+                <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
+                <div 
+                    id="cart-items">{% include 'menuplanning/cart_items.html' %}
+                </div>
+                <p class="total-price" id="total-price">Total Price: Rp0</p>
 
-    <!-- Cards Section untuk menampilkan menus di warung (masih data manual dummy)-->
-    <div class="mt-10 mx-auto flex flex-col items-center pb-24">
-
-        <div class="flex justify-center space-x-12">
-
-        <!-- Card 1 -->
-        <div class="bg-white rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300"
-            style="width: 325px; height: 420px; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5;">
-        
-            <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
-                alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
+                <div>
+                    <button id="save-button" onclick="saveCart()" class="text-white font-bold py-2 px-6 rounded-full mt-4 mb-4 cursor-pointer transform hover:scale-105 transition-transform duration-300" style="background-color: #64D16D;">Save Menu</button>
+                </div>
                 
-            <div class="p-4 w-full flex flex-col">
-                <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
-                <p class="text-lg text-gray-600">Rp20.000</p>
-                <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
-                <div class="quantity-wrapper">
-                    <button class="quantity-control" onclick="updateCart(-1, 1, 20000)">-</button>
-                    <span class="quantity-display" id="quantity-1">0</span>
-                    <button class="quantity-control" onclick="updateCart(1, 1, 20000)">+</button>
+                <div>
+                    <a href="{% url 'menuplanning:saved_menu_planning_page' %}" class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full mt-4 transform hover:scale-105 transition-transform duration-300">See My Saved Menus</a>
                 </div>
+                
             </div>
-        </div>
+        </section>
+        
+    </main>
 
-        <!-- Card 2 -->
-        <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
-            <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
-                    alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
-            <div class="p-4 w-full flex flex-col">
-                <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
-                <p class="text-lg text-gray-800">Rp20.000</p>
-                <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
-                <div class="quantity-wrapper">
-                    <button class="quantity-control" onclick="updateCart(-1, 2, 20000)">-</button>
-                    <span class="quantity-display" id="quantity-2">0</span>
-                    <button class="quantity-control" onclick="updateCart(1, 2, 20000)">+</button>
-                </div>
-            </div>
-        </div>
+    {% include 'footer.html' %}
 
-        <!-- Card 3 -->
-        <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
-            <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
-                alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
-            <div class="p-4 w-full flex flex-col">
-                <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
-                <p class="text-lg text-gray-800">Rp20.000</p>
-                <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
-                <div class="quantity-wrapper">
-                    <button class="quantity-control" onclick="updateCart(-1, 3, 20000)">-</button>
-                    <span class="quantity-display" id="quantity-3">0</span>
-                    <button class="quantity-control" onclick="updateCart(1, 3, 20000)">+</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Menunjukkan current cart items  -->
-    <section class="mt-10 mx-auto text-center">
-        <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
-    
-        <div id="cart-items">
-            {% include 'menuplanning/cart_items.html' %}
-        </div>
-        <p class="total-price" id="total-price">Total Price: Rp0</p>
-    </section>
-    
     <script>
     const MAX_BUDGET = 100000;  // Set the budget limit, masih manual bukan sesuai input user
     function updateCart(change, itemId, price) {
@@ -247,15 +256,24 @@
                     
                     // Update the save button text and disable it
                     $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
-                        'background-color': 'red',  // Optional: style to indicate an error
+                        'background-color': 'red', 
+                        'color': 'white',
+                        'border-radius': '9999px', 
+                        'padding': '0.5rem 1.5rem',  
+                        'font-weight': 'bold',
                         'cursor': 'not-allowed'
                     });
                 } else {
                     // Re-enable the save button if the total is within the budget
                     $('#save-button').text('Save Menu').prop('disabled', false).css({
-                        'background-color': '#4CAF50',  // Green for save
+                        'background-color': '#64D16D',  
+                        'color': 'white',
+                        'border-radius': '9999px', 
+                        'padding': '0.5rem 1.5rem',  
+                        'font-weight': 'bold',
                         'cursor': 'pointer'
                     });
+
                 }
             },
             error: function(xhr, status, error) {
@@ -263,16 +281,6 @@
             }
         });
     }
-
-    </script>
-
-    <!-- Save button to save the cart state -->
-    <button id="save-button" onclick="saveCart()" class="bg-green-500 text-white font-bold py-2 px-4 rounded mt-4">
-        Save Menu
-    </button>
-
-
-    <script>
     function saveCart() {
     // Send AJAX request to save the current cart state
         $.ajax({
@@ -317,28 +325,17 @@
         // Add the cart content to the modal (this is dynamically passed HTML from the server)
         modal.innerHTML = cartHtml;
 
-        // Add the Save and Edit buttons
+        // Add the Save and Edit buttons with the updated styles
         let buttonsContainer = document.createElement('div');
         buttonsContainer.style.marginTop = '20px';
 
         let saveButton = document.createElement('button');
         saveButton.textContent = 'Save';
-        saveButton.style.padding = '10px 20px';
-        saveButton.style.backgroundColor = '#4CAF50'; // Green for Save
-        saveButton.style.color = 'white';
-        saveButton.style.border = 'none';
-        saveButton.style.borderRadius = '5px';
-        saveButton.style.marginRight = '10px';
-        saveButton.style.cursor = 'pointer';
+        saveButton.classList.add('bg-[#ff6e1f]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
 
         let editButton = document.createElement('button');
         editButton.textContent = 'Edit';
-        editButton.style.padding = '10px 20px';
-        editButton.style.backgroundColor = '#ff6e1f'; // Orange for Edit
-        editButton.style.color = 'white';
-        editButton.style.border = 'none';
-        editButton.style.borderRadius = '5px';
-        editButton.style.cursor = 'pointer';
+        editButton.classList.add('bg-[#252525]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'ml-4', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
 
         buttonsContainer.appendChild(saveButton);
         buttonsContainer.appendChild(editButton);
@@ -361,7 +358,6 @@
         };
     }
 
-
     function confirmSaveCart() {
         // Send the final confirmation AJAX request to save the cart to the user's database
         $.ajax({
@@ -382,11 +378,6 @@
     }
     </script>
 
-    <!-- Button untuk mengarahkan ke page saved menu planning page -->
-    <a href="{% url 'menuplanning:saved_menu_planning_page' %}" class="bg-blue-500 text-white font-bold py-2 px-4 rounded mt-4">
-        See My Saved Menus
-    </a>
-
-
   </body>
 </html>
+

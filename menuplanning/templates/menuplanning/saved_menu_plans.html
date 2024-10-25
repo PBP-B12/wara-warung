@@ -30,6 +30,7 @@
         height: 420px;
         flex-shrink: 0;
         border-radius: 36px;
+
       }
 
       .total-price {
@@ -60,13 +61,34 @@
         color: white;
         font-weight: bold;
         padding: 0.75rem 1.5rem;
-        border-radius: 8px;
+        border-radius: 9999px;
         cursor: pointer;
         transition: background-color 0.3s ease;
       }
       
       .reset-button:hover {
         background-color: #cc1f1a;
+      }
+
+      .back-button-container {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 3rem;
+      }
+
+      .back-button {
+        background-color: #252525;
+        color: white;
+        font-weight: bold;
+        padding: 0.5rem 1.5rem;
+        border-radius: 9999px;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .back-button:hover {
+        transform: scale(1.05);
       }
     </style>
 </head>
@@ -76,7 +98,16 @@
     <nav class="absolute z-50">{% include 'navbar.html' %}</nav>
     <div class="navbar-height"></div>
 
-    <section class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+    <!-- Back Button Container -->
+    <div class="container mx-auto back-button-container">
+        <a href="{% url 'menuplanning:show_main' %}" class="back-button">
+           Back
+        </a>
+    </div>
+
+    <section 
+        class="container mx-auto mt-6 mb-12 p-6 shadow-md rounded-lg"
+        style="background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%);">
         <h1 class="text-3xl font-bold mb-6">My Saved Menus</h1>
 
         {% for menu_plan in menu_plans %}
@@ -87,7 +118,7 @@
                 <h3 class="font-bold mt-3">Menu:</h3>
                 <ul class="list-disc list-inside ml-5">
                     {% for item in menu_plan.items %}
-                        <li class="menu-item">{{ item.quantity }} x {{ item.item_name }} = Rp{{ item.total }}</li>
+                        <li class="menu-item">{{ item.quantity }} x Item {{ item.item_name }} = Rp{{ item.total }}</li>
                     {% endfor %}
                 </ul>
 
@@ -118,4 +149,5 @@
         }
     </script>
 </body>
+{% include 'footer.html' %}
 </html>
