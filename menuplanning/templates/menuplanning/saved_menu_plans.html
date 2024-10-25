@@ -102,7 +102,7 @@
     <script>
         function resetSavedMenus() {
             $.ajax({
-                url: '{% url "menuplanning:reset_saved_menus" %}',  // Update this URL based on your actual view
+                url: '{% url "menuplanning:reset_saved_menus" %}', 
                 type: 'POST',
                 data: {
                     'csrfmiddlewaretoken': '{{ csrf_token }}'

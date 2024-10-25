@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Cart, CartItem, ChosenMenu
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 # Helper function to get or create the user's cart
 def get_user_cart(user):
@@ -111,72 +112,20 @@ def save_cart_view(request):
 
 
 @login_required
-@csrf_exempt
-def confirm_save_cart(request):
-    if request.method == 'POST':
-        cart = Cart.objects.get(user=request.user)
-        cart.is_saved = True
-        cart.save()
-        return JsonResponse({'message': 'Cart saved successfully'})
-    else:
-        return JsonResponse({'error': 'Invalid request'}, status=400)
-
-
-
-# @login_required
-# def saved_menu_planning_page(request):
-#     chosen_menus = ChosenMenu.objects.filter(user=request.user)  # Filter for menus saved by the logged-in user
-#     context = {
-#         'chosen_menus': chosen_menus,
-#     }
-#     return render(request, 'menuplanning/saved_menu_plans.html', context)
-
-# @login_required
-# def saved_menu_planning_page(request):
-#     chosen_menus = ChosenMenu.objects.filter(user=request.user)  # Retrieve all saved items for the user
-    
-#     # Organize the menu items and calculate totals
-#     items = []
-#     total_price = 0
-
-#     for item in chosen_menus:
-#         item_total = item.quantity * item.price
-#         total_price += item_total
-#         items.append({
-#             'item_name': item.item_name,
-#             'quantity': item.quantity,
-#             'price': item.price,
-#             'total': item_total
-#         })
-
-#     # Add all items to a single menu plan dictionary
-#     menu_plan = {
-#         'name': "Saved Menu Plan",  # Static name or customize as needed
-#         'budget': 100000,           # Set or retrieve your budget here
-#         'items': items,
-#         'total_price': total_price
-#     }
-
-#     return render(request, 'menuplanning/saved_menu_plans.html', {'menu_plans': [menu_plan]})
-
-@login_required
 def saved_menu_planning_page(request):
-    # Retrieve all saved menus grouped by session
     chosen_menus = ChosenMenu.objects.filter(user=request.user)
     
-    # Use a dictionary to group items by each unique saving session
+    # Group by `save_session`
     menu_plans_dict = {}
     for menu in chosen_menus:
-        # Assume each 'menu.save_session' is a unique identifier for saved sessions
         if menu.save_session not in menu_plans_dict:
             menu_plans_dict[menu.save_session] = {
-                'name': f"Menu Planning {menu.save_session}",  # Unique name per session
-                'budget': 100000,  # Set budget here or dynamically
+                'name': f"Menu Planning {menu.save_session}",
+                'budget': 100000,
                 'items': [],
                 'total_price': 0,
             }
         
-        # Calculate the total for each item and add it to the corresponding session plan
         item_total = menu.quantity * menu.price
         menu_plans_dict[menu.save_session]['total_price'] += item_total
         menu_plans_dict[menu.save_session]['items'].append({
@@ -186,10 +135,10 @@ def saved_menu_planning_page(request):
             'total': item_total
         })
 
-    # Convert the dictionary to a list of menu plans for rendering
     menu_plans = list(menu_plans_dict.values())
-
     return render(request, 'menuplanning/saved_menu_plans.html', {'menu_plans': menu_plans})
+
+
 
 
 
@@ -201,5 +150,28 @@ def reset_saved_menus(request):
         ChosenMenu.objects.filter(user=request.user).delete()
         return JsonResponse({'success': True})
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@login_required
+@csrf_exempt
+def confirm_save_cart(request):
+    if request.method == 'POST':
+        cart = Cart.objects.get(user=request.user)
+        cart_items = CartItem.objects.filter(cart=cart)
+
+        # Create a unique save session ID, such as using the cart ID and current timestamp
+        save_session_id = int(timezone.now().timestamp()) 
+
+        for item in cart_items:
+            ChosenMenu.objects.create(
+                user=request.user,
+                item_name=item.item_name,
+                quantity=item.quantity,
+                price=item.item_price,
+                save_session=save_session_id
+            )
+
+        return JsonResponse({'message': 'Cart saved successfully'})
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
