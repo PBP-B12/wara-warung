@@ -78,26 +78,26 @@ def update_cart(request):
 @login_required
 @csrf_exempt
 def save_cart(request):
-    cart = Cart.objects.get(user=request.user)  # Fetch the user's cart
-    cart_items = CartItem.objects.filter(cart=cart)  # Get all cart items associated with the cart
+    cart = Cart.objects.get(user=request.user)
+    cart_items = CartItem.objects.filter(cart=cart)
 
-    total_price = sum(item.quantity * item.item_price for item in cart_items)
-
-    # Check if the total price exceeds the budget
-    if total_price > 100000:
-        return JsonResponse({'error': 'Budget exceeded! You cannot save this menu.'}, status=400)
-
-    # Save the cart items to ChosenMenu
+    # Calculate total price for each item and pass to template
     for item in cart_items:
-        ChosenMenu.objects.create(
-            user=request.user,
-            item_name=item.item_name,
-            quantity=item.quantity,
-            price=item.item_price
-        )
+        item.total_price = item.quantity * item.item_price
 
-    # Render the saved menu confirmation
-    saved_cart_html = render_to_string('menuplanning/saved_menu.html', {
+    total_price = sum(item.total_price for item in cart_items)
+
+    if total_price > 100000:
+        error_message = render_to_string('menuplanning/confirm.html', {
+            'cart_items': cart_items,
+            'total_price': total_price,
+            'cart_name': cart.name,
+            'budget': cart.budget,
+            'exceeded_budget': True
+        })
+        return JsonResponse({'saved_cart_html': error_message, 'error': 'Budget exceeded!'}, status=400)
+
+    saved_cart_html = render_to_string('menuplanning/confirm.html', {
         'cart_items': cart_items,
         'total_price': total_price,
         'cart_name': cart.name,
