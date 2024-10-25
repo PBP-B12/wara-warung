@@ -15,12 +15,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
-      body {
+    body {
         background-color: #fffbf2;
         font-family: 'Poppins', sans-serif;
-      }
+    }
 
-      .input-container {
+        .input-container {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -28,28 +28,25 @@
         border-radius: 32px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         padding: 0.5rem 1rem;
-        width: 450px; 
-        height: 64px;
-      }
+    }
 
-      .input-label {
+    .input-label {
         font-size: 1.2rem;
         font-weight: bold;
         color: white;
         margin-right: 10px;
-      }
+    }
 
-      .input-field {
+    .input-field {
         background-color: white;
         border: none;
         border-radius: 24px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         padding: 0.5rem 1rem;
-        width: 400px; 
-        height: 47px;
         font-size: 1.1rem;
         color: black;
-      }
+    }
+
 
       .flex-inputs {
         display: flex;
@@ -61,13 +58,13 @@
         height: 64px; 
       }
 
-      .warung-container {
+      /* .warung-container {
         margin-left: 60px; 
       }
 
       .budget-container {
         margin-right: 60px; 
-      }
+      } */
 
       .card {
         background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%);
@@ -161,17 +158,23 @@
 
                 <!-- Input Fields and Cards -->
                 <div class="flex flex-col items-center">
-                    <div class="flex justify-center space-x-8 mt-8">
-                        <div class="input-container warung-container">
-                            <label for="warung" class="input-label">Warung:</label>
-                            <input type="text" id="warung" value="Warung Lestari" class="input-field" /> 
-                        </div>
-
-                        <div class="input-container budget-container">
-                            <label for="budget" class="input-label">Budget:</label>
-                            <input type="text" id="budget" value="100000" class="input-field" onchange="updateMaxBudget()" />
+                    <div class="flex justify-center ">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 w-full max-w-3xl px-8">
+                            <div class="input-container warung-container w-full">
+                                <label for="warung" class="input-label">Warung:</label>
+                                <input type="text" id="warung" value="Warung Lestari" class="input-field w-full" /> 
+                            </div>
+                    
+                            <div class="input-container budget-container w-full">
+                                <label for="budget" class="input-label">Budget:</label>
+                                <input type="text" id="budget" value="100000" class="input-field w-full" onchange="updateMaxBudget()" />
+                            </div>
                         </div>
                     </div>
+                    
+                
+                    
+                    
 
                     <!-- Cards Section untuk menampilkan menus di warung (masih data manual dummy)-->
                     <div class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
