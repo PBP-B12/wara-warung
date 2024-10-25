@@ -176,59 +176,54 @@
                     </div>
 
                     <!-- Cards Section untuk menampilkan menus di warung (masih data manual dummy)-->
-                    <div class="mt-10 grid grid-cols-3 gap-8">
-                        <!-- Card 1 -->
-                        <div class="bg-white rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300"
-                            style="width: 325px; height: 420px; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5;">
-                        
+                    <div class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                    <!-- Card 1 -->
+                        <div class="card bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-[325px] w-full h-96 rounded-[36px] shadow-lg hover:scale-105 transition-transform duration-300">
                             <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
                                 alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
-                                
-                            <div class="p-4 w-full flex flex-col">
-                                <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
+                            <div class="p-4 flex flex-col">
+                                <h3 class="font-bold text-xl text-gray-800">Nasi Goreng</h3>
                                 <p class="text-lg text-gray-600">Rp20.000</p>
-                                <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
-                                <div class="quantity-wrapper">
+                                <p class="text-sm text-gray-500">Available at: Warung Lestari</p>
+                                <div class="quantity-wrapper flex justify-center mt-4">
                                     <button class="quantity-control" onclick="updateCart(-1, 1, 20000)">-</button>
-                                    <span class="quantity-display" id="quantity-1">0</span>
+                                    <span class="quantity-display mx-2" id="quantity-1">0</span>
                                     <button class="quantity-control" onclick="updateCart(1, 1, 20000)">+</button>
                                 </div>
                             </div>
                         </div>
-
+                    
                         <!-- Card 2 -->
-                        <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
+                        <div class="card bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-[325px] w-full h-96 rounded-[36px] shadow-lg hover:scale-105 transition-transform duration-300">
                             <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
-                                    alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
-                            <div class="p-4 w-full flex flex-col">
-                                <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
-                                <p class="text-lg text-gray-800">Rp20.000</p>
-                                <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
-                                <div class="quantity-wrapper">
+                                alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
+                            <div class="p-4 flex flex-col">
+                                <h3 class="font-bold text-xl text-gray-800">Nasi Goreng</h3>
+                                <p class="text-lg text-gray-600">Rp20.000</p>
+                                <p class="text-sm text-gray-500">Available at: Warung Lestari</p>
+                                <div class="quantity-wrapper flex justify-center mt-4">
                                     <button class="quantity-control" onclick="updateCart(-1, 2, 20000)">-</button>
-                                    <span class="quantity-display" id="quantity-2">0</span>
+                                    <span class="quantity-display mx-2" id="quantity-2">0</span>
                                     <button class="quantity-control" onclick="updateCart(1, 2, 20000)">+</button>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Card 3 -->
-                        <div class="card flex flex-col items-start transform hover:scale-105 transition-transform duration-300">
+                        <div class="card bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-[325px] w-full h-96 rounded-[36px] shadow-lg hover:scale-105 transition-transform duration-300">
                             <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
                                 alt="Nasi Goreng" class="w-full h-48 object-cover rounded-t-[36px]" />
-                            <div class="p-4 w-full flex flex-col">
-                                <h3 class="font-bold text-xl text-gray-800 mt-2">Nasi Goreng</h3>
-                                <p class="text-lg text-gray-800">Rp20.000</p>
-                                <p class="text-sm text-gray-500">Available at: Warung Lestari, ...</p>
-                                <div class="quantity-wrapper">
+                            <div class="p-4 flex flex-col">
+                                <h3 class="font-bold text-xl text-gray-800">Nasi Goreng</h3>
+                                <p class="text-lg text-gray-600">Rp20.000</p>
+                                <p class="text-sm text-gray-500">Available at: Warung Lestari</p>
+                                <div class="quantity-wrapper flex justify-center mt-4">
                                     <button class="quantity-control" onclick="updateCart(-1, 3, 20000)">-</button>
-                                    <span class="quantity-display" id="quantity-3">0</span>
+                                    <span class="quantity-display mx-2" id="quantity-3">0</span>
                                     <button class="quantity-control" onclick="updateCart(1, 3, 20000)">+</button>
                                 </div>
                             </div>
                         </div>
-
-                        
                     </div>
                 </div>
             
