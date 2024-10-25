@@ -1,9 +1,0 @@
-<!--  Template buat Saved Menu yang udh final Version-->
-<h1>Saved Cart: {{ cart_name }}</h1>
-<p>Budget: Rp{{ budget }}</p>
-<ul>
-    {% for item in cart_items %}
-        <li>{{ item.quantity }} x {{ item.item_name }} - Rp{{ item.total_price }}</li>
-    {% endfor %}
-</ul>
-<p>Total Price: Rp{{ total_price }}</p>

@@ -145,7 +145,7 @@
         </div>
     </section>
 
-    <!-- Cards Section -->
+    <!-- Cards Section untuk menampilkan menus di warung (masih data manual dummy)-->
     <div class="mt-10 mx-auto flex flex-col items-center pb-24">
 
         <div class="flex justify-center space-x-12">
@@ -202,7 +202,7 @@
         </div>
     </div>
 
-    <!-- Show Current Cart Items and Total Price -->
+    <!-- Menunjukkan current cart items  -->
     <section class="mt-10 mx-auto text-center">
         <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
     
@@ -213,57 +213,56 @@
     </section>
     
     <script>
-const MAX_BUDGET = 100000;  // Set the budget limit
+    const MAX_BUDGET = 100000;  // Set the budget limit, masih manual bukan sesuai input user
+    function updateCart(change, itemId, price) {
+        let quantityElement = document.getElementById('quantity-' + itemId);
+        let currentQuantity = parseInt(quantityElement.textContent);
+        let newQuantity = currentQuantity + change;
 
-function updateCart(change, itemId, price) {
-    let quantityElement = document.getElementById('quantity-' + itemId);
-    let currentQuantity = parseInt(quantityElement.textContent);
-    let newQuantity = currentQuantity + change;
-
-    if (newQuantity < 0) {
-        newQuantity = 0;
-    }
-
-    // Update the quantity on the page
-    quantityElement.textContent = newQuantity;
-
-    // Send AJAX request to update the cart on the server
-    $.ajax({
-        url: '{% url "menuplanning:update_cart" %}',
-        type: 'POST',
-        data: {
-            'item_id': itemId,
-            'quantity': newQuantity,
-            'price': price,
-            'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure this token is included
-        },
-        success: function(response) {
-            $('#cart-items').html(response.updated_cart_html);
-            $('#total-price').text('Total Price: Rp' + response.total_price);
-
-            // Check if the total exceeds the maximum budget
-            if (response.total_price > MAX_BUDGET) {
-                // Display an error popup if over budget
-                alert('Total exceeds Rp100,000. Please adjust your menu.');
-                
-                // Update the save button text and disable it
-                $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
-                    'background-color': 'red',  // Optional: style to indicate an error
-                    'cursor': 'not-allowed'
-                });
-            } else {
-                // Re-enable the save button if the total is within the budget
-                $('#save-button').text('Save Menu').prop('disabled', false).css({
-                    'background-color': '#4CAF50',  // Green for save
-                    'cursor': 'pointer'
-                });
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error updating cart:', error);
+        if (newQuantity < 0) {
+            newQuantity = 0;
         }
-    });
-}
+
+        // Update the quantity on the page
+        quantityElement.textContent = newQuantity;
+
+        // Send AJAX request to update the cart on the server
+        $.ajax({
+            url: '{% url "menuplanning:update_cart" %}',
+            type: 'POST',
+            data: {
+                'item_id': itemId,
+                'quantity': newQuantity,
+                'price': price,
+                'csrfmiddlewaretoken': '{{ csrf_token }}' 
+            },
+            success: function(response) {
+                $('#cart-items').html(response.updated_cart_html);
+                $('#total-price').text('Total Price: Rp' + response.total_price);
+
+                // Check if the total exceeds the maximum budget
+                if (response.total_price > MAX_BUDGET) {
+                    // Display an error popup if over budget
+                    alert('Total exceeds Rp100,000. Please adjust your menu.');
+                    
+                    // Update the save button text and disable it
+                    $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
+                        'background-color': 'red',  // Optional: style to indicate an error
+                        'cursor': 'not-allowed'
+                    });
+                } else {
+                    // Re-enable the save button if the total is within the budget
+                    $('#save-button').text('Save Menu').prop('disabled', false).css({
+                        'background-color': '#4CAF50',  // Green for save
+                        'cursor': 'pointer'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating cart:', error);
+            }
+        });
+    }
 
     </script>
 
@@ -280,7 +279,7 @@ function updateCart(change, itemId, price) {
             url: '{% url "menuplanning:save_cart" %}',
             type: 'POST',
             data: {
-                'csrfmiddlewaretoken': '{{ csrf_token }}' // Ensure this is correct
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
             },
             success: function(response) {
                 // Show the confirmation popup with cart items
@@ -293,79 +292,79 @@ function updateCart(change, itemId, price) {
     }
 
     function displayConfirmationPopup(cartHtml) {
-    // Create the overlay for the confirmation popup
-    let overlay = document.createElement('div');
-    overlay.id = 'cart-overlay';
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    overlay.style.display = 'flex';
-    overlay.style.justifyContent = 'center';
-    overlay.style.alignItems = 'center';
-    overlay.style.zIndex = '1000';
+        // Create the overlay for the confirmation popup
+        let overlay = document.createElement('div');
+        overlay.id = 'cart-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '1000';
 
-    // Create the modal container for the cart confirmation
-    let modal = document.createElement('div');
-    modal.id = 'saved-cart-modal';
-    modal.style.backgroundColor = 'white';
-    modal.style.padding = '20px';
-    modal.style.borderRadius = '10px';
-    modal.style.width = '50%';
+        // Create the modal container for the cart confirmation
+        let modal = document.createElement('div');
+        modal.id = 'saved-cart-modal';
+        modal.style.backgroundColor = 'white';
+        modal.style.padding = '20px';
+        modal.style.borderRadius = '10px';
+        modal.style.width = '50%';
 
-    // Add the cart content to the modal (this is dynamically passed HTML from the server)
-    modal.innerHTML = cartHtml;
+        // Add the cart content to the modal (this is dynamically passed HTML from the server)
+        modal.innerHTML = cartHtml;
 
-    // Add the Save and Edit buttons
-    let buttonsContainer = document.createElement('div');
-    buttonsContainer.style.marginTop = '20px';
+        // Add the Save and Edit buttons
+        let buttonsContainer = document.createElement('div');
+        buttonsContainer.style.marginTop = '20px';
 
-    let saveButton = document.createElement('button');
-    saveButton.textContent = 'Save';
-    saveButton.style.padding = '10px 20px';
-    saveButton.style.backgroundColor = '#4CAF50'; // Green for Save
-    saveButton.style.color = 'white';
-    saveButton.style.border = 'none';
-    saveButton.style.borderRadius = '5px';
-    saveButton.style.marginRight = '10px';
-    saveButton.style.cursor = 'pointer';
+        let saveButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+        saveButton.style.padding = '10px 20px';
+        saveButton.style.backgroundColor = '#4CAF50'; // Green for Save
+        saveButton.style.color = 'white';
+        saveButton.style.border = 'none';
+        saveButton.style.borderRadius = '5px';
+        saveButton.style.marginRight = '10px';
+        saveButton.style.cursor = 'pointer';
 
-    let editButton = document.createElement('button');
-    editButton.textContent = 'Edit';
-    editButton.style.padding = '10px 20px';
-    editButton.style.backgroundColor = '#ff6e1f'; // Orange for Edit
-    editButton.style.color = 'white';
-    editButton.style.border = 'none';
-    editButton.style.borderRadius = '5px';
-    editButton.style.cursor = 'pointer';
+        let editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.style.padding = '10px 20px';
+        editButton.style.backgroundColor = '#ff6e1f'; // Orange for Edit
+        editButton.style.color = 'white';
+        editButton.style.border = 'none';
+        editButton.style.borderRadius = '5px';
+        editButton.style.cursor = 'pointer';
 
-    buttonsContainer.appendChild(saveButton);
-    buttonsContainer.appendChild(editButton);
+        buttonsContainer.appendChild(saveButton);
+        buttonsContainer.appendChild(editButton);
 
-    modal.appendChild(buttonsContainer);
+        modal.appendChild(buttonsContainer);
 
-    // Append the modal to the overlay
-    overlay.appendChild(modal);
+        // Append the modal to the overlay
+        overlay.appendChild(modal);
 
-    // Append the overlay to the body
-    document.body.appendChild(overlay);
+        // Append the overlay to the body
+        document.body.appendChild(overlay);
 
-    // Handle Save and Edit button actions
-    saveButton.onclick = function() {
-        confirmSaveCart(); // Call the function to confirm save
-    };
+        // Handle Save and Edit button actions
+        saveButton.onclick = function() {
+            confirmSaveCart(); // Call the function to confirm save
+        };
 
-    editButton.onclick = function() {
-        document.body.removeChild(overlay); // Close the popup and allow editing
-    };
-}
+        editButton.onclick = function() {
+            document.body.removeChild(overlay); // Close the popup and allow editing
+        };
+    }
 
 
     function confirmSaveCart() {
         // Send the final confirmation AJAX request to save the cart to the user's database
-            $.ajax({
+        $.ajax({
             url: '{% url "menuplanning:confirm_save_cart" %}',  // This should now resolve correctly
             type: 'POST',
             data: {
@@ -383,10 +382,10 @@ function updateCart(change, itemId, price) {
     }
     </script>
 
-
-<a href="{% url 'menuplanning:saved_menu_planning_page' %}" class="bg-blue-500 text-white font-bold py-2 px-4 rounded mt-4">
-    See My Saved Menus
-</a>
+    <!-- Button untuk mengarahkan ke page saved menu planning page -->
+    <a href="{% url 'menuplanning:saved_menu_planning_page' %}" class="bg-blue-500 text-white font-bold py-2 px-4 rounded mt-4">
+        See My Saved Menus
+    </a>
 
 
   </body>

@@ -74,7 +74,6 @@ def update_cart(request):
 
 
 
-
 @login_required
 @csrf_exempt
 def save_cart(request):
@@ -106,33 +105,9 @@ def save_cart(request):
 
     return JsonResponse({'saved_cart_html': saved_cart_html})
 
-
-
-
+# Untuk nunjukkin popup message confirm.html
 def save_cart_view(request):
     return render(request, 'confirm.html')
-
-@login_required
-def saved_menu_planning(request):
-    # Get all saved ChosenMenu items for the user
-    chosen_menus = ChosenMenu.objects.filter(user=request.user)
-
-    # Calculate total price for each saved menu and pass to template
-    for item in chosen_menus:
-        item.total_price = item.quantity * item.price
-
-    total_price = sum(item.total_price for item in chosen_menus)
-
-    # Pass the saved menus to the confirm.html template
-    context = {
-        'cart_name': "My Saved Menus",  # You can customize the name here
-        'budget': 100000,  # Adjust the budget as necessary
-        'cart_items': chosen_menus,
-        'total_price': total_price,
-    }
-    
-    return render(request, 'menuplanning/confirm.html', context)  # Reuse the confirm.html template
-
 
 
 @login_required
@@ -146,11 +121,6 @@ def confirm_save_cart(request):
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
 
-@login_required
-def saved_menus(request):
-    chosen_menus = ChosenMenu.objects.filter(user=request.user)
-    saved_menus_html = render_to_string('menuplanning/saved_menu_plans.html', {'chosen_menus': chosen_menus})
-    return JsonResponse({'saved_menus_html': saved_menus_html})
 
 
 @login_required
