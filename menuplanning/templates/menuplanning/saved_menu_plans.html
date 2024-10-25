@@ -20,19 +20,6 @@
         font-family: 'Poppins', sans-serif;
       }
 
-      .navbar-height {
-        height: 64px; 
-      }
-
-      .card {
-        background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%);
-        width: 325px;
-        height: 420px;
-        flex-shrink: 0;
-        border-radius: 36px;
-
-      }
-
       .total-price {
         font-size: 1.5rem;
         font-weight: bold;
@@ -45,6 +32,7 @@
         border-radius: 16px;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         margin-bottom: 1.5rem;
+        width: 100%;
       }
 
       .menu-plan h2 {
@@ -70,12 +58,6 @@
         background-color: #cc1f1a;
       }
 
-      .back-button-container {
-        display: flex;
-        justify-content: flex-start;
-        margin-top: 3rem;
-      }
-
       .back-button {
         background-color: #252525;
         color: white;
@@ -93,44 +75,46 @@
     </style>
 </head>
 
-<body class="background-color: #fffbf2 font-poppins">
+<body class="bg-[#fffbf2] font-poppins">
     
     <nav class="absolute z-50">{% include 'navbar.html' %}</nav>
     <div class="navbar-height"></div>
 
     <!-- Back Button Container -->
-    <div class="container mx-auto back-button-container">
+    <div class="container mx-auto mt-12 px-4">
         <a href="{% url 'menuplanning:show_main' %}" class="back-button">
            Back
         </a>
     </div>
 
-    <section 
-        class="container mx-auto mt-6 mb-12 p-6 shadow-md rounded-lg"
-        style="background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%);">
-        <h1 class="text-3xl font-bold mb-6">My Saved Menus</h1>
+    <!-- Gradient Container with Full-width Cards -->
+    <section class="container mx-auto mt-6 mb-12 p-6 shadow-md rounded-lg bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5]">
+        <h1 class="text-3xl font-bold mb-6 text-center">My Saved Menus</h1>
 
-        {% for menu_plan in menu_plans %}
-            <div class="menu-plan">
-                <h2 class="text-2xl font-semibold mb-2">{{ menu_plan.name }}</h2>
-                <p class="budget-label"><strong>Budget:</strong> Rp{{ menu_plan.budget|floatformat:0 }}</p>
+        <div class="space-y-6">
+            {% for menu_plan in menu_plans %}
+                <div class="menu-plan">
+                    <h2 class="text-2xl font-semibold mb-2">{{ menu_plan.name }}</h2>
+                    <p class="budget-label text-black"><strong>Budget:</strong> Rp{{ menu_plan.budget|floatformat:0 }}</p>
 
+                    <h3 class="font-bold mt-3">Menu:</h3>
+                    <ul class="list-disc list-inside ml-5">
+                        {% for item in menu_plan.items %}
+                            <li class="menu-item">{{ item.quantity }} x Item {{ item.item_name }} = Rp{{ item.total|floatformat:0 }}</li>
+                        {% endfor %}
+                    </ul>
 
-                <h3 class="font-bold mt-3">Menu:</h3>
-                <ul class="list-disc list-inside ml-5">
-                    {% for item in menu_plan.items %}
-                        <li class="menu-item">{{ item.quantity }} x Item {{ item.item_name }} = Rp{{ item.total|floatformat:0 }}</li>
-                    {% endfor %}
-                </ul>
+                    <p class="menu-total font-bold mt-3 text-black">Total : Rp{{ menu_plan.total_price|floatformat:0 }}</p>
 
-                <p class="menu-total font-bold mt-3">Total = Rp{{ menu_plan.total_price|floatformat:0 }}</p>
-            </div>
-        {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
 
-        <!-- Reset Button -->
-        <button class="reset-button mt-6" onclick="resetSavedMenus()">Reset All Saved Menus</button>
+        <!-- Centered Reset Button -->
+        <div class="flex justify-center mt-6">
+            <button class="reset-button" onclick="resetSavedMenus()">Reset All Saved Menus</button>
+        </div>
     </section>
-
 
     <script>
         function resetSavedMenus() {
