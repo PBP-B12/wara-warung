@@ -10,7 +10,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 def main_view(request):
-    return render(request, 'main.html')
+    return render(request, 'homepage.html')
 
 def register_view(request):
     if request.method == 'POST':
@@ -37,12 +37,16 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('auth_app:main')  # Arahkan ke halaman utama setelah login
+                return redirect('auth_app:main')  # Redirect to the main page after login
             else:
-                form.add_error(None, 'Invalid username or password')
+                messages.error(request, 'Invalid username or password. Please try again.')
+        else:
+            messages.error(request, 'Invalid login details. Please check your username and password.')
     else:
         form = AuthenticationForm()
+    
     return render(request, 'login.html', {'form': form})
+
 
 @login_required
 def logout_view(request):

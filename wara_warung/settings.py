@@ -27,10 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "jeremia-rangga-warawarung.pbp.cs.ui.ac.id"]
 
+
 # Application definition
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/login/'
-LOGIN_URL = '/login/'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,11 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    'auth_app', #install app authentication
+    "django.contrib.humanize",
     'homepage',
+    'auth_app',
     "menu",
     "warung",
+    "search",
+    "menufavorite"
+    
 ]
 
 MIDDLEWARE = [
