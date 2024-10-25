@@ -8,8 +8,15 @@ from django.utils import timezone
 
 # Helper function to get or create the user's cart
 def get_user_cart(user):
-    cart, created = Cart.objects.get_or_create(user=user)
+    cart, created = Cart.objects.get_or_create(
+        user=user,
+        defaults={
+            'name': f"{user.username}'s Cart",  # Optional default name
+            'budget': 100000  # Set a budget
+        }
+    )
     return cart
+
 
 # Main view to display the menu planning page
 @login_required
@@ -45,16 +52,18 @@ def update_cart(request):
         # Get the user's cart
         cart = get_user_cart(request.user)
 
-        # Try to get the cart item, or create a new one if it doesn't exist
-        try:
-            cart_item = CartItem.objects.get(cart=cart, id=item_id)
-        except CartItem.DoesNotExist:
-            # If the item doesn't exist in the cart, create a new cart item
-            cart_item = CartItem.objects.create(cart=cart, id=item_id, quantity=quantity, item_price=price)
+        # Try to get the cart item by name within this specific cart, or create a new one if it doesn't exist
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart,
+            item_name=item_id,  # Use a unique identifier like item name or ID from the frontend
+            defaults={'quantity': quantity, 'item_price': price}
+        )
 
-        # Update the quantity and save the cart item
-        cart_item.quantity = quantity
-        cart_item.save()
+        # Update the quantity and price if the item already exists
+        if not created:
+            cart_item.quantity = quantity
+            cart_item.item_price = price
+            cart_item.save()
 
         # Fetch the updated cart items
         cart_items = CartItem.objects.filter(cart=cart)
@@ -72,6 +81,7 @@ def update_cart(request):
         })
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
+
 
 
 
@@ -121,7 +131,7 @@ def saved_menu_planning_page(request):
         if menu.save_session not in menu_plans_dict:
             menu_plans_dict[menu.save_session] = {
                 'name': f"Menu Planning {menu.save_session}",
-                'budget': 100000,
+                'budget': 100000, 
                 'items': [],
                 'total_price': 0,
             }
