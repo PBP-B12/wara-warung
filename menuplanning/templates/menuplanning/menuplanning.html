@@ -391,12 +391,19 @@
             // Handle Save and Edit button actions
             saveButton.onclick = function() {
                 confirmSaveCart(); // Call the function to confirm save
+                
+                // After saving, reset all quantity displays to zero
+                document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
+                
+                // Remove the popup overlay
+                document.body.removeChild(overlay);
             };
 
             editButton.onclick = function() {
                 document.body.removeChild(overlay); // Close the popup and allow editing
             };
         }
+
 
         function confirmSaveCart() {
             const budgetInput = document.getElementById("budget").value;
@@ -409,13 +416,35 @@
                 },
                 success: function(response) {
                     alert('Cart saved successfully!');
-                    document.body.removeChild(document.getElementById('cart-overlay'));
+                    
+                    // Reset the cart overlay if it exists
+                    const overlay = document.getElementById('cart-overlay');
+                    if (overlay) {
+                        document.body.removeChild(overlay);
+                    }
+
+                    // Reset the quantity displays to zero
+                    document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
+
+                    // Reset the cart items view to empty
+                    $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
+
+                    // Reset the total price display to zero
+                    $('#total-price').text('Total Price: Rp0');
                 },
                 error: function(xhr, status, error) {
                     console.error('Error confirming cart save:', error);
                 }
             });
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+        // Reset quantities to zero on page load
+        document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
+            $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
+            $('#total-price').text('Total Price: Rp0');
+        });
+
     </script>
 
   </body>

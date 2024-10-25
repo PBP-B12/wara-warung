@@ -18,27 +18,21 @@ def get_user_cart(user):
     return cart
 
 
-# Main view to display the menu planning page
 @login_required
 def show_main(request):
     cart = get_user_cart(request.user)
-    cart_items = CartItem.objects.filter(cart=cart)
+    # Filter out items with quantity 0
+    cart_items = CartItem.objects.filter(cart=cart).exclude(quantity=0)
 
-    # Calculate total price for each item
-    for item in cart_items:
-        item.total_price = item.quantity * item.item_price
+    # Calculate total cart price based on chosen items
+    total_price = sum(item.quantity * item.item_price for item in cart_items)
 
-    # Calculate total cart price
-    total_price = sum(item.total_price for item in cart_items)
-
-    # Pass the cart items and total price to the template
     context = {
         'cart_items': cart_items,
         'total_price': total_price,
-        'cart_name': cart.name,  # Ensure you pass cart_name here
+        'cart_name': cart.name,
     }
     return render(request, 'menuplanning/menuplanning.html', context)
-
 
 
 @login_required
@@ -52,10 +46,10 @@ def update_cart(request):
         # Get the user's cart
         cart = get_user_cart(request.user)
 
-        # Try to get the cart item by name within this specific cart, or create a new one if it doesn't exist
+        # Get or create the cart item
         cart_item, created = CartItem.objects.get_or_create(
             cart=cart,
-            item_name=item_id,  # Nama menu nya
+            item_name=item_id,
             defaults={'quantity': quantity, 'item_price': price}
         )
 
@@ -65,16 +59,15 @@ def update_cart(request):
             cart_item.item_price = price
             cart_item.save()
 
-        # Fetch the updated cart items
-        cart_items = CartItem.objects.filter(cart=cart)
+        # Fetch only items with quantity > 0
+        cart_items = CartItem.objects.filter(cart=cart).exclude(quantity=0)
 
-        # Calculate the updated total price for the cart
+        # Calculate the updated total price
         total_price = sum(item.quantity * item.item_price for item in cart_items)
 
-        # Render the updated cart items HTML
+        # Render the updated cart HTML
         updated_cart_html = render_to_string('menuplanning/cart_items.html', {'cart_items': cart_items})
 
-        # Return the updated cart HTML and total price in the response
         return JsonResponse({
             'updated_cart_html': updated_cart_html,
             'total_price': total_price
@@ -83,14 +76,12 @@ def update_cart(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-
-
 @login_required
 @csrf_exempt
 def save_cart(request):
     cart = get_user_cart(request.user)
-    cart_items = CartItem.objects.filter(cart=cart)
-    budget = int(request.POST.get('budget', 100000))  # Use budget from POST
+    cart_items = CartItem.objects.filter(cart=cart).exclude(quantity=0)  # Exclude items with zero quantity
+    budget = int(request.POST.get('budget', 100000))
 
     for item in cart_items:
         item.total_price = item.quantity * item.item_price
@@ -102,7 +93,7 @@ def save_cart(request):
             'cart_items': cart_items,
             'total_price': total_price,
             'cart_name': cart.name,
-            'budget': budget,  # Pass budget here
+            'budget': budget,
             'exceeded_budget': True
         })
         return JsonResponse({'saved_cart_html': error_message, 'error': 'Budget exceeded!'}, status=400)
@@ -111,10 +102,11 @@ def save_cart(request):
         'cart_items': cart_items,
         'total_price': total_price,
         'cart_name': cart.name,
-        'budget': budget,  # Pass budget here
+        'budget': budget,
     })
 
     return JsonResponse({'saved_cart_html': saved_cart_html})
+
 
 
 # Untuk nunjukkin popup message confirm.html
@@ -124,14 +116,15 @@ def save_cart_view(request):
 
 @login_required
 def saved_menu_planning_page(request):
-    chosen_menus = ChosenMenu.objects.filter(user=request.user)
+    chosen_menus = ChosenMenu.objects.filter(user=request.user).exclude(quantity=0)
 
+    # Organize menu plans by save_session
     menu_plans_dict = {}
     for menu in chosen_menus:
         if menu.save_session not in menu_plans_dict:
             menu_plans_dict[menu.save_session] = {
                 'name': f"Menu Planning {menu.save_session}",
-                'budget': menu.budget, 
+                'budget': menu.budget,
                 'items': [],
                 'total_price': 0,
             }
@@ -149,6 +142,7 @@ def saved_menu_planning_page(request):
     return render(request, 'menuplanning/saved_menu_plans.html', {'menu_plans': menu_plans})
 
 
+
 @login_required
 @csrf_exempt
 def reset_saved_menus(request):
@@ -162,13 +156,14 @@ def reset_saved_menus(request):
 @csrf_exempt
 def confirm_save_cart(request):
     if request.method == 'POST':
-        budget = request.POST.get('budget')  # Retrieve the user's budget input from the request
+        budget = request.POST.get('budget')
         cart = Cart.objects.get(user=request.user)
         cart_items = CartItem.objects.filter(cart=cart)
 
         user_budget = float(budget) if budget else 100000
-
         save_session_id = int(timezone.now().timestamp())
+
+        # Save the current cart items to the ChosenMenu model
         for item in cart_items:
             ChosenMenu.objects.create(
                 user=request.user,
@@ -176,12 +171,18 @@ def confirm_save_cart(request):
                 quantity=item.quantity,
                 price=item.item_price,
                 save_session=save_session_id,
-                budget=user_budget  # Save the user-specified budget
+                budget=user_budget
             )
+
+        # Reset cart item quantities to zero and update the price
+        cart_items.update(quantity=0)
 
         return JsonResponse({'message': 'Cart saved successfully'})
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+
 
 
 

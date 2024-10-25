@@ -95,19 +95,21 @@
             {% for menu_plan in menu_plans %}
                 <div class="menu-plan">
                     <h2 class="text-2xl font-semibold mb-2">{{ menu_plan.name }}</h2>
-                    <p class="budget-label text-black"><strong>Budget:</strong> Rp{{ menu_plan.budget|floatformat:0 }}</p>
+                    <p class="budget-label"><strong>Budget:</strong> Rp{{ menu_plan.budget|floatformat:0 }}</p>
 
                     <h3 class="font-bold mt-3">Menu:</h3>
                     <ul class="list-disc list-inside ml-5">
                         {% for item in menu_plan.items %}
-                            <li class="menu-item">{{ item.quantity }} x Item {{ item.item_name }} = Rp{{ item.total|floatformat:0 }}</li>
+                            {% if item.quantity > 0 %}
+                                <li class="menu-item">{{ item.quantity }} x Item {{ item.item_name }} = Rp{{ item.total|floatformat:0 }}</li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
 
-                    <p class="menu-total font-bold mt-3 text-black">Total : Rp{{ menu_plan.total_price|floatformat:0 }}</p>
-
+                    <p class="menu-total font-bold mt-3 text-black">Total = Rp{{ menu_plan.total_price|floatformat:0 }}</p>
                 </div>
             {% endfor %}
+
         </div>
 
         <!-- Centered Reset Button -->
