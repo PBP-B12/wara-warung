@@ -384,29 +384,10 @@ function updateCart(change, itemId, price) {
     </script>
 
 
-    <!-- Add a new button to see saved menu plans -->
-    <button onclick="seeMyMenuPlans()" class="bg-blue-500 text-white font-bold py-2 px-4 rounded mt-4">
-        See My Menu Plans
-    </button>
+<a href="{% url 'menuplanning:saved_menu_planning_page' %}" class="bg-blue-500 text-white font-bold py-2 px-4 rounded mt-4">
+    See My Saved Menus
+</a>
 
-    <!-- Placeholder for displaying the saved menu plans -->
-    <div id="saved-menu-plans" class="mt-8"></div>
 
-    <script>
-        function seeMyMenuPlans() {
-            // Send AJAX request to get saved menu plans
-            $.ajax({
-                url: '{% url "menuplanning:saved_menus" %}', // Make sure the URL points to the correct view
-                type: 'GET',
-                success: function(response) {
-                    // Insert the response (which contains the saved menus) into the saved-menu-plans div
-                    $('#saved-menu-plans').html(response.saved_menus_html);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error loading saved menu plans:', error);
-                }
-            });
-        }
-    </script>
   </body>
 </html>

@@ -5,7 +5,7 @@
     <p>Budget: Rp{{ budget }}</p>
     <ul>
         {% for item in cart_items %}
-            <li>{{ item.quantity }} x {{ item.item_name }} - Rp{{ item.total_price }}</li>
+            <li>{{ item.quantity }} x Item {{ forloop.counter }} {{ item.item_name }} - Rp{{ item.total_price }}</li>
         {% endfor %}
     </ul>
     <p>Total Price: Rp{{ total_price }}</p>

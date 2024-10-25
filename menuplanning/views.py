@@ -114,19 +114,26 @@ def save_cart_view(request):
 
 @login_required
 def saved_menu_planning(request):
-    cart = Cart.objects.get(user=request.user)  # Get the user's cart
-    cart_items = CartItem.objects.filter(cart=cart)  # Get cart items
-    
-    total_price = sum(item.quantity * item.item_price for item in cart_items)
+    # Get all saved ChosenMenu items for the user
+    chosen_menus = ChosenMenu.objects.filter(user=request.user)
 
+    # Calculate total price for each saved menu and pass to template
+    for item in chosen_menus:
+        item.total_price = item.quantity * item.price
+
+    total_price = sum(item.total_price for item in chosen_menus)
+
+    # Pass the saved menus to the confirm.html template
     context = {
-        'cart_name': cart.name,
-        'budget': cart.budget,
-        'cart_items': cart_items,
+        'cart_name': "My Saved Menus",  # You can customize the name here
+        'budget': 100000,  # Adjust the budget as necessary
+        'cart_items': chosen_menus,
         'total_price': total_price,
     }
+    
+    return render(request, 'menuplanning/confirm.html', context)  # Reuse the confirm.html template
 
-    return render(request, 'menuplanning/saved_menu.html', context)
+
 
 @login_required
 @csrf_exempt
@@ -144,3 +151,13 @@ def saved_menus(request):
     chosen_menus = ChosenMenu.objects.filter(user=request.user)
     saved_menus_html = render_to_string('menuplanning/saved_menu_plans.html', {'chosen_menus': chosen_menus})
     return JsonResponse({'saved_menus_html': saved_menus_html})
+
+
+@login_required
+def saved_menu_planning_page(request):
+    chosen_menus = ChosenMenu.objects.filter(user=request.user)  # Filter for menus saved by the logged-in user
+    context = {
+        'chosen_menus': chosen_menus,
+    }
+    return render(request, 'menuplanning/saved_menu_plans.html', context)
+
