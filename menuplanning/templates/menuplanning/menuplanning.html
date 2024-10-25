@@ -255,12 +255,12 @@
 
     <script>
     function saveCart() {
-        // Send AJAX request to save the current cart state
+    // Send AJAX request to save the current cart state
         $.ajax({
             url: '{% url "menuplanning:save_cart" %}',
             type: 'POST',
             data: {
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
+                'csrfmiddlewaretoken': '{{ csrf_token }}' // Ensure this is correct
             },
             success: function(response) {
                 // Show the confirmation popup with cart items
