@@ -20,7 +20,7 @@
         font-family: 'Poppins', sans-serif;
     }
 
-        .input-container {
+    .input-container {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -48,33 +48,25 @@
     }
 
 
-      .flex-inputs {
+    .flex-inputs {
         display: flex;
         justify-content: space-between;
         margin-top: 2rem;
-      }
+    }
 
-      .navbar-height {
+    .navbar-height {
         height: 64px; 
-      }
+    }
 
-      /* .warung-container {
-        margin-left: 60px; 
-      }
-
-      .budget-container {
-        margin-right: 60px; 
-      } */
-
-      .card {
+    .card {
         background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%);
         width: 325px;
         height: 420px;
         flex-shrink: 0;
         border-radius: 36px;
-      }
+    }
 
-      .quantity-control {
+    .quantity-control {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -86,38 +78,38 @@
         font-size: 1.2rem;
         font-weight: bold;
         margin: 0 10px;
-      }
+    }
 
-      .quantity-display {
+    .quantity-display {
         font-size: 1.2rem;
         color: black;
         font-weight: bold;
-      }
+    }
 
-      .quantity-wrapper {
+    .quantity-wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
         margin-top: 40px;
-      }
+    }
 
-      main {
+    main {
         flex: 1; 
-      }
+    }
 
-      .total-price {
+    .total-price {
         font-size: 1.5rem;
         font-weight: bold;
         margin-top: 1rem;
-      }
+    }
 
-      .content-wrapper {
+    .content-wrapper {
         display: flex;
         flex: 1;
         padding-top: 6rem; 
-      }
+    }
 
-      .cart-view {
+    .cart-view {
         position: fixed;
         top: calc(4rem + 3rem); /* Adjusted to start just below the navbar */
         bottom: 2vh; 
@@ -135,11 +127,11 @@
         z-index: 50;
     }
 
-      .menu-planning {
+    .menu-planning {
         width: 75%;
         padding: 2rem;
         margin-right: 25%;
-      }
+    }
 
       
     </style>
@@ -171,13 +163,10 @@
                             </div>
                         </div>
                     </div>
-                    
-                
-                    
-                    
-
+ 
                     <!-- Cards Section untuk menampilkan menus di warung (masih data manual dummy)-->
                     <div class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+
                     <!-- Card 1 -->
                         <div class="card bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-[325px] w-full h-96 rounded-[36px] shadow-lg hover:scale-105 transition-transform duration-300">
                             <img src="https://cdn0-production-images-kly.akamaized.net/viaedBOpL4cP1IQ1AAJMBv5rjqc=/500x281/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/2355329/original/078016000_1536562953-resep-masakan-sehari-hari.jpg" 
@@ -227,7 +216,6 @@
                         </div>
                     </div>
                 </div>
-            
             </section>
         </div>
 
@@ -239,14 +227,18 @@
                     id="cart-items">{% include 'menuplanning/cart_items.html' %}
                 </div>
                 <p class="total-price" id="total-price">Total Price: Rp0</p>
-                <div>
-                    <button id="save-button" onclick="saveCart()" class="text-white font-bold py-2 px-6 rounded-full mt-4 mb-4 cursor-pointer transform hover:scale-105 transition-transform duration-300" 
-                    style="background-color: #64D16D;">
-                    Save Menu</button>
-                </div>
-                <div>
-                    <a href="{% url 'menuplanning:saved_menu_planning_page' %}" 
-                        class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full mt-2 transform transition-transform duration-300 ease-in-out transform hover:scale-110 hover:shadow-lg">
+
+                <!-- Button Container with Vertical Layout -->
+                <div class="flex flex-col items-center gap-4 justify-center mt-4">
+                    <button id="save-button" onclick="saveCart()"
+                        class="text-white font-bold py-1.5 px-4 rounded-full cursor-pointer transform hover:scale-105 transition-transform duration-300"
+                        style="background-color: #64D16D; min-width: 100px; ">
+                        Save Menu
+                    </button>
+
+                    <a href="{% url 'menuplanning:saved_menu_planning_page' %}"
+                        class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform transition-transform duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
+                        style="min-width: 100px;">
                         See My Saved Menus
                     </a>
                 </div>
@@ -258,7 +250,6 @@
     <footer>
         {% include 'footer.html' %}
     </footer>
-
 
     <script>
         let MAX_BUDGET = parseInt(document.getElementById("budget").value) || 100000; // Set initial MAX_BUDGET
@@ -426,7 +417,6 @@
             });
         }
     </script>
-
 
   </body>
 </html>
