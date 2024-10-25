@@ -123,7 +123,7 @@
       .cart-view {
         position: fixed;
         top: calc(4rem + 3rem); /* Adjusted to start just below the navbar */
-        bottom: 2vh; /* Ends before the footer */
+        bottom: 2vh; 
         right: 0;
         width: 25%;
         background: #FFF;
@@ -151,8 +151,6 @@
   <body class="flex flex-col min-h-screen bg-[#fffbf2] font-poppins">
 
     <nav class="absolute z-50">{% include 'navbar.html' %}</nav>
-    
-
     <div class="flex flex-1 w-full">
     
     <!-- Menu Planning Section -->
@@ -328,14 +326,13 @@
 
 
         function saveCart() {
-            let budget = parseInt(document.getElementById("budget").value) || 100000; // Get budget input
-
+            const budgetInput = document.getElementById("budget").value;
             $.ajax({
                 url: '{% url "menuplanning:save_cart" %}',
                 type: 'POST',
                 data: {
-                    'budget': budget, // Include budget in the request
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'budget': budgetInput  
                 },
                 success: function(response) {
                     displayConfirmationPopup(response.saved_cart_html);
@@ -345,6 +342,7 @@
                 }
             });
         }
+
 
 
         function displayConfirmationPopup(cartHtml) {
@@ -407,22 +405,22 @@
         }
 
         function confirmSaveCart() {
-            // Send the final confirmation AJAX request to save the cart to the user's database
+            const budgetInput = document.getElementById("budget").value;
             $.ajax({
-                url: '{% url "menuplanning:confirm_save_cart" %}',  // This should now resolve correctly
+                url: '{% url "menuplanning:confirm_save_cart" %}',
                 type: 'POST',
                 data: {
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'budget': budgetInput 
                 },
                 success: function(response) {
                     alert('Cart saved successfully!');
-                    document.body.removeChild(document.getElementById('cart-overlay')); // Close the popup
+                    document.body.removeChild(document.getElementById('cart-overlay'));
                 },
                 error: function(xhr, status, error) {
                     console.error('Error confirming cart save:', error);
                 }
             });
-
         }
     </script>
 

@@ -125,18 +125,17 @@ def save_cart_view(request):
 @login_required
 def saved_menu_planning_page(request):
     chosen_menus = ChosenMenu.objects.filter(user=request.user)
-    
-    # Group by `save_session`
+
     menu_plans_dict = {}
     for menu in chosen_menus:
         if menu.save_session not in menu_plans_dict:
             menu_plans_dict[menu.save_session] = {
                 'name': f"Menu Planning {menu.save_session}",
-                'budget': 100000, 
+                'budget': menu.budget, 
                 'items': [],
                 'total_price': 0,
             }
-        
+
         item_total = menu.quantity * menu.price
         menu_plans_dict[menu.save_session]['total_price'] += item_total
         menu_plans_dict[menu.save_session]['items'].append({
@@ -163,23 +162,28 @@ def reset_saved_menus(request):
 @csrf_exempt
 def confirm_save_cart(request):
     if request.method == 'POST':
+        budget = request.POST.get('budget')  # Retrieve the user's budget input from the request
         cart = Cart.objects.get(user=request.user)
         cart_items = CartItem.objects.filter(cart=cart)
 
-        # Create a unique save session ID, such as using the cart ID and current timestamp
-        save_session_id = int(timezone.now().timestamp()) 
+        user_budget = float(budget) if budget else 100000
 
+        save_session_id = int(timezone.now().timestamp())
         for item in cart_items:
             ChosenMenu.objects.create(
                 user=request.user,
                 item_name=item.item_name,
                 quantity=item.quantity,
                 price=item.item_price,
-                save_session=save_session_id
+                save_session=save_session_id,
+                budget=user_budget  # Save the user-specified budget
             )
 
         return JsonResponse({'message': 'Cart saved successfully'})
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+
 
 

@@ -1,11 +1,12 @@
 <!-- POPUP before saving (can edit and click save) -->
 <div class="confirm-popup">
     <h1>{{ cart_name }}</h1>
-    <p>Budget: Rp{{ budget|floatformat:0 }}</p>  <!-- Displaying budget -->
+    <p>Budget: Rp{{ budget|floatformat:0 }}</p>  
+    <br>
     <ul>
         {% for item in cart_items %}
-            <li>{{ item.quantity }} x Item {{ forloop.counter }} {{ item.item_name }} - Rp{{ item.total_price|floatformat:0 }}</li>
+            <li>{{ item.quantity }} x Item {{ item.item_name }} - Rp{{ item.total_price|floatformat:0 }}</li>
         {% endfor %}
     </ul>
-    <p>Total Price: Rp{{ total_price|floatformat:0 }}</p>
+    <p><strong>Total Price: Rp{{ total_price|floatformat:0 }}</strong></p>
 </div>

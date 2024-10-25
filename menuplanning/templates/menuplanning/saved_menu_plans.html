@@ -113,22 +113,24 @@
         {% for menu_plan in menu_plans %}
             <div class="menu-plan">
                 <h2 class="text-2xl font-semibold mb-2">{{ menu_plan.name }}</h2>
-                <p class="budget-label"><strong>Budget:</strong> Rp{{ menu_plan.budget }}</p>
+                <p class="budget-label"><strong>Budget:</strong> Rp{{ menu_plan.budget|floatformat:0 }}</p>
+
 
                 <h3 class="font-bold mt-3">Menu:</h3>
                 <ul class="list-disc list-inside ml-5">
                     {% for item in menu_plan.items %}
-                        <li class="menu-item">{{ item.quantity }} x Item {{ item.item_name }} = Rp{{ item.total }}</li>
+                        <li class="menu-item">{{ item.quantity }} x Item {{ item.item_name }} = Rp{{ item.total|floatformat:0 }}</li>
                     {% endfor %}
                 </ul>
 
-                <p class="menu-total font-bold mt-3">Total = Rp{{ menu_plan.total_price }}</p>
+                <p class="menu-total font-bold mt-3">Total = Rp{{ menu_plan.total_price|floatformat:0 }}</p>
             </div>
         {% endfor %}
 
         <!-- Reset Button -->
         <button class="reset-button mt-6" onclick="resetSavedMenus()">Reset All Saved Menus</button>
     </section>
+
 
     <script>
         function resetSavedMenus() {
