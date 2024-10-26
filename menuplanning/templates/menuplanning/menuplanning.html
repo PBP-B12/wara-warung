@@ -166,6 +166,68 @@ body {
         /* Centered Message Styling */
         .no-warung-message { text-align: center; color: gray; font-size: 1.25rem; margin-top: 2rem; }
 
+            /* Floating Box Style */
+    .floating-cart-box {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%; /* Adjust width as necessary */
+        max-width: 600px;
+        max-height: 200px;
+        padding: 15px;
+        background-color: #ffffff;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        border-radius: 30px;
+        text-align: center;
+        z-index: 50;
+    }
+
+    /* Text Styling */
+    .cart-item-count {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .cart-total {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 8px 0;
+    }
+
+    /* Button Styling */
+    .cart-buttons {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+    }
+
+    .cart-button {
+        width: 45%;
+        padding: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 8px;
+        border-radius: 9999px;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+    }
+
+    .cart-button:hover {
+        transform: scale(1.05);
+    }
+
+    .save-button {
+        background-color: #FF6E1F;
+        color: white;
+    }
+
+    .empty-button {
+        background-color: #252525;
+        color: white;
+    }
+
     </style>
 
   </head>
@@ -221,17 +283,27 @@ body {
 
                 <div class="flex flex-col items-center gap-4 mt-4">
                     <button id="save-button" onclick="saveCart()" class="text-white font-bold py-1.5 px-4 rounded-full bg-[#64d16d] hover:scale-105 transition-transform duration-300">Save Menu</button>
-                    <a href="{% url 'menuplanning:saved_menu_planning_page' %}" class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform hover:scale-110 hover:shadow-lg">See My Saved Menus</a>
-                    <button onclick="emptyCart()" class="bg-red-500 text-white font-bold py-1.5 px-4 rounded-full hover:scale-105 transition-transform duration-300">Empty Cart</button>
+                   
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Floating Review Cart & Save Button -->
-    <div class="fixed-bottom-center">
-        <button id="show-cart-btn" class="bg-blue-500 text-white font-bold py-2 px-6 rounded-full transform hover:scale-105 transition-transform duration-300">Review Cart & Save</button>
+    <div class="floating-cart-box">
+        <p class="cart-item-count" id="cart-item-count">0 Item(s)</p>
+        <p class="cart-total" id="cart-total">Total: Rp0</p>
+    
+        <div class="cart-buttons">
+            <button id="show-cart-btn" class="cart-button save-button">Review & Save</button>
+            <button onclick="emptyCart()" class="cart-button empty-button">Empty Cart</button>
+        </div>
     </div>
+    
+
+    <!-- Floating Review Cart & Save Button -->
+    <!-- <div class="fixed-bottom-center">
+        <button id="show-cart-btn" class="bg-blue-500 text-white font-bold py-2 px-6 rounded-full transform hover:scale-105 transition-transform duration-300">Review Cart & Save</button>
+    </div> -->
 
     <!-- Footer -->
     <footer>{% include 'footer.html' %}</footer>
@@ -246,67 +318,92 @@ body {
         }
 
         function updateCart(change, itemId, price) {
-            const budgetInput = document.getElementById('budget').value
+        const budgetInput = document.getElementById('budget').value;
 
-            let quantityElement = document.getElementById('quantity-' + itemId);
-            let currentQuantity = parseInt(quantityElement.textContent);
-            let newQuantity = currentQuantity + change;
+        let quantityElement = document.getElementById('quantity-' + itemId);
+        let currentQuantity = parseInt(quantityElement.textContent);
+        let newQuantity = currentQuantity + change;
 
-            if (newQuantity < 0) {
-                newQuantity = 0;
-            }
-
-            // Update the quantity on the page
-            quantityElement.textContent = newQuantity;
-
-            // Send AJAX request to update the cart on the server
-            $.ajax({
-                url: '{% url "menuplanning:update_cart" %}',
-                type: 'POST',
-                data: {
-                    item_id: itemId,
-                    quantity: newQuantity,
-                    price: price,
-                    budget: budgetInput,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function (response) {
-                    // Update cart items and total price dynamically
-                    $('#cart-items').html(response.updated_cart_html);
-                    $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
-
-                    // Check if the total exceeds the maximum budget
-                    if (response.exceeded_budget) {
-                        alert(`Total exceeds your budget of Rp${MAX_BUDGET.toLocaleString()}. Please adjust your menu.`);
-
-                        // Highlight the total price in red and disable save button
-                        $('#total-price').css('color', 'red');
-                        $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
-                            'background-color': 'red',
-                            color: 'white',
-                            'border-radius': '9999px',
-                            padding: '0.5rem 1.5rem',
-                            'font-weight': 'bold',
-                            cursor: 'not-allowed',
-                        });
-                    } else {
-                        // Reset the total price color and re-enable save button
-                        $('#total-price').css('color', 'black');
-                        $('#save-button').text('Save Menu').prop('disabled', false).css({
-                            'background-color': '#64D16D',
-                            color: 'white',
-                            'border-radius': '9999px',
-                            padding: '0.5rem 1.5rem',
-                            'font-weight': 'bold',
-                            cursor: 'pointer',
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    alert('Error updating cart:', error);
-                },
-            });
+        if (newQuantity < 0) {
+            newQuantity = 0;
         }
+
+        // Update the quantity on the page
+        quantityElement.textContent = newQuantity;
+
+        // Send AJAX request to update the cart on the server
+        $.ajax({
+            url: '{% url "menuplanning:update_cart" %}',
+            type: 'POST',
+            data: {
+                item_id: itemId,
+                quantity: newQuantity,
+                price: price,
+                budget: budgetInput,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (response) {
+                // Update cart items and total price dynamically
+                $('#cart-items').html(response.updated_cart_html);
+                $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
+
+                // Update the floating cart summary box with item count and total price
+                updateCartSummary(response.item_count, response.total_price);
+
+                // Check if the total exceeds the maximum budget
+                if (response.exceeded_budget) {
+                    alert(`Total exceeds your budget of Rp${MAX_BUDGET.toLocaleString()}. Please adjust your menu.`);
+
+                    // Only disable the "Save Menu" button in the modal when budget is exceeded
+                    $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
+                        'background-color': 'red',
+                        color: 'white',
+                        'border-radius': '9999px',
+                        padding: '0.5rem 1.5rem',
+                        'font-weight': 'bold',
+                        cursor: 'not-allowed',
+                    });
+
+                    // Keep "Review & Save" button functional so the user can still view the cart
+                    $('#show-cart-btn').text('Review Cart').prop('disabled', false).css({
+                        'background-color': '#FF6E1F',
+                        color: 'white',
+                        'border-radius': '9999px',
+                        padding: '0.5rem 1.5rem',
+                        'font-weight': 'bold',
+                        cursor: 'pointer',
+                    });
+
+                } else {
+                    // Reset the total price color and re-enable buttons if under budget
+                    $('#total-price').css('color', 'black');
+
+                    // Re-enable the "Save Menu" button in the modal
+                    $('#save-button').text('Save Menu').prop('disabled', false).css({
+                        'background-color': '#FF6E1F',
+                        color: 'white',
+                        'border-radius': '9999px',
+                        padding: '0.5rem 1.5rem',
+                        'font-weight': 'bold',
+                        cursor: 'pointer',
+                    });
+
+                    // Ensure the "Review & Save" button remains enabled
+                    $('#show-cart-btn').text('Review & Save').prop('disabled', false).css({
+                        'background-color': '#64D16D',
+                        color: 'white',
+                        'border-radius': '9999px',
+                        padding: '0.5rem 1.5rem',
+                        'font-weight': 'bold',
+                        cursor: 'pointer',
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('Error updating cart:', error);
+            },
+        });
+    }
 
         function saveCart() {
             const budgetInput = document.getElementById('budget').value;
@@ -479,47 +576,67 @@ body {
         });
 
         function emptyCart() {
-            $.ajax({
-                url: '{% url "menuplanning:empty_cart" %}',
-                type: 'POST',
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alert(response.message);
-
-                        // Update cart items and total price to reflect an empty cart
-                        $('#cart-items').html(response.updated_cart_html);
-                        $('#total-price').text('Total Price: Rp0');
-
-                        // Reset all quantity displays to zero
-                        document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error emptying cart:', error);
-                }
-            });
-        }
-
-        function showCartDetails() {
-    $('#cart-view').removeClass('hidden').css('display', 'flex');  // Show the cart view modal
-
     $.ajax({
-        url: '{% url "menuplanning:load_cart" %}',  // Confirm URL matches the view name and namespace
-        type: 'GET',
-        dataType: 'json',
+        url: '{% url "menuplanning:empty_cart" %}',
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
         success: function(response) {
-            $('#cart-items').html(response.updated_cart_html);
-            $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
+            if (response.success) {
+                alert(response.message);
+
+                // Update cart items and total price to reflect an empty cart
+                $('#cart-items').html(response.updated_cart_html);
+                $('#total-price').text('Total Price: Rp0');
+
+                // Reset all quantity displays to zero
+                document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
+
+                // Set the floating cart summary to 0 items and Rp0
+                updateCartSummary(0, 0);
+            }
         },
         error: function(xhr, status, error) {
-            console.error('Error loading cart details:', xhr.responseText);  // Log any errors
+            console.error('Error emptying cart:', error);
         }
     });
 }
 
+function showCartDetails() {
+        $('#cart-view').removeClass('hidden').css('display', 'flex');  // Show the cart view modal
+
+        $.ajax({
+            url: '{% url "menuplanning:load_cart" %}',  // Confirm URL matches the view name and namespace
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                $('#cart-items').html(response.updated_cart_html);
+                $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
+            },
+            error: function(xhr, status, error) {
+                console.error('Error loading cart details:', xhr.responseText);  // Log any errors
+            }
+        });
+    }
+
+    // Event listener to open the cart when clicking "Review & Save" button
+    $(document).ready(function() {
+        $('#show-cart-btn').on('click', function(event) {
+            event.stopPropagation();  // Prevent click from propagating to document
+            showCartDetails();
+        });
+
+        // Close the cart view if clicking outside the modal content
+        $(document).on('click', function(event) {
+            const $cartView = $('#cart-view');
+            const $modalContent = $cartView.find('.bg-white'); // Modal content selector
+
+            if ($cartView.is(':visible') && !$modalContent.is(event.target) && !$modalContent.has(event.target).length) {
+                hideCartDetails();
+            }
+        });
+    });
 
         function hideCartDetails() {
             $('#cart-view').addClass('hidden').css('display', 'none');
@@ -543,6 +660,26 @@ body {
             hideCartDetails();
         }
     });
+});
+
+// // Function to update item count and total dynamically
+// function updateCartSummary(itemCount, totalPrice) {
+//         document.getElementById('cart-item-count').textContent = `${itemCount} Item(s)`;
+//         document.getElementById('cart-total').textContent = `Total: Rp${totalPrice.toLocaleString()}`;
+//     }
+
+//     // Example usage: Update dynamically based on your data
+//     updateCartSummary(3, 40000); // Example values; replace with actual values from your cart
+
+// Function to update item count and total dynamically
+function updateCartSummary(itemCount = 0, totalPrice = 0) {
+    document.getElementById('cart-item-count').textContent = `${itemCount} Item(s)`;
+    document.getElementById('cart-total').textContent = `Total: Rp${totalPrice.toLocaleString()}`;
+}
+
+// Ensure it starts with 0 items and Rp0
+document.addEventListener('DOMContentLoaded', function() {
+    updateCartSummary(0, 0);
 });
 
 

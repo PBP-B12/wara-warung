@@ -81,21 +81,24 @@ def update_cart(request):
             cart_item.item_price = price
             cart_item.save()
 
-        # Calculate the total price of items in the cart
+        # Calculate the total price of items in the cart and the total item count
         cart_items = CartItem.objects.filter(cart=cart).exclude(quantity=0)
         total_price = sum(item.quantity * item.item_price for item in cart_items)
+        item_count = sum(item.quantity for item in cart_items)  # Total count of all items
 
-        # Render the updated cart items and check if total exceeds the budget
+        # Render the updated cart items HTML
         updated_cart_html = render_to_string('menuplanning/cart_items.html', {'cart_items': cart_items})
         exceeded_budget = total_price > budget
 
         return JsonResponse({
             'updated_cart_html': updated_cart_html,
             'total_price': total_price,
+            'item_count': item_count,
             'exceeded_budget': exceeded_budget
         })
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
 
 
 @login_required
