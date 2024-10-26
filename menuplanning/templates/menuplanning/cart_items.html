@@ -1,10 +1,11 @@
-<!-- Showing CURRENT cart on the page -->
-<h1>{{ cart_name }}</h1>
-
-<ul>
-  {% for item in cart_items %}
-    <li> {{ item.quantity }} x Item {{ item.item_name }} - Rp{{ item.get_total_price }}</li>
-  {% endfor %}
-</ul>
-
-
+{% if cart_items %}
+    <!-- Display cart items if there are any -->
+    {% for item in cart_items %}
+        <div class="cart-item">
+            <!-- Cart item display here -->
+            <p>{{ item.item_name }} - Quantity: {{ item.quantity }}</p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-gray-500">Your cart is empty.</p>
+{% endif %}

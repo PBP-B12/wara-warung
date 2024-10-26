@@ -23,470 +23,502 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
-      body {
-        background-color: #fffbf2;
-        font-family: 'Poppins', sans-serif;
-      }
+        body {
+            background-color: #fffbf2;
+            font-family: 'Poppins', sans-serif;
+        }
 
-      .input-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #ff6e1f;
-        border-radius: 32px;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        padding: 0.5rem 1rem;
-      }
+        .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ff6e1f;
+            border-radius: 32px;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            padding: 0.5rem 1rem;
+        }
 
-      .input-label {
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: white;
-        margin-right: 10px;
-      }
+        .input-label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 10px;
+        }
 
-      .input-field {
-        background-color: white;
-        border: none;
-        border-radius: 24px;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        padding: 0.5rem 1rem;
-        font-size: 1.1rem;
-        color: black;
-      }
+        .input-field {
+            background-color: white;
+            border: none;
+            border-radius: 24px;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            padding: 0.5rem 1rem;
+            font-size: 1.1rem;
+            color: black;
+        }
 
-      .flex-inputs {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 2rem;
-      }
+        .flex-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
 
-      .navbar-height {
-        height: 64px;
-      }
+        .navbar-height {
+            height: 64px;
+        }
 
-      .card {
-        background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%);
-        width: 325px;
-        height: 420px;
-        flex-shrink: 0;
-        border-radius: 36px;
-      }
+        .card {
+            background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%);
+            width: 325px;
+            height: 420px;
+            flex-shrink: 0;
+            border-radius: 36px;
+        }
 
-      .quantity-control {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #ff6e1f;
-        border-radius: 24px;
-        width: 40px;
-        height: 40px;
-        color: white;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin: 0 10px;
-      }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ff6e1f;
+            border-radius: 24px;
+            width: 40px;
+            height: 40px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0 10px;
+        }
 
-      .quantity-display {
-        font-size: 1.2rem;
-        color: black;
-        font-weight: bold;
-      }
+        .quantity-display {
+            font-size: 1.2rem;
+            color: black;
+            font-weight: bold;
+        }
 
-      .quantity-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 40px;
-      }
+        .quantity-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 40px;
+        }
 
-      main {
-        flex: 1;
-      }
+        main {
+            flex: 1;
+        }
 
-      .total-price {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-top: 1rem;
-      }
+        .total-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
 
-      .content-wrapper {
-        display: flex;
-        flex: 1;
-        padding-top: 6rem;
-      }
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+            padding-top: 6rem;
+        }
 
-      .cart-view {
-        position: fixed;
-        top: calc(4rem + 3rem); /* Adjusted to start just below the navbar */
-        bottom: 2vh;
-        right: 0;
-        width: 25%;
-        background: #fff;
-        border-radius: 48px 0 0 48px;
-        box-shadow: -4px 0px 20.5px 4px rgba(0, 0, 0, 0.2);
-        padding: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        overflow-y: auto;
-        z-index: 50;
-      }
+        .cart-view {
+            position: fixed;
+            top: calc(4rem + 3rem); /* Adjusted to start just below the navbar */
+            bottom: 2vh;
+            right: 0;
+            width: 25%;
+            background: #fff;
+            border-radius: 48px 0 0 48px;
+            box-shadow: -4px 0px 20.5px 4px rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            z-index: 50;
+        }
 
-      .menu-planning {
-        width: 75%;
-        padding: 2rem;
-        margin-right: 25%;
-      }
+        .menu-planning {
+            width: 75%;
+            padding: 2rem;
+            margin-right: 25%;
+        }
+
     </style>
+
   </head>
 
-  <body class="flex flex-col min-h-screen bg-[#fffbf2] font-poppins">
-    <nav class="z-50">{% include 'navbar.html' %}</nav>
-    <div class="flex flex-1 w-full mt-10">
-      <!-- Menu Planning Section -->
-      <div class="w-3/4 p-10 mt-10">
-        <section class="text-center">
-          <h1 class="text-4xl font-bold mb-2">Menu Planning</h1>
-          <p class="text-lg text-gray-700 mb-8">Choose your warung and plan your menu with your preferred budget!</p>
+    <body class="flex flex-col min-h-screen bg-[#fffbf2] font-poppins">
+        <nav class="z-50">{% include 'navbar.html' %}</nav>
 
-          <!-- Input Fields and Cards -->
-          <div class="flex flex-col items-center">
-            <div class="flex justify-center">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 w-full max-w-3xl px-8">
-                <div class="input-container warung-container w-full">
-                  <label
-                    for="warungDropdownss"
-                    class="input-label"
-                    >Warung:</label
-                  >
-                  <select
-                    id="warungDropdownss"
-                    class="input-field w-full"
-                  >
-                    <option value="">Select a Warung</option>
-                  </select>
-                </div>
+        <div class="flex flex-1 w-full mt-10">
 
-                <div class="input-container budget-container w-full">
-                  <label
-                    for="budget"
-                    class="input-label"
-                    >Budget:</label
-                  >
-                  <input
-                    type="text"
-                    id="budget"
-                    value="100000"
-                    class="input-field w-full"
-                    onchange="updateMaxBudget()"
-                  />
-                </div>
-              </div>
+            <!-- Menu Planning Section -->
+            <div class="w-3/4 p-10 mt-10">
+                <section class="text-center">
+                    <h1 class="text-4xl font-bold mb-2">Menu Planning</h1>
+                    <p class="text-lg text-gray-700 mb-8">Choose your warung and plan your menu with your preferred budget!</p>
+
+                    <!-- Input Fields and Cards -->
+                    <div class="flex flex-col items-center">
+                        <div class="flex justify-center">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 w-full max-w-3xl px-8">
+                                <div class="input-container warung-container w-full">
+                                    <label
+                                        for="warungDropdownss"
+                                        class="input-label"
+                                        >Warung:</label
+                                    >
+                                    <select
+                                        id="warungDropdownss"
+                                        class="input-field w-full"
+                                    >
+                                        <option value="">Select a Warung</option>
+                                    </select>
+                                </div>
+
+                                <div class="input-container budget-container w-full">
+                                    <label
+                                        for="budget"
+                                        class="input-label"
+                                        >Budget:</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="budget"
+                                        value="100000"
+                                        class="input-field w-full"
+                                        onchange="updateMaxBudget()"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cards Section untuk menampilkan menus di warung (masih data manual dummy)-->
+                        <div
+                            class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                            id="menu-results"
+                        ></div>
+                    </div>
+                </section>
             </div>
 
-            <!-- Cards Section untuk menampilkan menus di warung (masih data manual dummy)-->
-            <div
-              class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-              id="menu-results"
-            ></div>
-          </div>
-        </section>
-      </div>
+            <!-- Cart view  -->
+            <div class="cart-view">
+                <div class="text-center w-full">
+                    <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
+                    <div id="cart-items">{% include 'menuplanning/cart_items.html' %}</div>
+                    <p
+                        class="total-price"
+                        id="total-price"
+                    >
+                        Total Price: Rp0
+                    </p>
 
-      <!-- Cart view  -->
-      <div class="cart-view">
-        <div class="text-center w-full">
-          <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
-          <div id="cart-items">{% include 'menuplanning/cart_items.html' %}</div>
-          <p
-            class="total-price"
-            id="total-price"
-          >
-            Total Price: Rp0
-          </p>
+                    <!-- Button Container with Vertical Layout -->
+                    <div class="flex flex-col items-center gap-4 justify-center mt-4">
+                        <button
+                            id="save-button"
+                            onclick="saveCart()"
+                            class="text-white font-bold py-1.5 px-4 rounded-full cursor-pointer transform hover:scale-105 transition-transform duration-300"
+                            style="background-color: #64d16d; min-width: 100px"
+                            >
+                            Save Menu
+                        </button>
 
-          <!-- Button Container with Vertical Layout -->
-          <div class="flex flex-col items-center gap-4 justify-center mt-4">
-            <button
-              id="save-button"
-              onclick="saveCart()"
-              class="text-white font-bold py-1.5 px-4 rounded-full cursor-pointer transform hover:scale-105 transition-transform duration-300"
-              style="background-color: #64d16d; min-width: 100px"
-            >
-              Save Menu
-            </button>
-
-            <a
-              href="{% url 'menuplanning:saved_menu_planning_page' %}"
-              class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform transition-transform duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
-              style="min-width: 100px"
-            >
-              See My Saved Menus
-            </a>
-          </div>
+                        <a
+                            href="{% url 'menuplanning:saved_menu_planning_page' %}"
+                            class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform transition-transform duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
+                            style="min-width: 100px"
+                            >
+                            See My Saved Menus
+                        </a>
+                        
+                        <button
+                            onclick="emptyCart()"
+                            class="bg-red-500 text-white font-bold py-1.5 px-4 rounded-full cursor-pointer transform hover:scale-105 transition-transform duration-300"
+                            style="min-width: 100px">
+                            Empty Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Footer -->
-    <footer>{% include 'footer.html' %}</footer>
+        <!-- Footer -->
+        <footer>{% include 'footer.html' %}</footer>
 
-    <script>
-      let MAX_BUDGET = parseInt(document.getElementById('budget').value) || 100000; // Set initial MAX_BUDGET
+        <script>
+        let MAX_BUDGET = parseInt(document.getElementById('budget').value) || 100000; // Set initial MAX_BUDGET
 
-      function updateMaxBudget() {
-        const budgetInput = document.getElementById('budget').value.replace(/\D/g, ''); // Remove non-numeric characters
-        MAX_BUDGET = parseInt(budgetInput) || 100000; // Update MAX_BUDGET with the new value
-      }
-
-      function updateCart(change, itemId, price) {
-        let quantityElement = document.getElementById('quantity-' + itemId);
-        let currentQuantity = parseInt(quantityElement.textContent);
-        let newQuantity = currentQuantity + change;
-
-        if (newQuantity < 0) {
-          newQuantity = 0;
+        function updateMaxBudget() {
+            const budgetInput = document.getElementById('budget').value.replace(/\D/g, ''); // Remove non-numeric characters
+            MAX_BUDGET = parseInt(budgetInput) || 100000; // Update MAX_BUDGET with the new value
         }
 
-        // Update the quantity on the page
-        quantityElement.textContent = newQuantity;
+        function updateCart(change, itemId, price) {
+            let quantityElement = document.getElementById('quantity-' + itemId);
+            let currentQuantity = parseInt(quantityElement.textContent);
+            let newQuantity = currentQuantity + change;
 
-        // Send AJAX request to update the cart on the server
-        $.ajax({
-          url: '{% url "menuplanning:update_cart" %}',
-          type: 'POST',
-          data: {
-            item_id: itemId,
-            quantity: newQuantity,
-            price: price,
-            budget: MAX_BUDGET,
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-          },
-          success: function (response) {
-            // Update cart items and total price dynamically
-            $('#cart-items').html(response.updated_cart_html);
-            $('#total-price').text('Total Price: Rp' + response.total_price);
-
-            // Check if the total exceeds the maximum budget
-            if (response.total_price > MAX_BUDGET) {
-              // Display an error popup if over budget
-              alert(`Total exceeds your budget of Rp${MAX_BUDGET.toLocaleString()}. Please adjust your menu.`);
-
-              // Clear the cart items display
-              $('#cart-items').empty();
-              $('#total-price').text('Total Price: Rp0');
-              newQuantity = 0;
-              quantityElement.textContent = newQuantity;
-
-              // Update the save button text and disable it
-              $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
-                'background-color': 'red',
-                color: 'white',
-                'border-radius': '9999px',
-                padding: '0.5rem 1.5rem',
-                'font-weight': 'bold',
-                cursor: 'not-allowed',
-              });
-            } else {
-              // Re-enable the save button if the total is within the budget
-              $('#save-button').text('Save Menu').prop('disabled', false).css({
-                'background-color': '#64D16D',
-                color: 'white',
-                'border-radius': '9999px',
-                padding: '0.5rem 1.5rem',
-                'font-weight': 'bold',
-                cursor: 'pointer',
-              });
-            }
-          },
-          error: function (xhr, status, error) {
-            alert('Error updating cart:', error);
-          },
-        });
-      }
-
-      function saveCart() {
-        const budgetInput = document.getElementById('budget').value;
-        $.ajax({
-          url: '{% url "menuplanning:save_cart" %}',
-          type: 'POST',
-          data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            budget: budgetInput,
-          },
-          success: function (response) {
-            displayConfirmationPopup(response.saved_cart_html);
-          },
-          error: function (xhr, status, error) {
-            console.error('Error saving cart:', error);
-          },
-        });
-      }
-
-      function displayConfirmationPopup(cartHtml) {
-        // Create the overlay for the confirmation popup
-        let overlay = document.createElement('div');
-        overlay.id = 'cart-overlay';
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-        overlay.style.display = 'flex';
-        overlay.style.justifyContent = 'center';
-        overlay.style.alignItems = 'center';
-        overlay.style.zIndex = '1000';
-
-        // Create the modal container for the cart confirmation
-        let modal = document.createElement('div');
-        modal.id = 'saved-cart-modal';
-        modal.style.backgroundColor = 'white';
-        modal.style.padding = '20px';
-        modal.style.borderRadius = '10px';
-        modal.style.width = '50%';
-
-        // Add the cart content to the modal (this is dynamically passed HTML from the server)
-        modal.innerHTML = cartHtml;
-
-        // Add the Save and Edit buttons with the updated styles
-        let buttonsContainer = document.createElement('div');
-        buttonsContainer.style.marginTop = '20px';
-
-        let saveButton = document.createElement('button');
-        saveButton.textContent = 'Save';
-        saveButton.classList.add('bg-[#ff6e1f]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
-
-        let editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.classList.add('bg-[#252525]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'ml-4', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
-
-        buttonsContainer.appendChild(saveButton);
-        buttonsContainer.appendChild(editButton);
-
-        modal.appendChild(buttonsContainer);
-
-        // Append the modal to the overlay
-        overlay.appendChild(modal);
-
-        // Append the overlay to the body
-        document.body.appendChild(overlay);
-
-        // Handle Save and Edit button actions
-        saveButton.onclick = function () {
-          confirmSaveCart(); // Call the function to confirm save
-
-          // After saving, reset all quantity displays to zero
-          document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
-
-          // Remove the popup overlay
-          document.body.removeChild(overlay);
-        };
-
-        editButton.onclick = function () {
-          document.body.removeChild(overlay); // Close the popup and allow editing
-        };
-      }
-
-      function confirmSaveCart() {
-        const budgetInput = document.getElementById('budget').value;
-        $.ajax({
-          url: '{% url "menuplanning:confirm_save_cart" %}',
-          type: 'POST',
-          data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            budget: budgetInput,
-          },
-          success: function (response) {
-            alert('Cart saved successfully!');
-
-            // Reset the cart overlay if it exists
-            const overlay = document.getElementById('cart-overlay');
-            if (overlay) {
-              document.body.removeChild(overlay);
+            if (newQuantity < 0) {
+                newQuantity = 0;
             }
 
-            // Reset the quantity displays to zero
+            // Update the quantity on the page
+            quantityElement.textContent = newQuantity;
+
+            // Send AJAX request to update the cart on the server
+            $.ajax({
+                url: '{% url "menuplanning:update_cart" %}',
+                type: 'POST',
+                data: {
+                    item_id: itemId,
+                    quantity: newQuantity,
+                    price: price,
+                    budget: MAX_BUDGET,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function (response) {
+                    // Update cart items and total price dynamically
+                    $('#cart-items').html(response.updated_cart_html);
+                    $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
+
+                    // Check if the total exceeds the maximum budget
+                    if (response.exceeded_budget) {
+                        alert(`Total exceeds your budget of Rp${MAX_BUDGET.toLocaleString()}. Please adjust your menu.`);
+
+                        // Highlight the total price in red and disable save button
+                        $('#total-price').css('color', 'red');
+                        $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
+                            'background-color': 'red',
+                            color: 'white',
+                            'border-radius': '9999px',
+                            padding: '0.5rem 1.5rem',
+                            'font-weight': 'bold',
+                            cursor: 'not-allowed',
+                        });
+                    } else {
+                        // Reset the total price color and re-enable save button
+                        $('#total-price').css('color', 'black');
+                        $('#save-button').text('Save Menu').prop('disabled', false).css({
+                            'background-color': '#64D16D',
+                            color: 'white',
+                            'border-radius': '9999px',
+                            padding: '0.5rem 1.5rem',
+                            'font-weight': 'bold',
+                            cursor: 'pointer',
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('Error updating cart:', error);
+                },
+            });
+        }
+
+        function saveCart() {
+            const budgetInput = document.getElementById('budget').value;
+            $.ajax({
+            url: '{% url "menuplanning:save_cart" %}',
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                budget: budgetInput,
+            },
+            success: function (response) {
+                displayConfirmationPopup(response.saved_cart_html);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error saving cart:', error);
+            },
+            });
+        }
+
+        function displayConfirmationPopup(cartHtml) {
+            // Create the overlay for the confirmation popup
+            let overlay = document.createElement('div');
+            overlay.id = 'cart-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            overlay.style.zIndex = '1000';
+
+            // Create the modal container for the cart confirmation
+            let modal = document.createElement('div');
+            modal.id = 'saved-cart-modal';
+            modal.style.backgroundColor = 'white';
+            modal.style.padding = '20px';
+            modal.style.borderRadius = '10px';
+            modal.style.width = '50%';
+
+            // Add the cart content to the modal (this is dynamically passed HTML from the server)
+            modal.innerHTML = cartHtml;
+
+            // Add the Save and Edit buttons with the updated styles
+            let buttonsContainer = document.createElement('div');
+            buttonsContainer.style.marginTop = '20px';
+
+            let saveButton = document.createElement('button');
+            saveButton.textContent = 'Save';
+            saveButton.classList.add('bg-[#ff6e1f]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
+
+            let editButton = document.createElement('button');
+            editButton.textContent = 'Edit';
+            editButton.classList.add('bg-[#252525]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'ml-4', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
+
+            buttonsContainer.appendChild(saveButton);
+            buttonsContainer.appendChild(editButton);
+
+            modal.appendChild(buttonsContainer);
+
+            // Append the modal to the overlay
+            overlay.appendChild(modal);
+
+            // Append the overlay to the body
+            document.body.appendChild(overlay);
+
+            // Handle Save and Edit button actions
+            saveButton.onclick = function () {
+            confirmSaveCart(); // Call the function to confirm save
+
+            // After saving, reset all quantity displays to zero
             document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
 
-            // Reset the cart items view to empty
+            // Remove the popup overlay
+            document.body.removeChild(overlay);
+            };
+
+            editButton.onclick = function () {
+            document.body.removeChild(overlay); // Close the popup and allow editing
+            };
+        }
+
+        function confirmSaveCart() {
+            const budgetInput = document.getElementById('budget').value;
+            $.ajax({
+                url: '{% url "menuplanning:confirm_save_cart" %}',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    budget: budgetInput,
+                },
+                success: function (response) {
+                    alert('Cart saved successfully!');
+
+                    // Update the cart items with the "Your cart is empty" message
+                    $('#cart-items').html(response.updated_cart_html);
+
+                    // Reset the total price display to zero
+                    $('#total-price').text('Total Price: Rp0');
+                    // Reset all quantity displays to zero in the menu cards
+                    document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
+
+                    // Remove the cart overlay if it exists
+                    const overlay = document.getElementById('cart-overlay');
+                    if (overlay) {
+                        document.body.removeChild(overlay);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error confirming cart save:', error);
+                },
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Reset quantities to zero on page load
+            document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
             $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
-
-            // Reset the total price display to zero
             $('#total-price').text('Total Price: Rp0');
-          },
-          error: function (xhr, status, error) {
-            console.error('Error confirming cart save:', error);
-          },
-        });
-      }
 
-      document.addEventListener('DOMContentLoaded', function () {
-        // Reset quantities to zero on page load
-        document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
-        $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
-        $('#total-price').text('Total Price: Rp0');
+            const warungDropdowns = document.getElementById('warungDropdownss');
+            const menuResults = document.getElementById('menu-results');
 
-        const warungDropdowns = document.getElementById('warungDropdownss');
-        const menuResults = document.getElementById('menu-results');
-
-        // Populate dropdown with warung options
-        fetch('/menuplanning/api/warungs')
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.warungs) {
-              data.warungs.forEach((warung) => {
-                const option = document.createElement('option');
-                option.value = warung.nama;
-                option.textContent = warung.nama;
-                warungDropdowns.appendChild(option);
-              });
-            }
-          })
-          .catch((error) => console.error('Error fetching warungs:', error));
-
-    
-        // Fetch menus when a warung is selected
-        warungDropdowns.addEventListener('change', function () {
-        const selectedWarung = warungDropdowns.value;
-        if (selectedWarung) {
-            fetch(`/menuplanning/api/menus/${selectedWarung}/`)
+            // Populate dropdown with warung options
+            fetch('/menuplanning/api/warungs')
             .then((response) => response.json())
             .then((data) => {
-                menuResults.innerHTML = '';
-                if (data.menus && data.menus.length > 0) {
-                data.menus.forEach((menu) => {
-                    const menuCard = `
-                    <div class="card bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-[325px] w-full h-96 rounded-[36px] shadow-lg hover:scale-105 transition-transform duration-300">
-                        <img src="${menu.gambar}" alt="${menu.menu}" class="w-full h-48 object-cover rounded-t-[36px]" />
-                        <div class="p-4 flex flex-col">
-                        <h3 class="font-bold text-xl text-gray-800">${menu.menu}</h3>
-                        <p class="text-lg text-gray-600">Rp${menu.harga.toLocaleString()}</p>
-                        <p class="text-sm text-gray-500">Available at: ${menu.warung}</p>
-                        <div class="quantity-wrapper flex justify-center mt-4">
-                            <button class="quantity-control" onclick="updateCart(-1, ${menu.id}, ${menu.harga})">-</button>
-                            <span class="quantity-display mx-2" id="quantity-${menu.id}">0</span>
-                            <button class="quantity-control" onclick="updateCart(1, ${menu.id}, ${menu.harga})">+</button>
-                        </div>
-                        </div>
-                    </div>
-                    `;
-                    menuResults.innerHTML += menuCard;
+                if (data.warungs) {
+                data.warungs.forEach((warung) => {
+                    const option = document.createElement('option');
+                    option.value = warung.nama;
+                    option.textContent = warung.nama;
+                    warungDropdowns.appendChild(option);
                 });
-                } else {
-                menuResults.innerHTML = '<p>No menus available for this warung.</p>';
                 }
             })
-            .catch((error) => console.error('Error fetching menus:', error));
-        } else {
-            menuResults.innerHTML = '<p>Select a warung to see menus.</p>';
-        }
+            .catch((error) => console.error('Error fetching warungs:', error));
+
+        
+            // Fetch menus when a warung is selected
+            warungDropdowns.addEventListener('change', function () {
+            const selectedWarung = warungDropdowns.value;
+            if (selectedWarung) {
+                fetch(`/menuplanning/api/menus/${selectedWarung}/`)
+                .then((response) => response.json())
+                .then((data) => {
+                    menuResults.innerHTML = '';
+                    if (data.menus && data.menus.length > 0) {
+                    data.menus.forEach((menu) => {
+                        const menuCard = `
+                        <div class="card bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-[325px] w-full h-96 rounded-[36px] shadow-lg hover:scale-105 transition-transform duration-300">
+                            <img src="${menu.gambar}" alt="${menu.menu}" class="w-full h-48 object-cover rounded-t-[36px]" />
+                            <div class="p-4 flex flex-col">
+                            <h3 class="font-bold text-xl text-gray-800">${menu.menu}</h3>
+                            <p class="text-lg text-gray-600">Rp${menu.harga.toLocaleString()}</p>
+                            <p class="text-sm text-gray-500">Available at: ${menu.warung}</p>
+                            <div class="quantity-wrapper flex justify-center mt-4">
+                                <button class="quantity-control" onclick="updateCart(-1, ${menu.id}, ${menu.harga})">-</button>
+                                <span class="quantity-display mx-2" id="quantity-${menu.id}">0</span>
+                                <button class="quantity-control" onclick="updateCart(1, ${menu.id}, ${menu.harga})">+</button>
+                            </div>
+                            </div>
+                        </div>
+                        `;
+                        menuResults.innerHTML += menuCard;
+                    });
+                    } else {
+                    menuResults.innerHTML = '<p>No menus available for this warung.</p>';
+                    }
+                })
+                .catch((error) => console.error('Error fetching menus:', error));
+            } else {
+                menuResults.innerHTML = '<p>Select a warung to see menus.</p>';
+            }
+            });
+
         });
 
+        function emptyCart() {
+            $.ajax({
+                url: '{% url "menuplanning:empty_cart" %}',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
 
-    });
-    </script>
-  </body>
+                        // Update cart items and total price to reflect an empty cart
+                        $('#cart-items').html(response.updated_cart_html);
+                        $('#total-price').text('Total Price: Rp0');
+
+                        // Reset all quantity displays to zero
+                        document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error emptying cart:', error);
+                }
+            });
+        }
+
+        </script>
+
+        
+    </body>
 </html>

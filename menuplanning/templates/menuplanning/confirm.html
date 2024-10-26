@@ -1,5 +1,5 @@
 <!-- POPUP before saving (can edit and click save) -->
-<div class="confirm-popup">
+<!-- <div class="confirm-popup">
     <h1>{{ cart_name }}</h1>
     <p>Budget: Rp{{ budget|floatformat:0 }}</p>  
     <ul>
@@ -10,5 +10,29 @@
         {% endfor %}
     </ul>
     <p class="font-bold mt-3 text-black">Total: Rp{{ total_price|floatformat:0 }}</p>
+</div> -->
+
+<!-- Confirm Popup -->
+<div class="confirm-popup bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
+    <h1 class="text-2xl font-semibold mb-2 text-center">{{ cart_name }}</h1>
+    <p class="text-lg text-gray-700 text-center mb-4">Budget: Rp{{ budget|floatformat:0 }}</p>  
+
+    <ul class="divide-y divide-gray-300 mb-4">
+        {% for item in cart_items %}
+            {% if item.quantity > 0 %}
+                <li class="flex justify-between py-2">
+                    <div>
+                        <span class="font-medium">{{ item.item_name }}</span> - 
+                        <span class="text-sm text-gray-600">{{ item.quantity }} x Rp{{ item.item_price|floatformat:0 }}</span>
+                    </div>
+                    <div class="text-right font-semibold">Rp{{ item.total_price|floatformat:0 }}</div>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <p class="text-lg font-bold mt-4 text-center text-black">Total: Rp{{ total_price|floatformat:0 }}</p>
+    
 </div>
+
 
