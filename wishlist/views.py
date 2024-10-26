@@ -5,21 +5,31 @@ from django.contrib import messages
 from .models import Wishlist, Category, Menu
 from .forms import CategoryForm
 from django.http import JsonResponse  # Add this import
+from django.template.loader import render_to_string  # Ensure render_to_string is imported here
+
 
 @login_required
 def wishlist_view(request):
-    category_name = request.GET.get('category_name')  # Get the category filter from the query parameters
+    category_name = request.GET.get('category_name')
     categories = Category.objects.filter(user=request.user)
 
-    # If a category is selected, filter the wishlist items by that category
+    # Filter wishlist items based on selected category
     if category_name:
         category = get_object_or_404(Category, name=category_name, user=request.user)
         wishlist_items = Wishlist.objects.filter(user=request.user, categories=category)
     else:
         wishlist_items = Wishlist.objects.filter(user=request.user)
 
-    category_form = CategoryForm()  # Form for adding new categories
+    # Handle AJAX request for dynamic filtering
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        wishlist_html = render_to_string('partials/wishlist_items.html', {
+            'wishlist_items': wishlist_items,
+            'categories': categories  # Include categories in the context
+        }, request=request)
+        return JsonResponse({'wishlist_html': wishlist_html})
 
+    # For non-AJAX requests, render the full wishlist page
+    category_form = CategoryForm()
     return render(request, 'wishlist.html', {
         'wishlist_items': wishlist_items,
         'categories': categories,

@@ -105,17 +105,17 @@
     <div class="flex justify-center gap-8 mb-6">
         <!-- Category Filter Form -->
         <div class="form-container p-6 rounded-lg shadow-md w-full max-w-md">
-            <form method="GET" action="{% url 'wishlist' %}">
-                <label for="category" class="block text-lg font-semibold mb-2">Choose Category:</label>
-                <select name="category_name" id="category" class="w-full p-2 border rounded text-gray-700">
-                    <option value="">All Categories</option>
-                    {% for category in categories %}
-                        <option value="{{ category.name }}" {% if category.name == selected_category %}selected{% endif %}>{{ category.name }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit" class="mt-4 button-assign">Filter</button>
-            </form>
-        </div>
+          <form id="filter-form">
+              <label for="category" class="block text-lg font-semibold mb-2">Choose Category:</label>
+              <select name="category_name" id="category" class="w-full p-2 border rounded text-gray-700">
+                  <option value="">All Categories</option>
+                  {% for category in categories %}
+                      <option value="{{ category.name }}" {% if category.name == selected_category %}selected{% endif %}>{{ category.name }}</option>
+                  {% endfor %}
+              </select>
+              <button type="button" id="filter-button" class="mt-4 button-assign">Filter</button>
+          </form>
+      </div>
 
         <!-- Add New Category Form -->
         <div class="form-container p-6 rounded-lg shadow-md w-full max-w-md">
@@ -130,7 +130,7 @@
 
     <!-- Display Wishlist Items or Show Empty Message -->
     {% if wishlist_items %}
-    <div class="flex flex-wrap justify-center mt-10">
+    <div id="wishlist-container" class="flex flex-wrap justify-center mt-10">
         {% for item in wishlist_items %}
         <div class="wishlist-card relative p-4 max-w-[250px] w-full m-3">
           <!-- Image Section -->
@@ -176,9 +176,7 @@
                 <label for="category_id" class="block text-xs font-semibold mb-1">Assign Category:</label>
                 <select name="category_id" required class="w-full p-1 text-xs border rounded mb-2">
                     <option value="">Select Category</option>
-                    {% for category in categories %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
+                        {% include 'partials/category_options.html' %}
                 </select>
                 <button type="submit" class="button-assign py-1 text-xs">Assign</button>
             </form>
@@ -189,10 +187,11 @@
     </div>
     {% else %}
     <!-- Display this if no items in the wishlist -->
-    <div class="flex flex-col items-center mt-16">
+    <div id="empty-wishlist-message" class="flex flex-col items-center mt-16">
         <img src="{% static 'images/empty_wishlist.png' %}" alt="Empty Wishlist" class="empty-state mb-4">
         <p class="text-xl text-gray-600 mb-10">Your wishlist is empty. Start adding your favorite items!</p>
     </div>
+
     {% endif %}
 </div>
 
@@ -248,44 +247,46 @@ document.addEventListener("DOMContentLoaded", function() {
         .catch(error => console.error("Error:", error));
     });
     $(document).on("click", ".remove-btn", function (e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        const url = $(this).data("url");
-        const $itemCard = $(this).closest(".wishlist-card");  // Updated to match the HTML structure
-        const csrfToken = $('[name=csrfmiddlewaretoken]').val();
+    const url = $(this).data("url");
+    const $itemCard = $(this).closest(".wishlist-card");  // Reference to the item card
+    const csrfToken = $('[name=csrfmiddlewaretoken]').val();
 
-        console.log("URL for deletion:", url);  // Debug URL
-        console.log("CSRF Token:", csrfToken);  // Debug CSRF token
+    $.ajax({
+        url: url,
+        type: "POST",
+        headers: {
+            "X-CSRFToken": csrfToken
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                // Fade out and remove the item card
+                $itemCard.fadeOut(300, function () {
+                    $(this).remove();
 
-        $.ajax({
-            url: url,
-            type: "POST",
-            headers: {
-                "X-CSRFToken": csrfToken
-            },
-            success: function (response) {
-                console.log("AJAX Success Response:", response);  // Debug success response
-                if (response.status === 'success') {
-                    // Fade out and remove the item card
-                    $itemCard.fadeOut(300, function () {
-                        $(this).remove();
-
-                        // Check if there are any remaining wishlist items
-                        if ($(".wishlist-card").length === 0) {
-                            // Refresh the page if there are no items left
-                            location.reload();
-                        }
-                    });
-                } else {
-                    alert(response.message || "Error removing item.");
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log("AJAX Error Response:", xhr.responseText);  // Debug error response
-                alert("Error removing item. Please try again.");
+                    // Check if there are any remaining wishlist items
+                    if ($(".wishlist-card").length === 0) {
+                        // Add the empty wishlist message to the DOM if no items are left
+                        $("#wishlist-container").html(`
+                            <div class="flex flex-col items-center mt-16">
+                                <img src="{% static 'images/empty_wishlist.png' %}" alt="Empty Wishlist" class="empty-state mb-4">
+                                <p class="text-xl text-gray-600 mb-10">Your wishlist is empty. Start adding your favorite items!</p>
+                            </div>
+                        `);
+                    }
+                });
+            } else {
+                alert(response.message || "Error removing item.");
             }
-        });
+        },
+        error: function (xhr, status, error) {
+            console.log("AJAX Error Response:", xhr.responseText);
+            alert("Error removing item. Please try again.");
+        }
     });
+});
+
      // Event Delegation for the "Assign" button in the "Assign Category to Item" form
      $(document).on("submit", ".assign-category-form", function(e) {
         e.preventDefault();  // Prevent the default form submission
@@ -345,6 +346,25 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 console.log("AJAX Error:", xhr.responseText);  // Silent error handling
+            }
+        });
+    });
+    $('#filter-button').on('click', function(e) {
+        e.preventDefault();  // Prevent default form submission
+
+        const selectedCategory = $('#category').val();  // Get selected category
+
+        $.ajax({
+            url: "{% url 'wishlist' %}",  // URL for wishlist view
+            type: "GET",
+            data: { category_name: selectedCategory },  // Send selected category
+            success: function(response) {
+                // Replace the wishlist container's content with the filtered items
+                $('#wishlist-container').html(response.wishlist_html);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", xhr.responseText);  // Log any errors
+                alert("An error occurred. Please try again.");
             }
         });
     });
