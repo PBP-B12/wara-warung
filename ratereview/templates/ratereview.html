@@ -1,0 +1,48 @@
+{% load star_ratings %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ menu_item.warung }}</title>
+</head>
+<body>
+    <h1>{{ menu_item.warung }}</h1>
+    <p>Menu: {{ menu_item.menu }}</p>
+    <p>Price: {{ menu_item.harga }}</p>
+    <img src="{{ menu_item.gambar }}" alt="{{ menu_item.menu }}" style="width:200px;height:auto;">
+
+    <h2>Average Rating: {{ average_rating }} ({{ total_votes }} votes)</h2>
+
+    <!-- Star Ratings Section -->
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="rating">Rate this item:</label>
+            {% ratings menu_rating as rating %}
+            {{ rating }}  <!-- This will render the star rating widget -->
+        </div>
+        <button type="submit">Rate</button>
+    </form>
+
+    <h2>Reviews:</h2>
+    <ul>
+        {% for review in reviews %}
+            <li>{{ review.text }}</li>
+        {% empty %}
+            <li>No reviews yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Submit a Review:</h2>
+    <form method ="POST">
+        {% csrf_token %}
+        <textarea name="review_text" required></textarea>
+        <button type="submit">Submit Review</button>
+    </form>
+    <a href="{% url 'menu_list' %}">
+        <button>Back to Menu List</button>
+    </a>
+</body>
+</html>

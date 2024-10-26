@@ -1,25 +1,17 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models import Avg
-from .models import Menu
-
+from django.contrib.contenttypes.fields import GenericRelation
+from star_ratings.models import Rating
 
 class MenuRating(models.Model):
-    header = models.CharField(max_length=100, default="Header")
+    menu = models.OneToOneField('menu.Menu', on_delete=models.CASCADE) 
+    ratings = GenericRelation(Rating, related_query_name='posts')
 
-    def average_rating(self) -> float:
-        return UserRateReview.objects.filter(post=self).aggregate(Avg("rating"))["rating__avg"] or 0
+    def average_rating(self):
+        return self.ratings.aggregate(models.Avg('value'))['value__avg'] or 0
 
-    def __str__(self):
-        return f"{self.header}: {self.average_rating()}"
+    def total_votes(self):
+        return self.ratings.count()
 
-
-class UserRateReview(models.Model):
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.IntegerField(default=0)
-    review = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'Review for {self.menu.name} - Rating: {self.rating}'
+class Review(models.Model):
+    menu = models.OneToOneField('menu.Menu', on_delete=models.CASCADE) 
+    text = models.CharField(max_length=200)

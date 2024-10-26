@@ -1,8 +1,9 @@
-from django.urls import path
-from ratereview.views import menu_item_detail
+from django.urls import path, include
+from . import views
 
-app_name = 'main'
+app_name = 'ratereview'
 
 urlpatterns = [
-    path('ratereview/<int:menu_item_id>/', menu_item_detail, name='menu_item_detail'),
+    path('', views.show_main, name='show_main'),  
+    path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ]
