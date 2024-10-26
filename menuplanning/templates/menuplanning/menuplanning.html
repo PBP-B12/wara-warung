@@ -405,90 +405,97 @@ body {
         });
     }
 
-        function saveCart() {
-            const budgetInput = document.getElementById('budget').value;
-            $.ajax({
-                url: '{% url "menuplanning:save_cart" %}',
-                type: 'POST',
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    budget: budgetInput,
-                },
-                success: function (response) {
-                    // Display confirmation popup with cart details
-                    displayConfirmationPopup(response.confirm_popup_html);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error saving cart:', error);
-                },
-            });
-        }
+    function saveCart() {
+    const budgetInput = document.getElementById('budget').value;
+    $.ajax({
+        url: '{% url "menuplanning:confirm_save_cart" %}', // Use confirm_save_cart to save directly
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            budget: budgetInput,
+        },
+        success: function (response) {
+            alert('Cart saved successfully!'); // Display success message
+            // Clear the cart display after saving
+            $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
+            $('#total-price').text('Total Price: Rp0');
+            updateCartSummary(0, 0); // Reset the floating cart summary
+
+            // Reset all quantity displays to zero
+            document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
+        },
+        error: function (xhr, status, error) {
+            console.error('Error saving cart:', error);
+        },
+    });
+}
 
 
-        function displayConfirmationPopup(cartHtml) {
-            // Create the overlay for the confirmation popup
-            let overlay = document.createElement('div');
-            overlay.id = 'cart-overlay';
-            overlay.style.position = 'fixed';
-            overlay.style.top = '0';
-            overlay.style.left = '0';
-            overlay.style.width = '100%';
-            overlay.style.height = '100%';
-            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-            overlay.style.display = 'flex';
-            overlay.style.justifyContent = 'center';
-            overlay.style.alignItems = 'center';
-            overlay.style.zIndex = '1000';
 
-            // Create the modal container for the cart confirmation
-            let modal = document.createElement('div');
-            modal.id = 'saved-cart-modal';
-            modal.style.backgroundColor = 'white';
-            modal.style.padding = '20px';
-            modal.style.borderRadius = '10px';
-            modal.style.width = '50%';
+        // function displayConfirmationPopup(cartHtml) {
+        //     // Create the overlay for the confirmation popup
+        //     let overlay = document.createElement('div');
+        //     overlay.id = 'cart-overlay';
+        //     overlay.style.position = 'fixed';
+        //     overlay.style.top = '0';
+        //     overlay.style.left = '0';
+        //     overlay.style.width = '100%';
+        //     overlay.style.height = '100%';
+        //     overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        //     overlay.style.display = 'flex';
+        //     overlay.style.justifyContent = 'center';
+        //     overlay.style.alignItems = 'center';
+        //     overlay.style.zIndex = '1000';
 
-            // Add the cart content to the modal (this is dynamically passed HTML from the server)
-            modal.innerHTML = cartHtml;
+        //     // Create the modal container for the cart confirmation
+        //     let modal = document.createElement('div');
+        //     modal.id = 'saved-cart-modal';
+        //     modal.style.backgroundColor = 'white';
+        //     modal.style.padding = '20px';
+        //     modal.style.borderRadius = '10px';
+        //     modal.style.width = '50%';
 
-            // Add the Save and Edit buttons with the updated styles
-            let buttonsContainer = document.createElement('div');
-            buttonsContainer.style.marginTop = '20px';
+        //     // Add the cart content to the modal (this is dynamically passed HTML from the server)
+        //     modal.innerHTML = cartHtml;
 
-            let saveButton = document.createElement('button');
-            saveButton.textContent = 'Save';
-            saveButton.classList.add('bg-[#ff6e1f]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
+        //     // Add the Save and Edit buttons with the updated styles
+        //     let buttonsContainer = document.createElement('div');
+        //     buttonsContainer.style.marginTop = '20px';
 
-            let editButton = document.createElement('button');
-            editButton.textContent = 'Edit';
-            editButton.classList.add('bg-[#252525]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'ml-4', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
+        //     let saveButton = document.createElement('button');
+        //     saveButton.textContent = 'Save';
+        //     saveButton.classList.add('bg-[#ff6e1f]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
 
-            buttonsContainer.appendChild(saveButton);
-            buttonsContainer.appendChild(editButton);
+        //     let editButton = document.createElement('button');
+        //     editButton.textContent = 'Edit';
+        //     editButton.classList.add('bg-[#252525]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'ml-4', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
 
-            modal.appendChild(buttonsContainer);
+        //     buttonsContainer.appendChild(saveButton);
+        //     buttonsContainer.appendChild(editButton);
 
-            // Append the modal to the overlay
-            overlay.appendChild(modal);
+        //     modal.appendChild(buttonsContainer);
 
-            // Append the overlay to the body
-            document.body.appendChild(overlay);
+        //     // Append the modal to the overlay
+        //     overlay.appendChild(modal);
 
-            // Handle Save and Edit button actions
-            saveButton.onclick = function () {
-            confirmSaveCart(); // Call the function to confirm save
+        //     // Append the overlay to the body
+        //     document.body.appendChild(overlay);
 
-            // After saving, reset all quantity displays to zero
-            document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
+        //     // Handle Save and Edit button actions
+        //     saveButton.onclick = function () {
+        //     confirmSaveCart(); // Call the function to confirm save
 
-            // Remove the popup overlay
-            document.body.removeChild(overlay);
-            };
+        //     // After saving, reset all quantity displays to zero
+        //     document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
 
-            editButton.onclick = function () {
-            document.body.removeChild(overlay); // Close the popup and allow editing
-            };
-        }
+        //     // Remove the popup overlay
+        //     document.body.removeChild(overlay);
+        //     };
+
+        //     editButton.onclick = function () {
+        //     document.body.removeChild(overlay); // Close the popup and allow editing
+        //     };
+        // }
 
         function confirmSaveCart() {
             const budgetInput = document.getElementById('budget').value;
