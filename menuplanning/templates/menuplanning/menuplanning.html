@@ -282,7 +282,8 @@ body {
                 <p id="total-price" class="total-price">Total Price: Rp0</p>
 
                 <div class="flex flex-col items-center gap-4 mt-4">
-                    <button id="save-button" onclick="saveCart()" class="text-white font-bold py-1.5 px-4 rounded-full bg-[#64d16d] hover:scale-105 transition-transform duration-300">Save Menu</button>
+                    <button id="save-button" onclick="saveCart()" class="text-white font-bold py-1.5 px-4 rounded-full bg-[#64d16d] hover:scale-105 transition-transform duration-300" disabled>Save Menu</button>
+
                    
                 </div>
             </div>
@@ -682,7 +683,20 @@ function showCartDetails() {
 function updateCartSummary(itemCount = 0, totalPrice = 0) {
     document.getElementById('cart-item-count').textContent = `${itemCount} Item(s)`;
     document.getElementById('cart-total').textContent = `Total: Rp${totalPrice.toLocaleString()}`;
+    
+    // Enable or disable the Save Menu button based on the item count
+    const saveButton = document.getElementById('save-button');
+    if (itemCount > 0) {
+        saveButton.disabled = false;
+        saveButton.style.backgroundColor = '#FF6E1F'; // Enable with orange color
+        saveButton.style.cursor = 'pointer';
+    } else {
+        saveButton.disabled = true;
+        saveButton.style.backgroundColor = 'gray'; // Disable with gray color
+        saveButton.style.cursor = 'not-allowed';
+    }
 }
+
 
 // Ensure it starts with 0 items and Rp0
 document.addEventListener('DOMContentLoaded', function() {

@@ -31,7 +31,6 @@
         padding: 1.5rem;
         border-radius: 16px;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 1.5rem;
         width: 100%;
       }
 
@@ -77,23 +76,23 @@
 
 <body class="bg-[#fffbf2] font-poppins">
     
-    <nav class="absolute z-50">{% include 'navbar.html' %}</nav>
+    <nav class="absolute z-50 w-full">{% include 'navbar.html' %}</nav>
     <div class="navbar-height"></div>
 
     <!-- Back Button Container -->
-    <div class="container mx-auto mt-12 px-4">
-        <a href="{% url 'menuplanning:show_main' %}" class="back-button">
+    <div class="container mx-auto mt-12 px-4 text-center md:text-left">
+        <a href="{% url 'menuplanning:show_main' %}" class="back-button inline-block">
            Back
         </a>
     </div>
 
-    <!-- Gradient Container with Full-width Cards -->
-    <section class="container mx-auto mt-6 mb-12 p-6 shadow-md rounded-lg bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5]">
+    <!-- Centered Gradient Container with Full-width Cards -->
+    <section class="container mx-auto mt-6 mb-12 p-4 sm:p-6 md:p-8 shadow-md rounded-lg bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl mx-auto">
         <h1 class="text-3xl font-bold mb-6 text-center">My Saved Menus</h1>
 
         <div class="space-y-6">
             {% for menu_plan in menu_plans %}
-                <div class="menu-plan">
+                <div class="menu-plan mx-auto sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl">
                     <h2 class="text-2xl font-semibold mb-2">{{ menu_plan.name }}</h2>
                     <p class="budget-label"><strong>Budget:</strong> Rp{{ menu_plan.budget|floatformat:0 }}</p>
 
@@ -109,7 +108,6 @@
                     <p class="menu-total font-bold mt-3 text-black">Total = Rp{{ menu_plan.total_price|floatformat:0 }}</p>
                 </div>
             {% endfor %}
-
         </div>
 
         <!-- Centered Reset Button -->
