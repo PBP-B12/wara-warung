@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Wishlist, Section
 from menu.models import Menu
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 
 @login_required
 def wishlist_view(request):
@@ -10,18 +13,41 @@ def wishlist_view(request):
     sections = Section.objects.filter(user=request.user)  # Retrieve user's sections
     return render(request, 'wishlist.html', {'wishlist_items': wishlist_items, 'sections': sections})
 
+
 @login_required
 def add_section(request):
     if request.method == "POST":
-        section_name = request.POST.get("section_name")
-        # Check if a section with the same name exists for this user
-        if section_name and not Section.objects.filter(user=request.user, name__iexact=section_name).exists():
-            Section.objects.create(user=request.user, name=section_name)
-            messages.success(request, f'Section "{section_name}" has been created.')
+        section_name = request.POST.get("section_name", "").strip()
+        
+        print("Received section_name:", section_name)  # Debug line
+        
+        # Check if the section name is provided and if it already exists
+        if section_name:
+            if not Section.objects.filter(user=request.user, name=section_name).exists():
+                # Create the new section
+                section = Section.objects.create(user=request.user, name=section_name)
+                
+                # Return the section's ID and name as JSON
+                return JsonResponse({
+                    'success': True,
+                    'section_id': section.id,
+                    'section_name': section.name
+                })
+            else:
+                print("Section name already exists")  # Debug line
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Section name already exists.'
+                }, status=400)
         else:
-            messages.warning(request, f'Section "{section_name}" already exists.')
-        return redirect('wishlist')
+            print("Section name is missing")  # Debug line
+            return JsonResponse({
+                'success': False,
+                'error': 'Section name is required.'
+            }, status=400)
 
+    print("Request method is not POST")  # Debug line
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
 
 @login_required
 def add_to_wishlist(request, menu_id):
@@ -74,19 +100,20 @@ def assign_section_to_wishlist_item(request, item_id):
         wishlist_item.section = section
         wishlist_item.save()
         
-        return redirect('wishlist')
+        # Return a JSON response instead of redirecting
+        return JsonResponse({"success": True, "section_name": section.name if section else "No Section"})
+
+    return JsonResponse({"success": False, "error": "Invalid request method"})
 
 @login_required
 def delete_section(request, section_id):
-    section = get_object_or_404(Section, id=section_id, user=request.user)
-    
-    # Ensure no items are left in the section
-    Wishlist.objects.filter(user=request.user, section=section).delete()
-    
-    # Delete the section itself
-    section.delete()
-    
-    return redirect('wishlist')
+    try:
+        section = Section.objects.get(id=section_id, user=request.user)
+        section.delete()
+        return JsonResponse({"success": True})
+    except Section.DoesNotExist:
+        return JsonResponse({"success": False, "error": "Section not found."})
+
 
 @login_required
 def assign_section_to_wishlist_item(request, item_id):

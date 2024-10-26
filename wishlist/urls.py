@@ -6,6 +6,6 @@ urlpatterns = [
     path('add/<int:menu_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('remove/<int:menu_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
     path('add-section/', views.add_section, name='add_section'),  # Add section URL
-    path('wishlist/section/delete/<int:section_id>/', views.delete_section, name='delete_section'),  # Delete section
+    path('delete_section/<int:section_id>/', views.delete_section, name='delete_section'),
     path('assign-section/<int:item_id>/', views.assign_section_to_wishlist_item, name='assign_section_to_wishlist_item'),
 ]
