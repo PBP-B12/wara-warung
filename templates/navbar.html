@@ -29,7 +29,12 @@
 
         {% if user.is_authenticated %}
         <a
-          href="/account"
+          href="/menuplanning"
+          class="text-black text-base"
+          >Menu Planning</a
+        >
+        <a
+          href="/user_dashboard"
           class="text-black text-base"
           >My Account</a
         >
@@ -102,6 +107,11 @@
         >
 
         {% if user.is_authenticated %}
+        <a
+          href="/menuplanning"
+          class="text-black text-base block px-3 py-2"
+          >Menu Planning</a
+        >
         <a
           href="/account"
           class="text-black text-base block px-3 py-2"
