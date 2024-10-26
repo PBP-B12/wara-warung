@@ -24,5 +24,6 @@ urlpatterns = [
     path("menu/", include('menu.urls')),
     path("warung/", include('warung.urls')),
     path('', include('search.urls')),
+    path('menuplanning/', include('menuplanning.urls')),
 
 ]

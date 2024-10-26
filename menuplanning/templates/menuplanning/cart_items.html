@@ -1,0 +1,10 @@
+<!-- Showing CURRENT cart on the page -->
+<h1>{{ cart_name }}</h1>
+
+<ul>
+  {% for item in cart_items %}
+    <li> {{ item.quantity }} x Item {{ item.item_name }} - Rp{{ item.get_total_price }}</li>
+  {% endfor %}
+</ul>
+
+
