@@ -176,7 +176,9 @@
                 <label for="category_id" class="block text-xs font-semibold mb-1">Assign Category:</label>
                 <select name="category_id" required class="w-full p-1 text-xs border rounded mb-2">
                     <option value="">Select Category</option>
-                        {% include 'partials/category_options.html' %}
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
                 </select>
                 <button type="submit" class="button-assign py-1 text-xs">Assign</button>
             </form>
@@ -253,6 +255,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const $itemCard = $(this).closest(".wishlist-card");  // Reference to the item card
     const csrfToken = $('[name=csrfmiddlewaretoken]').val();
 
+    console.log("URL for deletion:", url);  // Debug URL
+    console.log("CSRF Token:", csrfToken);  // Debug CSRF token
+
     $.ajax({
         url: url,
         type: "POST",
@@ -260,6 +265,7 @@ document.addEventListener("DOMContentLoaded", function() {
             "X-CSRFToken": csrfToken
         },
         success: function (response) {
+            console.log("AJAX Success Response:", response);  // Debug success response
             if (response.status === 'success') {
                 // Fade out and remove the item card
                 $itemCard.fadeOut(300, function () {
@@ -267,13 +273,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
                     // Check if there are any remaining wishlist items
                     if ($(".wishlist-card").length === 0) {
-                        // Add the empty wishlist message to the DOM if no items are left
-                        $("#wishlist-container").html(`
-                            <div class="flex flex-col items-center mt-16">
-                                <img src="{% static 'images/empty_wishlist.png' %}" alt="Empty Wishlist" class="empty-state mb-4">
-                                <p class="text-xl text-gray-600 mb-10">Your wishlist is empty. Start adding your favorite items!</p>
-                            </div>
-                        `);
+                        // Show the empty wishlist message
+                        $("#empty-wishlist-message").removeClass("hidden");
                     }
                 });
             } else {
@@ -281,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         },
         error: function (xhr, status, error) {
-            console.log("AJAX Error Response:", xhr.responseText);
+            console.log("AJAX Error Response:", xhr.responseText);  // Debug error response
             alert("Error removing item. Please try again.");
         }
     });
