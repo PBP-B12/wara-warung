@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Cart, CartItem, ChosenMenu
 from django.template.loader import render_to_string
 from django.utils import timezone
+from menu.models import Menu
 
 # Helper function to get or create the user's cart
 def get_user_cart(user):
@@ -33,6 +34,15 @@ def show_main(request):
         'cart_name': cart.name,
     }
     return render(request, 'menuplanning/menuplanning.html', context)
+
+
+def menu_list(request):
+    menus = Menu.objects.all().values('id', 'menu', 'harga', 'gambar', 'warung')
+    return JsonResponse({'menus': list(menus)}, safe=False)
+
+def menus_by_warung(request, warung_id):
+    menus = Menu.objects.filter(warung=warung_id).values('id', 'menu', 'harga', 'gambar', 'warung')
+    return JsonResponse({'menus': list(menus)}, safe=False)
 
 
 @login_required
