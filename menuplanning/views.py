@@ -278,6 +278,20 @@ def empty_cart(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+@login_required
+def load_cart(request):
+    cart_items = CartItem.objects.filter(cart__user=request.user).exclude(quantity=0)
+    total_price = sum(item.quantity * item.item_price for item in cart_items)
+    
+    # Render HTML for cart items
+    updated_cart_html = render_to_string('menuplanning/cart_items.html', {'cart_items': cart_items})
+    
+    return JsonResponse({
+        'updated_cart_html': updated_cart_html,
+        'total_price': total_price,
+    })
+
+
 
 
 

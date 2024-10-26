@@ -21,11 +21,26 @@
     />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 
     <style>
-        body {
+body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure body takes full viewport height */
             background-color: #fffbf2;
             font-family: 'Poppins', sans-serif;
+        }
+
+        /* Main Content Stretching */
+        main {
+            flex: 1; /* Allows main content to grow and push footer to the bottom */
+            padding: 2rem; /* Adds padding around main content */
+        }
+
+        /* Extra Spacing Above Footer */
+        .content-footer-space {
+            margin-bottom: 20rem; /* Extra space above footer */
         }
 
         .input-container {
@@ -100,9 +115,6 @@
             margin-top: 40px;
         }
 
-        main {
-            flex: 1;
-        }
 
         .total-price {
             font-size: 1.5rem;
@@ -116,21 +128,18 @@
             padding-top: 6rem;
         }
 
-        .cart-view {
+        .hidden {
+            display: none;
+        }
+
+        #cart-view {
+            display: none; /* Hidden initially, shown when 'hidden' is removed */
             position: fixed;
-            top: calc(4rem + 3rem); /* Adjusted to start just below the navbar */
-            bottom: 2vh;
-            right: 0;
-            width: 25%;
-            background: #fff;
-            border-radius: 48px 0 0 48px;
-            box-shadow: -4px 0px 20.5px 4px rgba(0, 0, 0, 0.2);
-            padding: 1.5rem;
+            inset: 0;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            overflow-y: auto;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
             z-index: 50;
         }
 
@@ -140,109 +149,93 @@
             margin-right: 25%;
         }
 
+        /* Fixed Bottom Button Styling */
+        .fixed-bottom-center { 
+            position: fixed; 
+            bottom: 40px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 50;
+        }
+
+        .see-saved-btn {
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        /* Centered Message Styling */
+        .no-warung-message { text-align: center; color: gray; font-size: 1.25rem; margin-top: 2rem; }
+
     </style>
 
   </head>
 
-    <body class="flex flex-col min-h-screen bg-[#fffbf2] font-poppins">
-        <nav class="z-50">{% include 'navbar.html' %}</nav>
 
-        <div class="flex flex-1 w-full mt-10">
+  
+  <body>
+    <!-- Navigation -->
+    <nav class="z-50">{% include 'navbar.html' %}</nav>
 
-            <!-- Menu Planning Section -->
-            <div class="w-3/4 p-10 mt-10">
-                <section class="text-center">
-                    <h1 class="text-4xl font-bold mb-2">Menu Planning</h1>
-                    <p class="text-lg text-gray-700 mb-8">Choose your warung and plan your menu with your preferred budget!</p>
+    <!-- Main Content -->
+    <main class="content-footer-space">
+        <section class="text-center">
+            <h1 class="text-4xl font-bold mb-2">Menu Planning</h1>
+            <p class="text-lg text-gray-700 mb-8">Choose your warung and plan your menu with your preferred budget!</p>
 
-                    <!-- Input Fields and Cards -->
-                    <div class="flex flex-col items-center">
-                        <div class="flex justify-center">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 w-full max-w-3xl px-8">
-                                <div class="input-container warung-container w-full">
-                                    <label
-                                        for="warungDropdownss"
-                                        class="input-label"
-                                        >Warung:</label
-                                    >
-                                    <select
-                                        id="warungDropdownss"
-                                        class="input-field w-full"
-                                    >
-                                        <option value="">Select a Warung</option>
-                                    </select>
-                                </div>
-
-                                <div class="input-container budget-container w-full">
-                                    <label
-                                        for="budget"
-                                        class="input-label"
-                                        >Budget:</label
-                                    >
-                                    <input
-                                        type="text"
-                                        id="budget"
-                                        value="100000"
-                                        class="input-field w-full"
-                                        onchange="updateMaxBudget()"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Cards Section untuk menampilkan menus di warung (masih data manual dummy)-->
-                        <div
-                            class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-                            id="menu-results"
-                        ></div>
-                    </div>
-                </section>
+            <!-- "See My Saved Menus" Button Above Input Fields -->
+            <div class="see-saved-btn text-center">
+                <a href="{% url 'menuplanning:saved_menu_planning_page' %}" class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform hover:scale-110 hover:shadow-lg">See My Saved Menus</a>
             </div>
-
-            <!-- Cart view  -->
-            <div class="cart-view">
-                <div class="text-center w-full">
-                    <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
-                    <div id="cart-items">{% include 'menuplanning/cart_items.html' %}</div>
-                    <p
-                        class="total-price"
-                        id="total-price"
-                    >
-                        Total Price: Rp0
-                    </p>
-
-                    <!-- Button Container with Vertical Layout -->
-                    <div class="flex flex-col items-center gap-4 justify-center mt-4">
-                        <button
-                            id="save-button"
-                            onclick="saveCart()"
-                            class="text-white font-bold py-1.5 px-4 rounded-full cursor-pointer transform hover:scale-105 transition-transform duration-300"
-                            style="background-color: #64d16d; min-width: 100px"
-                            >
-                            Save Menu
-                        </button>
-
-                        <a
-                            href="{% url 'menuplanning:saved_menu_planning_page' %}"
-                            class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform transition-transform duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
-                            style="min-width: 100px"
-                            >
-                            See My Saved Menus
-                        </a>
-
-                        <button
-                            onclick="emptyCart()"
-                            class="bg-red-500 text-white font-bold py-1.5 px-4 rounded-full cursor-pointer transform hover:scale-105 transition-transform duration-300"
-                            style="min-width: 100px">
-                            Empty Cart
-                        </button>
+            <!-- Input Fields and Cards -->
+            <div class="flex flex-col items-center">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 w-full max-w-3xl px-8">
+                    <!-- Warung Dropdown -->
+                    <div class="input-container w-full">
+                        <label for="warungDropdownss" class="input-label">Warung:</label>
+                        <select id="warungDropdownss" class="input-field w-full">
+                            <option value="">Select a Warung</option>
+                        </select>
                     </div>
+                    <!-- Budget Input -->
+                    <div class="input-container w-full">
+                        <label for="budget" class="input-label">Budget:</label>
+                        <input type="text" id="budget" value="100000" class="input-field w-full" onchange="updateMaxBudget()" />
+                    </div>
+                </div>
+                <!-- Menu Results -->
+                <div id="menu-results" class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+                
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart View Modal -->
+    <div id="cart-view" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <div class="bg-white p-6 rounded-xl shadow-lg w-80 relative">
+            <button onclick="hideCartDetails()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
+            <div class="text-center">
+                <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
+                <div id="cart-items"><p class="text-gray-500">Your cart is empty.</p></div>
+                <p id="total-price" class="total-price">Total Price: Rp0</p>
+
+                <div class="flex flex-col items-center gap-4 mt-4">
+                    <button id="save-button" onclick="saveCart()" class="text-white font-bold py-1.5 px-4 rounded-full bg-[#64d16d] hover:scale-105 transition-transform duration-300">Save Menu</button>
+                    <a href="{% url 'menuplanning:saved_menu_planning_page' %}" class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform hover:scale-110 hover:shadow-lg">See My Saved Menus</a>
+                    <button onclick="emptyCart()" class="bg-red-500 text-white font-bold py-1.5 px-4 rounded-full hover:scale-105 transition-transform duration-300">Empty Cart</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Footer -->
-        <footer>{% include 'footer.html' %}</footer>
+    <!-- Floating Review Cart & Save Button -->
+    <div class="fixed-bottom-center">
+        <button id="show-cart-btn" class="bg-blue-500 text-white font-bold py-2 px-6 rounded-full transform hover:scale-105 transition-transform duration-300">Review Cart & Save</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>{% include 'footer.html' %}</footer>
+        
 
         <script>
         let MAX_BUDGET = parseInt(document.getElementById('budget').value) || 100000; // Set initial MAX_BUDGET
@@ -510,8 +503,52 @@
             });
         }
 
-        </script>
+        function showCartDetails() {
+    $('#cart-view').removeClass('hidden').css('display', 'flex');  // Show the cart view modal
 
-        
+    $.ajax({
+        url: '{% url "menuplanning:load_cart" %}',  // Confirm URL matches the view name and namespace
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            $('#cart-items').html(response.updated_cart_html);
+            $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
+        },
+        error: function(xhr, status, error) {
+            console.error('Error loading cart details:', xhr.responseText);  // Log any errors
+        }
+    });
+}
+
+
+        function hideCartDetails() {
+            $('#cart-view').addClass('hidden').css('display', 'none');
+        }
+
+        $(document).ready(function() {
+    // Show the cart view when "See Cart Details" button is clicked
+    $('#show-cart-btn').on('click', function(event) {
+        event.stopPropagation();  // Prevent click from propagating to document
+        console.log("Button clicked");
+        showCartDetails();
+    });
+
+    // Close the cart view if clicking outside the modal content
+    $(document).on('click', function(event) {
+        const $cartView = $('#cart-view');
+        const $modalContent = $cartView.find('.bg-white'); // Modal content selector
+
+        if ($cartView.is(':visible') && !$modalContent.is(event.target) && !$modalContent.has(event.target).length) {
+            console.log("Clicked outside modal, hiding cart");
+            hideCartDetails();
+        }
+    });
+});
+
+
+
+
+
+        </script>
     </body>
 </html>

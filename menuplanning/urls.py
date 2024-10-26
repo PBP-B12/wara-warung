@@ -14,5 +14,6 @@ urlpatterns = [
     path('api/warungs/', views.warungs_list, name='warungs_list'),
     path('api/menus/<str:warung>/', views.get_menus_by_warung, name='get_menus_by_warung'),
     path('empty_cart/', views.empty_cart, name='empty_cart'),
+    path('api/load-cart/', views.load_cart, name='load_cart'),
 
 ]
