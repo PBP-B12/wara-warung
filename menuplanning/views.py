@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from .models import Cart, CartItem, ChosenMenu
+from menuplanning.models import Cart, CartItem, ChosenMenu
 from django.template.loader import render_to_string
 from django.utils import timezone
 from menu.models import Menu

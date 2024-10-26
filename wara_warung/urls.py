@@ -21,9 +21,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('homepage.urls')),
     path('', include('auth_app.urls')),
-    path("menu/", include('menu.urls')),
-    path("warung/", include('warung.urls')),
+    path('menu/', include('menu.urls')),
+    path('warung/', include('warung.urls')),
     path('', include('search.urls')),
     path('menuplanning/', include('menuplanning.urls')),
-
+    path('wishlist/', include('wishlist.urls')),
+    path('user_dashboard/', include('user_dashboard.urls')),
+    path('ratereview/', include('ratereview.urls')),
 ]

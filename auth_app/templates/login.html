@@ -61,7 +61,7 @@
 
       .form-input:focus {
         outline: none;
-        box-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Efek glowing saat focus */
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
       }
 
       .login-button {
@@ -79,8 +79,8 @@
 
       .login-button:hover {
         background-color: #FF9D6B;
-        transform: translateY(-2px); /* Efek hover untuk membuat tombol sedikit naik */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Efek bayangan pada hover */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       }
 
       .login-link {
@@ -90,27 +90,38 @@
       }
 
       .login-link a {
-        color: #1D4ED8; /* Warna biru untuk link */
+        color: #1D4ED8;
         font-weight: bold;
         text-decoration: none;
         transition: color 0.3s ease, text-decoration 0.3s ease;
       }
 
       .login-link a:hover {
-        color: #3B82F6; /* Warna biru lebih terang saat di-hover */
-        text-decoration: underline; /* Menambahkan underline saat hover */
+        color: #3B82F6;
+        text-decoration: underline;
       }
     </style>
   </head>
   <body>
     <div class="flex justify-center mt-8">
-      <img src="{% static 'images/logo002.png' %}" alt="Logo" class="w-28 h-auto"> <!-- Ukuran logo disesuaikan -->
+      <img src="{% static 'images/logo002.png' %}" alt="Logo" class="w-28 h-auto">
     </div>    
 
     <div class="flex items-center justify-center mt-4">
       <div class="form-container">
         <h2 class="form-title">Hello again!</h2>
         <p class="form-subtitle">Discover the best local flavors with Wara Warung.</p>
+
+        <!-- Display error messages -->
+        {% if messages %}
+          <div>
+            {% for message in messages %}
+              <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative mt-4" role="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
 
         <form method="POST" class="space-y-4">
           {% csrf_token %}
@@ -120,16 +131,15 @@
 
           <!-- Password Input -->
           <input type="password" name="password" class="form-input" placeholder="Password" required>
-          <div style="margin-top: 108px;">
-            <br>
-          </div>
+
           <button type="submit" class="login-button">Log In</button>
         </form>
 
         <div class="login-link">
-          Don't have an account? <a href="{% url 'auth_app:register' %}">Sign in</a>
+          Don't have an account? <a href="{% url 'auth_app:register' %}">Sign up</a>
         </div>
       </div>
     </div>
   </body>
+  {% include 'footer.html' %}
 </html>
