@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from menu.models import Menu
+import random
+from django.http import JsonResponse
+from warung.models import Warung
 
 # Create your views here.
 def show_main(request):
@@ -9,3 +13,7 @@ def show_main(request):
     }
 
     return render(request, "homepage.html", context)
+
+def get_warungs(request):
+    warungs = Warung.objects.all().values('id', 'nama')
+    return JsonResponse({'warungs': list(warungs)})

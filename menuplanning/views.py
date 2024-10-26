@@ -2,10 +2,11 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from .models import Cart, CartItem, ChosenMenu
+from menuplanning.models import Cart, CartItem, ChosenMenu
 from django.template.loader import render_to_string
 from django.utils import timezone
 from menu.models import Menu
+from warung.models import Warung
 
 # Helper function to get or create the user's cart
 def get_user_cart(user):
@@ -34,6 +35,10 @@ def show_main(request):
         'cart_name': cart.name,
     }
     return render(request, 'menuplanning/menuplanning.html', context)
+
+def get_warungs(request):
+    warungs = list(Warung.objects.values('id', 'nama'))
+    return JsonResponse({'warungs': warungs})
 
 
 def menu_list(request):
@@ -190,6 +195,48 @@ def confirm_save_cart(request):
         return JsonResponse({'message': 'Cart saved successfully'})
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+
+def menu_list(request, warung_id):
+    # Filter menus based on the warung_id
+    menus = Menu.objects.filter(warung=warung_id)
+    data = [
+        {
+            'menu': menu.menu,
+            'harga': menu.harga,
+            'warung': menu.warung,
+            'gambar': menu.gambar,
+            'id': menu.id,
+        } for menu in menus
+    ]
+    return JsonResponse({'menus': data})
+
+def get_menus_by_warung(request, warung):
+    # Retrieve menus for the selected warung_id
+    menus = Menu.objects.filter(warung=warung)
+
+    # Prepare the data to be returned
+    data = [
+        {
+            'menu': menu.menu,
+            'harga': menu.harga,
+            'warung': menu.warung,  # Include warung name
+            'gambar': menu.gambar,
+            'id': menu.id,
+        }
+        for menu in menus
+    ]
+    return JsonResponse({'menus': data})
+
+def warungs_list(request):
+    warungs = Warung.objects.all()
+    data = {'warungs': [{'id': warung.id, 'nama': warung.nama} for warung in warungs]}
+    return JsonResponse(data)
+
+def get_warungs(request):
+    warungs = Warung.objects.all().values('id', 'nama')
+    return JsonResponse({'warungs': list(warungs)})
 
 
 
