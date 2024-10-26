@@ -1,109 +1,114 @@
-from django.shortcuts import render, get_object_or_404, redirect
+# views.py
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Wishlist, Section
-from menu.models import Menu
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-
+from .models import Wishlist, Category, Menu
+from .forms import CategoryForm
+from django.http import JsonResponse  # Add this import
 
 @login_required
 def wishlist_view(request):
-    wishlist_items = Wishlist.objects.filter(user=request.user)
-    sections = Section.objects.filter(user=request.user)  # Retrieve user's sections
-    return render(request, 'wishlist.html', {'wishlist_items': wishlist_items, 'sections': sections})
+    category_name = request.GET.get('category_name')  # Get the category filter from the query parameters
+    categories = Category.objects.filter(user=request.user)
 
+    # If a category is selected, filter the wishlist items by that category
+    if category_name:
+        category = get_object_or_404(Category, name=category_name, user=request.user)
+        wishlist_items = Wishlist.objects.filter(user=request.user, categories=category)
+    else:
+        wishlist_items = Wishlist.objects.filter(user=request.user)
+
+    category_form = CategoryForm()  # Form for adding new categories
+
+    return render(request, 'wishlist.html', {
+        'wishlist_items': wishlist_items,
+        'categories': categories,
+        'category_form': category_form,
+        'selected_category': category_name,
+    })
 
 @login_required
-def add_section(request):
-    if request.method == "POST":
-        section_name = request.POST.get("section_name", "").strip()
-        
-        print("Received section_name:", section_name)  # Debug line
-        
-        # Check if the section name is provided and if it already exists
-        if section_name:
-            if not Section.objects.filter(user=request.user, name=section_name).exists():
-                # Create the new section
-                section = Section.objects.create(user=request.user, name=section_name)
-                
-                # Return the section's ID and name as JSON
-                return JsonResponse({
-                    'success': True,
-                    'section_id': section.id,
-                    'section_name': section.name
-                })
+def add_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category_name = form.cleaned_data['name']
+            # Check if the category already exists for the user
+            category, created = Category.objects.get_or_create(
+                name=category_name, user=request.user
+            )
+            if created:
+                messages.success(request, 'Category added successfully.')
             else:
-                print("Section name already exists")  # Debug line
-                return JsonResponse({
-                    'success': False,
-                    'error': 'Section name already exists.'
-                }, status=400)
-        else:
-            print("Section name is missing")  # Debug line
-            return JsonResponse({
-                'success': False,
-                'error': 'Section name is required.'
-            }, status=400)
+                messages.info(request, 'Category already exists.')
 
-    print("Request method is not POST")  # Debug line
-    return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
+            # Check if the request is AJAX
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                categories = list(Category.objects.filter(user=request.user).values('id', 'name'))
+                return JsonResponse({'categories': categories})
+
+        else:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'error': 'Invalid category name.'}, status=400)
+            messages.error(request, 'Invalid category name.')
+    
+    return redirect('wishlist')
+
+def assign_category_to_item(request, item_id):
+    if request.method == 'POST':
+        category_id = request.POST.get('category_id')
+        
+        if category_id:
+            wishlist_item = get_object_or_404(Wishlist, id=item_id, user=request.user)
+            category = get_object_or_404(Category, id=category_id, user=request.user)
+            
+            # Clear existing categories and add the selected category
+            wishlist_item.categories.clear()
+            wishlist_item.categories.add(category)
+
+            # Return JSON response without messages
+            response = {
+                'status': 'success',
+                'category_name': category.name  # Send the category name to update the UI
+            }
+            return JsonResponse(response)
+        
+        # Return JSON error response without messages
+        return JsonResponse({'status': 'error', 'message': 'Please select a category.'})
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=400)
 
 @login_required
 def add_to_wishlist(request, menu_id):
     menu_item = get_object_or_404(Menu, id=menu_id)
-    section_id = request.POST.get("section_id")
-    section = None
-    
-    if section_id:
-        section = get_object_or_404(Section, id=section_id, user=request.user)
-
-    # Check if item already exists in the wishlist
-    wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, menu=menu_item, defaults={'section': section})
-
+    wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, menu=menu_item)
     if created:
-        messages.success(request, f'{menu_item.menu} has been added to your wishlist.')
+        messages.success(request, f'{menu_item.menu} added to your wishlist.')
     else:
         messages.info(request, f'{menu_item.menu} is already in your wishlist.')
-
     return redirect('wishlist')
-
 
 @login_required
 def remove_from_wishlist(request, menu_id):
-    menu = get_object_or_404(Menu, id=menu_id)
-    
-    # Get the wishlist item and section
-    wishlist_item = Wishlist.objects.filter(user=request.user, menu=menu).first()
-    
-    if wishlist_item:
-        section = wishlist_item.section  # Save the section before deleting the item
-        wishlist_item.delete()  # Remove the item from the wishlist
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        menu_item = get_object_or_404(Menu, id=menu_id)
+        wishlist_item = Wishlist.objects.filter(user=request.user, menu=menu_item).first()
+
+        if wishlist_item:
+            wishlist_item.delete()
+            response = {
+                'status': 'success',
+                'menu_id': menu_id,
+                'message': f'{menu_item.menu} has been removed from your wishlist.'
+            }
+        else:
+            response = {
+                'status': 'error',
+                'message': 'Item not found in wishlist.'
+            }
         
-        # Check if the section has any remaining items
-        if section and not Wishlist.objects.filter(user=request.user, section=section).exists():
-            section.delete()  # Delete the section if no items remain in it
+        print("AJAX Response:", response)  # Debugging output for the server console
+        return JsonResponse(response)
     
+    # Redirect if not an AJAX request
     return redirect('wishlist')
-
-@login_required
-def assign_section_to_wishlist_item(request, item_id):
-    wishlist_item = get_object_or_404(Wishlist, id=item_id, user=request.user)
-
-    if request.method == 'POST':
-        section_id = request.POST.get('section')
-        if section_id:
-            section = get_object_or_404(Section, id=section_id, user=request.user)
-            wishlist_item.section = section
-            wishlist_item.save()
-    
-    return redirect('wishlist')
-    
-@login_required
-def delete_section(request, section_id):
-    try:
-        section = Section.objects.get(id=section_id, user=request.user)
-        section.delete()
-        return JsonResponse({"success": True})
-    except Section.DoesNotExist:
-        return JsonResponse({"success": False, "error": "Section not found."})

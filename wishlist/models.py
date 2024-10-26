@@ -1,19 +1,19 @@
+# models.py
 from django.db import models
 from django.contrib.auth.models import User
 from menu.models import Menu
 
-class Section(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # User who owns the section
-    name = models.CharField(max_length=255)  # Section name, like "Breakfast", "Lunch"
-    
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.name
-        
+
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
-    section = models.ForeignKey(Section, null=True, blank=True, on_delete=models.SET_NULL)
-    added_at = models.DateTimeField(auto_now_add=True)
+    categories = models.ManyToManyField(Category, blank=True, related_name="wishlist_items")  # Link categories to wishlist items
 
-    class Meta:
-        unique_together = ('user', 'menu')  # Prevent duplicates per user-menu pair
+    def __str__(self):
+        return f"{self.user.username}'s Wishlist Item: {self.menu.menu}"
