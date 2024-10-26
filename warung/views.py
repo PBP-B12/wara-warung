@@ -13,7 +13,7 @@ def show_main(request):
 
 def show_warung(request, namawarung):
     warung_shown = Warung.objects.filter(nama=namawarung)
-    menus=Menu.objects.filter(warung=namawarung)
+    menus = Menu.objects.filter(warung__nama=namawarung)
     context={
         "warung_entries":warung_shown,
         "menu_entries":menus
