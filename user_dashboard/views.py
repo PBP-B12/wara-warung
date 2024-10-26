@@ -37,7 +37,7 @@ def edit_user(request, id):
             # Return JSON response with updated data
             response_data = {
                 'username': request.user.username,
-                'email': user_entry.email,
+                'email': request.user.email,
                 'phone_number': user_entry.phone_number,
                 'address': user_entry.address,
                 'date_of_birth': user_entry.date_of_birth,
