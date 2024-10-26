@@ -15,7 +15,7 @@ def show_user_dashboard(request):
 
     context = {
         'username': request.user.username,
-        'email': user_entry.email if user_entry.email else '',
+        'email': request.user.email,
         'phone_number': user_entry.phone_number if user_entry.phone_number else '',
         'address': user_entry.address if user_entry.address else '',
         'date_of_birth': user_entry.date_of_birth if user_entry.date_of_birth else '',
