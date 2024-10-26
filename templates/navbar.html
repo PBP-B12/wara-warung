@@ -14,7 +14,8 @@
         </div>
       </a>
 
-      <div class="flex justify-center space-x-8 mr-24">
+      <!-- Desktop Menu -->
+      <div class="hidden lg:flex justify-center space-x-8 mr-24">
         <a
           href="/"
           class="text-black text-base"
@@ -25,10 +26,15 @@
           class="text-black text-base"
           >Search</a
         >
-        <!-- Show My Account only if the user is authenticated -->
+
         {% if user.is_authenticated %}
         <a
-          href="/account"
+          href="/menuplanning"
+          class="text-black text-base"
+          >Menu Planning</a
+        >
+        <a
+          href="/user_dashboard"
           class="text-black text-base"
           >My Account</a
         >
@@ -44,21 +50,22 @@
         {% endif %}
       </div>
 
-      <!-- Log Out Button if user is authenticated, otherwise show Log In -->
+      <!-- Log In/Out Buttons -->
       {% if user.is_authenticated %}
       <a
-        class="bg-[#ff583e] lg:flex text-white px-4 py-1 lg:px-6 lg:py-2 rounded-full w-max transform hover:scale-105 transition-transform duration-300"
+        class="hidden lg:block bg-[#ff583e] text-white px-4 py-1 lg:px-6 lg:py-2 rounded-full w-max transform hover:scale-105 transition-transform duration-300"
         href="/logout"
         >Log Out</a
       >
       {% else %}
       <a
-        class="bg-[#ff583e] lg:flex text-white px-4 py-1 lg:px-6 lg:py-2 rounded-full w-max transform hover:scale-105 transition-transform duration-300"
+        class="hidden lg:block bg-[#ff583e] text-white px-4 py-1 lg:px-6 lg:py-2 rounded-full w-max transform hover:scale-105 transition-transform duration-300"
         href="/login"
         >Log In</a
       >
       {% endif %}
 
+      <!-- Burger Icon for Mobile Menu -->
       <div class="lg:hidden flex items-center">
         <button
           id="burger"
@@ -82,29 +89,60 @@
       </div>
     </div>
 
-    <!-- Mobile Menu (hidden by default) -->
+    <!-- Mobile Menu -->
     <div
       id="mobileMenu"
-      class="absolute top-16 left-0 w-full bg-white hidden lg:hidden flex-col items-center space-y-4 py-4 shadow-lg"
+      class="hidden absolute md:hidden w-11/12 top-16 left-0 right-0 mx-auto bg-white items-center space-y-4 py-4 mt-5 shadow-lg rounded-lg"
     >
-      <a
-        href="#"
-        class="text-black text-base"
-        >Home</a
-      >
-      <a
-        href="#"
-        class="text-black text-base"
-        >Search</a
-      >
-      <a
-        href="#"
-        class="text-black text-base"
-        >My Account</a
-      >
-      {}
-      <button class="bg-[#ff583e] text-white px-6 py-2 rounded-full w-max">Log Out</button>
+      <div class="flex flex-col items-center space-y-1 text-center">
+        <a
+          href="/"
+          class="text-black text-base block px-3 py-2"
+          >Home</a
+        >
+        <a
+          href="/search-menu"
+          class="text-black text-base block px-3 py-2"
+          >Search</a
+        >
+
+        {% if user.is_authenticated %}
+        <a
+          href="/menuplanning"
+          class="text-black text-base block px-3 py-2"
+          >Menu Planning</a
+        >
+        <a
+          href="/account"
+          class="text-black text-base block px-3 py-2"
+          >My Account</a
+        >
+        {% endif %} {% if user.is_authenticated and user.username == 'admin'%}
+        <button
+          class="text-black text-base block px-3 py-2"
+          data-modal-target="crudModal"
+          data-modal-toggle="crudModal"
+          onclick="showModal();"
+        >
+          Add Menu
+        </button>
+        {% endif %} {% if user.is_authenticated %}
+        <a
+          class="bg-[#ff583e] text-white px-6 py-2 rounded-full w-max block"
+          href="/logout"
+          >Log Out</a
+        >
+        {% else %}
+        <a
+          class="bg-[#ff583e] text-white px-6 py-2 rounded-full w-max block"
+          href="/login"
+          >Log In</a
+        >
+        {% endif %}
+      </div>
     </div>
+
+    {% include 'modal.html' %}
 
     <!-- JavaScript to toggle the mobile menu -->
     <script>

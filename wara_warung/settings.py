@@ -43,8 +43,10 @@ INSTALLED_APPS = [
     "menu",
     "warung",
     "search",
+    'menuplanning',
     "wishlist",
-    
+    "user_dashboard",
+    'ratereview',
 ]
 
 MIDDLEWARE = [

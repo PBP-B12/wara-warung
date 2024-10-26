@@ -113,7 +113,7 @@
             </div>
             <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> 3 out of 5</p>
           </div>
-         
+
           <!-- Button Section -->
           <div class="w-full flex justify-center mb-3">
             <a
@@ -122,12 +122,11 @@
               >See Details</a
             >
             {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'add_to_wishlist' menu.id %}" class="inline">
-              {% csrf_token %}
-              <button type="submit" class="bg-[#ff583e] text-white px-6 py-2 ml-3 rounded-full hover:bg-[#ff7b5e] transition duration-300 ease-in-out">
-                  Add to Wishlist
-              </button>
-          </form>
+            <a
+              class="bg-[#ff583e] text-white px-6 py-2 ml-3 rounded-full"
+              href="/wishlist/add/{{menu.id}}/"
+              >Add to list</a
+            >
             {% endif %}
           </div>
         </div>

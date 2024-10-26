@@ -89,35 +89,6 @@ def remove_from_wishlist(request, menu_id):
 @login_required
 def assign_section_to_wishlist_item(request, item_id):
     wishlist_item = get_object_or_404(Wishlist, id=item_id, user=request.user)
-    
-    if request.method == 'POST':
-        section_id = request.POST.get('section_id')
-        section = None
-        
-        if section_id:
-            section = get_object_or_404(Section, id=section_id, user=request.user)
-        
-        wishlist_item.section = section
-        wishlist_item.save()
-        
-        # Return a JSON response instead of redirecting
-        return JsonResponse({"success": True, "section_name": section.name if section else "No Section"})
-
-    return JsonResponse({"success": False, "error": "Invalid request method"})
-
-@login_required
-def delete_section(request, section_id):
-    try:
-        section = Section.objects.get(id=section_id, user=request.user)
-        section.delete()
-        return JsonResponse({"success": True})
-    except Section.DoesNotExist:
-        return JsonResponse({"success": False, "error": "Section not found."})
-
-
-@login_required
-def assign_section_to_wishlist_item(request, item_id):
-    wishlist_item = get_object_or_404(Wishlist, id=item_id, user=request.user)
 
     if request.method == 'POST':
         section_id = request.POST.get('section')
@@ -127,3 +98,12 @@ def assign_section_to_wishlist_item(request, item_id):
             wishlist_item.save()
     
     return redirect('wishlist')
+    
+@login_required
+def delete_section(request, section_id):
+    try:
+        section = Section.objects.get(id=section_id, user=request.user)
+        section.delete()
+        return JsonResponse({"success": True})
+    except Section.DoesNotExist:
+        return JsonResponse({"success": False, "error": "Section not found."})
