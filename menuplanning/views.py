@@ -9,6 +9,7 @@ from menu.models import Menu
 from warung.models import Warung
 from django.shortcuts import get_object_or_404
 
+
 # Helper function to get or create the user's cart
 def get_user_cart(user):
     cart, created = Cart.objects.get_or_create(
@@ -58,94 +59,78 @@ def update_cart(request):
         item_id = request.POST.get('item_id')
         quantity = int(request.POST.get('quantity'))
         price = float(request.POST.get('price'))
+        budget = int(request.POST.get('budget'))  # Budget received from the frontend
 
-        # Retrieve the menu item to get its name
-        menu_item = get_object_or_404(Menu, id=item_id)
-        menu_name = menu_item.menu  # The actual menu name
-
-        # Get the user's cart
+        # Retrieve or create the user's cart
         cart = get_user_cart(request.user)
 
-        # Get or create the cart item using the menu name instead of ID
+        # Get the menu item to retrieve the item name
+        menu_item = get_object_or_404(Menu, id=item_id)
+        item_name = menu_item.menu  # Retrieve the menu name for display
+
+        # Get or create the cart item with the correct quantity and price
         cart_item, created = CartItem.objects.get_or_create(
             cart=cart,
-            item_name=menu_name,  # Store menu name instead of ID
+            item_name=item_name,
             defaults={'quantity': quantity, 'item_price': price}
         )
 
-        # Update the quantity and price if the item already exists
+        # Update quantity and price if the item already exists
         if not created:
             cart_item.quantity = quantity
             cart_item.item_price = price
             cart_item.save()
 
-        # Fetch only items with quantity > 0
+        # Calculate the total price of items in the cart
         cart_items = CartItem.objects.filter(cart=cart).exclude(quantity=0)
-
-        # Calculate the updated total price
         total_price = sum(item.quantity * item.item_price for item in cart_items)
 
-        # Render the updated cart HTML
+        # Render the updated cart items and check if total exceeds the budget
         updated_cart_html = render_to_string('menuplanning/cart_items.html', {'cart_items': cart_items})
+        exceeded_budget = total_price > budget
 
         return JsonResponse({
             'updated_cart_html': updated_cart_html,
             'total_price': total_price,
-            'exceeded_budget': total_price > cart.budget  # Flag if budget exceeded
+            'exceeded_budget': exceeded_budget
         })
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
 @login_required
 @csrf_exempt
 def save_cart(request):
-    cart = get_user_cart(request.user)
-    cart_items = CartItem.objects.filter(cart=cart).exclude(quantity=0)  # Ensure only non-zero quantities
-    budget = int(request.POST.get('budget', 100000))  # User's specified budget
+    if request.method == 'POST':
+        cart = get_user_cart(request.user)
+        cart_items = CartItem.objects.filter(cart=cart).exclude(quantity=0)
+        budget = int(request.POST.get('budget', 100000))
 
-    # Calculate total cart price based on items in the cart
-    total_price = sum(item.quantity * item.item_price for item in cart_items)
+        # Calculate total cart price
+        total_price = sum(item.quantity * item.item_price for item in cart_items)
 
-    # Check if total_price actually exceeds the budget
-    if total_price > budget:
-        # Render error message with the current cart state, without clearing it
-        error_message = render_to_string('menuplanning/confirm.html', {
+        # If over budget, render the confirm popup with an error message
+        if total_price > budget:
+            error_message = render_to_string('menuplanning/confirm.html', {
+                'cart_items': cart_items,
+                'total_price': total_price,
+                'cart_name': cart.name,
+                'budget': budget,
+                'exceeded_budget': True
+            })
+            return JsonResponse({'saved_cart_html': error_message, 'error': 'Budget exceeded!'}, status=400)
+
+        # Render confirmation popup without saving items to ChosenMenu
+        confirm_popup_html = render_to_string('menuplanning/confirm.html', {
             'cart_items': cart_items,
             'total_price': total_price,
             'cart_name': cart.name,
             'budget': budget,
-            'exceeded_budget': True
+            'exceeded_budget': False
         })
-        return JsonResponse({'saved_cart_html': error_message, 'error': 'Budget exceeded!'}, status=400)
 
-    # If budget not exceeded, proceed to save items to ChosenMenu
-    save_session_id = int(timezone.now().timestamp())
-    for item in cart_items:
-        ChosenMenu.objects.create(
-            user=request.user,
-            item_name=item.item_name,
-            quantity=item.quantity,
-            price=item.item_price,
-            save_session=save_session_id,
-            budget=budget
-        )
-
-    # Reset cart items after saving
-    cart_items.update(quantity=0)
-    updated_cart_html = render_to_string('menuplanning/cart_items.html', {'cart_items': []})
-
-    saved_cart_html = render_to_string('menuplanning/confirm.html', {
-        'cart_items': cart_items,
-        'total_price': 0,
-        'cart_name': cart.name,
-        'budget': budget,
-    })
-
-    return JsonResponse({'saved_cart_html': saved_cart_html, 'updated_cart_html': updated_cart_html})
-
+        return JsonResponse({'confirm_popup_html': confirm_popup_html})
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
 
@@ -198,29 +183,33 @@ from django.template.loader import render_to_string
 @csrf_exempt
 def confirm_save_cart(request):
     if request.method == 'POST':
-        budget = request.POST.get('budget')
+        budget = int(request.POST.get('budget', 100000))
         cart = get_user_cart(request.user)
-        cart_items = CartItem.objects.filter(cart=cart)
+        cart_items = CartItem.objects.filter(cart=cart).exclude(quantity=0)
+        
+        # Calculate the total price again for a final check
+        total_price = sum(item.quantity * item.item_price for item in cart_items)
 
-        user_budget = float(budget) if budget else 100000
+        # If total price exceeds the budget, return an error (in case budget changed)
+        if total_price > budget:
+            return JsonResponse({'error': 'Cannot save; budget exceeded.'}, status=400)
+
+        # Save items to ChosenMenu
         save_session_id = int(timezone.now().timestamp())
-
-        # Save the current cart items to the ChosenMenu model with menu names
         for item in cart_items:
-            menu_item = get_object_or_404(Menu, menu=item.item_name)
             ChosenMenu.objects.create(
                 user=request.user,
-                item_name=menu_item.menu,
+                item_name=item.item_name,
                 quantity=item.quantity,
                 price=item.item_price,
                 save_session=save_session_id,
-                budget=user_budget
+                budget=budget
             )
 
-        # Reset cart item quantities to zero after saving
+        # Reset cart items after saving
         cart_items.update(quantity=0)
 
-        # Render the empty cart message for the frontend
+        # Render an empty cart for the frontend
         updated_cart_html = render_to_string('menuplanning/cart_items.html', {'cart_items': []})
         
         return JsonResponse({
@@ -228,10 +217,7 @@ def confirm_save_cart(request):
             'updated_cart_html': updated_cart_html, 
             'total_price': 0
         })
-    else:
-        return JsonResponse({'error': 'Invalid request'}, status=400)
-
-
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def menu_list(request, warung_id):
     # Filter menus based on the warung_id

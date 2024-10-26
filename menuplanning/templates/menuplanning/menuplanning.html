@@ -229,7 +229,7 @@
                             >
                             See My Saved Menus
                         </a>
-                        
+
                         <button
                             onclick="emptyCart()"
                             class="bg-red-500 text-white font-bold py-1.5 px-4 rounded-full cursor-pointer transform hover:scale-105 transition-transform duration-300"
@@ -253,6 +253,8 @@
         }
 
         function updateCart(change, itemId, price) {
+            const budgetInput = document.getElementById('budget').value
+
             let quantityElement = document.getElementById('quantity-' + itemId);
             let currentQuantity = parseInt(quantityElement.textContent);
             let newQuantity = currentQuantity + change;
@@ -272,7 +274,7 @@
                     item_id: itemId,
                     quantity: newQuantity,
                     price: price,
-                    budget: MAX_BUDGET,
+                    budget: budgetInput,
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                 },
                 success: function (response) {
@@ -316,20 +318,22 @@
         function saveCart() {
             const budgetInput = document.getElementById('budget').value;
             $.ajax({
-            url: '{% url "menuplanning:save_cart" %}',
-            type: 'POST',
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                budget: budgetInput,
-            },
-            success: function (response) {
-                displayConfirmationPopup(response.saved_cart_html);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error saving cart:', error);
-            },
+                url: '{% url "menuplanning:save_cart" %}',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    budget: budgetInput,
+                },
+                success: function (response) {
+                    // Display confirmation popup with cart details
+                    displayConfirmationPopup(response.confirm_popup_html);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error saving cart:', error);
+                },
             });
         }
+
 
         function displayConfirmationPopup(cartHtml) {
             // Create the overlay for the confirmation popup
@@ -407,23 +411,12 @@
                 },
                 success: function (response) {
                     alert('Cart saved successfully!');
-
-                    // Update the cart items with the "Your cart is empty" message
+                    // Clear the cart display after saving
                     $('#cart-items').html(response.updated_cart_html);
-
-                    // Reset the total price display to zero
                     $('#total-price').text('Total Price: Rp0');
-                    // Reset all quantity displays to zero in the menu cards
-                    document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
-
-                    // Remove the cart overlay if it exists
-                    const overlay = document.getElementById('cart-overlay');
-                    if (overlay) {
-                        document.body.removeChild(overlay);
-                    }
                 },
                 error: function (xhr, status, error) {
-                    console.error('Error confirming cart save:', error);
+                    console.error('Error confirming save:', error);
                 },
             });
         }
