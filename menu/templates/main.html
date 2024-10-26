@@ -1,0 +1,140 @@
+{% load static %} {% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>All Menu</title>
+    <!-- Import Poppins font from Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-[url('/asset/background.svg')] w-full overflow-x-hidden font-['Poppins']"
+    style="background-color: #fffbf2"
+  >
+    <div class="flex flex-col w-screen justify-item-center">
+      <!-- Navbar -->
+      <nav class="relative z-50">{% include 'navbar.html' %}</nav>
+
+      <!-- Title Section -->
+      <div class="flex flex-col items-center mt-40 text-center">
+        <h1 class="text-5xl font-bold">All Menu</h1>
+        <h2 class="text-2xl mt-2">What you want to eat?</h2>
+      </div>
+
+      <!-- Menu Card -->
+      <div
+        class="flex flex-wrap justify-center gap-6 mt-20 mb-8"
+        id="menu-results"
+      >
+        {% for menu in menu_entries %}
+        <div
+          class="bg-white relative rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs w-full sm:w-1/3"
+          style="flex-shrink: 0; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)"
+        >
+          <!-- Edit and Delete Buttons -->
+          {% if user.is_authenticated and user.username == 'admin'%}
+          <div class="absolute top-3 right-3 flex space-x-2 z-40">
+            <!-- Edit button -->
+            <a
+              class="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-blue-600"
+              href="/menu/edit/{{ menu.id }}"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-pencil"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                />
+              </svg>
+            </a>
+
+            <!-- Delete button -->
+            <a
+              class="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-red-600"
+              href="/menu/delete/{{ menu.id }}"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-trash"
+                viewBox="0 0 16 16"
+              >
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                <path
+                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+                />
+              </svg>
+            </a>
+          </div>
+          {% endif %}
+
+          <!-- Image Section -->
+          <img
+            src="{{ menu.gambar }}"
+            alt="{{ menu.menu }}"
+            class="w-full h-48 object-cover rounded-t-[36px]"
+          />
+
+          <!-- Content Section -->
+          <div class="p-6">
+            <h2 class="font-bold text-2xl text-gray-800">{{ menu.menu }}</h2>
+            <p class="text-lg text-gray-800 mt-2">Rp {{ menu.harga|intcomma }}</p>
+            <div class="flex items-center mt-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-geo-alt text-orange-500 h-5 w-5"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"
+                />
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+              </svg>
+              <p class="ml-2">{{ menu.warung }}</p>
+            </div>
+            <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> 3 out of 5</p>
+          </div>
+
+          <!-- Button Section -->
+          <div class="w-full flex justify-center mb-3">
+            <a
+              class="bg-[#252525] text-white px-6 py-2 rounded-full"
+              href="/warung/{{ menu.warung }}"
+              >See Details</a
+            >
+            {% if user.is_authenticated %}
+            <a
+              class="bg-[#ff583e] text-white px-6 py-2 ml-3 rounded-full"
+              href="/wishlist/add/{{menu.id}}/"
+              >Add to list</a
+            >
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+  </body>
+</html>

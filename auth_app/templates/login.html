@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    
+    <!-- Import Poppins font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+      body {
+        background-image: url("{% static 'images/background02.png' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      .form-container {
+        background: linear-gradient(180deg, #F5E6C5 0%, #FFC5A5 100%);
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+      }
+
+      .form-title {
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        color: #1F1F1F;
+        margin-bottom: 8px;
+      }
+
+      .form-subtitle {
+        font-size: 1rem;
+        text-align: center;
+        color: #606060;
+        margin-bottom: 20px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #E0E0E0;
+        margin-bottom: 15px;
+        background-color: white;
+        font-size: 1rem;
+        color: #1F1F1F;
+        transition: all 0.3s ease;
+      }
+
+      .form-input:focus {
+        outline: none;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+      }
+
+      .login-button {
+        width: 100%;
+        background-color: #FF6E1F;
+        color: white;
+        font-weight: bold;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: center;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-size: 1rem;
+      }
+
+      .login-button:hover {
+        background-color: #FF9D6B;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .login-link {
+        text-align: center;
+        margin-top: 1rem;
+        color: #606060;
+      }
+
+      .login-link a {
+        color: #1D4ED8;
+        font-weight: bold;
+        text-decoration: none;
+        transition: color 0.3s ease, text-decoration 0.3s ease;
+      }
+
+      .login-link a:hover {
+        color: #3B82F6;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="flex justify-center mt-8">
+      <img src="{% static 'images/logo002.png' %}" alt="Logo" class="w-28 h-auto">
+    </div>    
+
+    <div class="flex items-center justify-center mt-4">
+      <div class="form-container">
+        <h2 class="form-title">Hello again!</h2>
+        <p class="form-subtitle">Discover the best local flavors with Wara Warung.</p>
+
+        <!-- Display error messages -->
+        {% if messages %}
+          <div>
+            {% for message in messages %}
+              <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative mt-4" role="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <form method="POST" class="space-y-4">
+          {% csrf_token %}
+          
+          <!-- Username Input -->
+          <input type="text" name="username" class="form-input" placeholder="Username" required>
+
+          <!-- Password Input -->
+          <input type="password" name="password" class="form-input" placeholder="Password" required>
+
+          <button type="submit" class="login-button">Log In</button>
+        </form>
+
+        <div class="login-link">
+          Don't have an account? <a href="{% url 'auth_app:register' %}">Sign up</a>
+        </div>
+      </div>
+    </div>
+  </body>
+  {% include 'footer.html' %}
+</html>

@@ -1,0 +1,221 @@
+{% load static %} {% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Home Page</title>
+
+    <!-- Import Poppins font from Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      body {
+        background-color: #fffbf2;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      .custom-rounded-box {
+        background: linear-gradient(180deg, #ff6e1f 13.5%, #ff9d6b 100%);
+        border-radius: 50px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="relative overflow-x-hidden">
+    <nav class="absolute z-50">{% include 'navbar.html' %}</nav>
+
+    <!-- Main Content -->
+    <main class="relative w-full h-screen flex items-center justify-between px-4 lg:px-10">
+      <div class="flex flex-col space-y-4 justify-center ml-4 lg:ml-12 mt-5 lg:mt-10">
+        <h2 class="text-3xl lg:text-4xl font-bold text-left">Welcome to</h2>
+        <h2 class="text-4xl lg:text-5xl font-bold text-left">WaraWarung</h2>
+        <p class="text-base lg:text-lg text-left">Find food, read reviews, and personalize your chosen menu!</p>
+        <a
+          class="bg-[#ff583e] text-white px-4 py-2 lg:px-6 lg:py-3 rounded-full w-max transform hover:scale-105 transition-transform duration-300"
+          href="/menu"
+        >
+          Start
+        </a>
+      </div>
+
+      <div class="hidden md:block absolute z-10 right-0 xl:right-[-50px] lg:right-0 xl:top-0 lg:top-20 md:top-3 w-72 h-72 sm:w-96 sm:h-96 md:w-[540px] md:h-[573px] lg:w-[720px] lg:h-[764px] xl:w-[1080px] xl:h-[1146px]">
+        <img
+          src="{% static 'images/mainphoto.png' %}"
+          alt="Main Photo"
+          class="object-cover w-full h-full"
+        />
+      </div>
+    </main>
+
+    <!-- Section 2 -->
+    <div class="custom-rounded-box mt-10 mx-5 flex flex-col items-center justify-center py-20">
+      <h2 class="text-xl sm:text-3xl lg:text-4xl font-bold mb-8 text-white">What do you want to do?</h2>
+
+      <!-- Box Container -->
+      <div class="flex justify-center lg:flex-row flex-col md:flex-row xl:space-x-10 lg:space-x-9 md:space-x-7 z-40">
+        <!-- Box 1: Search Menu -->
+        <a href="/search-menu">
+          <div
+            class="flex flex-col items-center bg-white rounded-[36px] shadow-lg transform hover:scale-105 transition-transform duration-300 h-[220px] w-[220px] sm:h-[295px] sm:w-[295px] md:w-48 md:h-[260px] lg:h-[295px] lg:w-[295px] mt-5"
+            style="flex-shrink: 0"
+          >
+            <img
+              src="{% static 'images/search.png' %}"
+              alt="Search Menu"
+              class="h-32 w-32 mt-7 sm:mt-14"
+            />
+            <p class="mt-4 font-bold text-lg">Search Menu</p>
+          </div>
+        </a>
+
+        <!-- Box 2: Review -->
+        <a href="/review">
+          <div
+            class="flex flex-col items-center bg-white rounded-[36px] shadow-lg transform hover:scale-105 transition-transform duration-300 h-[220px] w-[220px] sm:h-[295px] sm:w-[295px] md:w-48 md:h-[260px] lg:h-[295px] lg:w-[295px] sm:mt-5 mt-5"
+            style="flex-shrink: 0"
+          >
+            <img
+              src="{% static 'images/review.png' %}"
+              alt="Review"
+              class="h-32 w-32 mt-7 sm:mt-14"
+            />
+            <p class="mt-4 font-bold text-lg">Review</p>
+          </div>
+        </a>
+
+        <!-- Box 3: Menu Planning -->
+        <a href="/menuplanning">
+          <div
+            class="flex flex-col items-center bg-white rounded-[36px] shadow-lg transform hover:scale-105 transition-transform duration-300 h-[220px] w-[220px] sm:h-[295px] sm:w-[295px] md:w-48 md:h-[260px] lg:h-[295px] lg:w-[295px] sm:mt-5 mt-5"
+            style="flex-shrink: 0"
+          >
+            <img
+              src="{% static 'images/calender.png' %}"
+              alt="Menu Planning"
+              class="h-32 w-32 mt-7 sm:mt-14"
+            />
+            <p class="mt-4 font-bold text-lg">Menu Planning</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section 3 (Random Menus) -->
+    <div class="mt-28 mx-auto flex flex-col items-center pb-24">
+      <h2 class="text-xl sm:text-3xl lg:text-4xl font-bold mb-1 xl:mb-16 sm:mb-3">Menus You Can Find in Bali</h2>
+
+      <div class="flex lg:flex-row flex-col md:flex-row xl:space-x-10 md:space-x-4 items-center justify-center">
+        {% for menu in menus %}
+        <!-- Card -->
+        <div
+          class="bg-white relative rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs sm:w-full sm:mt-10 w-[80%] md:w-[30vw] mt-10 lg:mt-3"
+          style="flex-shrink: 0; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)"
+        >
+          <!-- Edit and Delete Buttons -->
+          {% if user.is_authenticated and user.username == 'admin'%}
+          <div class="absolute top-3 right-3 flex space-x-2 z-40">
+            <!-- Edit button -->
+            <a
+              class="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-blue-600"
+              href="/menu/edit/{{ menu.id }}"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-pencil"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                />
+              </svg>
+            </a>
+
+            <!-- Delete button -->
+            <a
+              class="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-red-600"
+              href="/menu/delete/{{ menu.id }}"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-trash"
+                viewBox="0 0 16 16"
+              >
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                <path
+                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+                />
+              </svg>
+            </a>
+          </div>
+          {% endif %}
+
+          <!-- Image Section -->
+          <img
+            src="{{ menu.gambar }}"
+            alt="{{ menu.menu }}"
+            class="w-full h-48 object-cover rounded-t-[36px]"
+          />
+
+          <!-- Content Section -->
+          <div class="p-6">
+            <h2 class="font-bold text-xl sm:text-2xl text-gray-800">{{ menu.menu }}</h2>
+            <p class="text-lg text-gray-800 mt-2">Rp {{ menu.harga|intcomma }}</p>
+            <div class="flex items-center mt-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-geo-alt text-orange-500 h-5 w-5"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"
+                />
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+              </svg>
+              <p class="ml-2">{{ menu.warung }}</p>
+            </div>
+            <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> 3 out of 5</p>
+          </div>
+
+          <!-- Button Section -->
+          <div class="w-full flex justify-center mb-3">
+            <a
+              class="bg-[#252525] text-white px-6 py-2 md:px-2 sm:px-1.5 px-1 rounded-full"
+              href="/warung/{{ menu.warung }}"
+              >See Details</a
+            >
+            {% if user.is_authenticated %}
+            <a
+              class="bg-[#ff583e] text-white px-6 py-2 ml-3 md:px-2 sm:px-1.5 px-1 rounded-full"
+              href="/wishlist/add/{{menu.id}}/"
+              >Add to list</a
+            >
+            {% endif %}
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+  </body>
+</html>
