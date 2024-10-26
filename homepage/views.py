@@ -6,10 +6,10 @@ from warung.models import Warung
 
 # Create your views here.
 def show_main(request):
+    all_menu = list(Menu.objects.all())
+    random_menu = random.sample(all_menu, 3)  # Mengambil 3 menu acak
     context = {
-        'npm' : '2306123456',
-        'name': 'Pak Bepe',
-        'class': 'PBP E'
+        'menus': random_menu,
     }
 
     return render(request, "homepage.html", context)

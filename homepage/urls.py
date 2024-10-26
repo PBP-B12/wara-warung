@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import show_main, get_warungs
+from homepage.views import show_main, get_warungs
 
 app_name = 'homepage'
 
