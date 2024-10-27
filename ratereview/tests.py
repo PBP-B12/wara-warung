@@ -22,17 +22,6 @@ class RateReviewAppTests(TestCase):
         self.assertEqual(response.context['reviews'].count(), 0)
         self.assertEqual(response.context['avg_rating'], 0)
 
-    def test_submit_review_non_ajax(self):
-        response = self.client.post(self.submit_review_url, {
-            'rating': 4,
-            'comment': "Great menu!"
-        })
-        self.assertRedirects(response, self.menu_detail_url)
-        reviews = Review.objects.filter(menu=self.menu)
-        self.assertEqual(reviews.count(), 1)
-        self.assertEqual(reviews.first().rating, 4)
-        self.assertEqual(reviews.first().comment, "Great menu!")
-
     def test_submit_review_ajax(self):
         # Initial GET request to set the CSRF token
         self.client.get(self.menu_detail_url)

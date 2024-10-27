@@ -6,8 +6,3 @@ class EditUserProfileForm(forms.ModelForm):
     class Meta:
         model = UserEntry
         fields = ['email', 'phone_number', 'address', 'date_of_birth']
-
-class EditUsernameForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username']
