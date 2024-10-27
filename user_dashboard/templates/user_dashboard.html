@@ -10,6 +10,10 @@
     {% endblock meta %}
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+    rel="stylesheet"/>
+
     <style>
         body {
             background-image: url("{% static 'images/background02.png' %}");
@@ -21,52 +25,80 @@
             margin: 0;
         }
 
+        /* Container styles */
         .container {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
-            align-items: center; 
+            align-items: center;
             flex-direction: row;
             padding: 50px;
-            margin: 80px; 
+            margin: 80px;
             margin-top: 10px;
             width: fit-content;
+            font-family: 'Poppins', sans-serif;
         }
 
+        /* Responsive container for smaller devices */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 20px;
+                margin: 0;
+                width: 100%;
+            }
+        }
+
+        /* Profile card styles */
         .profile-card {
             display: flex;
             justify-content: flex-start;
             width: 100%;
-            max-width: 700px; 
+            max-width: 700px;
             background: linear-gradient(180deg, #F5E6C5 0%, #FFC5A5 100%);
             border-radius: 24px;
             box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 2rem; 
+            padding: 2rem;
             gap: 1rem;
+            font-family: 'Poppins', sans-serif;
         }
 
+        /* Responsive profile card for smaller devices */
+        @media (max-width: 768px) {
+            .profile-card {
+                flex-direction: column;
+                padding: 1rem;
+            }
+        }
+
+        /* Profile info styles */
         .profile-info {
             display: flex;
             flex-direction: column;
             padding-left: 20px;
             width: 100%;
+            font-family: 'Poppins', sans-serif;
         }
 
         .profile-info h2 {
             font-size: 1.5rem;
             font-weight: bold;
+            font-family: 'Poppins', sans-serif;
         }
 
         .profile-info p {
             font-size: 1.125rem;
             margin: 0.5rem 0;
+            font-family: 'Poppins', sans-serif;
         }
 
+        /* Avatar styles */
         .avatar {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1rem;
+            font-family: 'Poppins', sans-serif;
         }
 
         .avatar img {
@@ -76,10 +108,20 @@
             object-fit: cover;
         }
 
+        /* Adjust avatar image for smaller devices */
+        @media (max-width: 480px) {
+            .avatar img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        /* Button styles */
         .buttons {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+            font-family: 'Poppins', sans-serif;
         }
 
         .edit-profile-button, .delete-profile-button {
@@ -89,21 +131,32 @@
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            text-align: center;  
+            text-align: center;
             white-space: nowrap;
+            font-family: 'Poppins', sans-serif;
         }
 
+        /* Adjust button styles for smaller devices */
+        @media (max-width: 480px) {
+            .edit-profile-button, .delete-profile-button {
+                width: 100%;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Edit button */
         .edit-profile-button {
             color: #FF6E1F;
             background-color: white;
         }
 
+        /* Delete button */
         .delete-profile-button {
             background-color: #FF6347;
             color: white;
-            justify-content: space-between;
         }
 
+        /* Button hover effects */
         .edit-profile-button:hover {
             background-color: #F9F6EE;
             transform: translateY(-2px);
@@ -116,26 +169,41 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
+        /* Info button styles */
         .info-button {
             padding: 4px;
             border-radius: 8px;
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            text-align: center;  
+            text-align: center;
             color: #FF6E1F;
             width: auto;
+            font-family: 'Poppins', sans-serif;
         }
 
+        /* Info button hover effect */
         .info-button:hover {
             transform: translateY(-2px);
-            text-decoration: underline
+            text-decoration: underline;
         }
 
-        .info-button::before {
-            font-size: 1.2rem;
-            color: #FF6E1F;
-            margin-right: 8px;
+        /* Profile input fields */
+        .input-field {
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* General responsiveness for input fields */
+        @media (max-width: 480px) {
+            .input-field {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
         }
 
         .menu-button::before {
@@ -144,29 +212,6 @@
 
         .wishlist-button::before {
             content: "\2665"; 
-        }
-
-        .button-group {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .detail-title{
-            margin-bottom: 15px;
-        }
-
-        .username{
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .input-field {
-            background-color: white;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            width: 100%;
         }
     </style>
 </head>
@@ -218,13 +263,11 @@
 {% include 'edit_user.html' %}
 
 <script>
-function toggleEditProfileModal() {
-    const modal = document.getElementById("editProfileModal");
-    modal.classList.toggle("hidden");
-}
-</script>
+    // Use jQuery for toggle functionality
+    function toggleEditProfileModal() {
+        $('#editProfileModal').toggleClass('hidden');
+    }
 
-<script>
     function confirmDeleteAccount() {
         const userConfirmed = confirm("Are you sure you want to delete your account? This action cannot be undone.");
         
@@ -234,25 +277,25 @@ function toggleEditProfileModal() {
     }
 
     function deleteUserAccount() {
-        fetch("{% url 'user_dashboard:delete_user_account' %}", {
-            method: 'POST',
+        $.ajax({
+            url: "{% url 'user_dashboard:delete_user_account' %}",
+            type: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
                 'X-Requested-With': 'XMLHttpRequest',
             },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert(data.message);
-                window.location.href = '{% url "auth_app:login" %}';  // Redirect to login page after logout
-            } else {
-                alert("Failed to delete account. Please try again.");
+            success: function(data) {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    window.location.href = '{% url "auth_app:login" %}'; 
+                } else {
+                    alert("Failed to delete account. Please try again.");
+                }
+            },
+            error: function(error) {
+                console.error('Error:', error);
+                alert("An error occurred. Please try again.");
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("An error occurred. Please try again.");
         });
     }
 </script>

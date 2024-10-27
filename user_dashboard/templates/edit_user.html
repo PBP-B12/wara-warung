@@ -86,39 +86,40 @@
 
 <script>
     function toggleEditProfileModal() {
-        const modal = document.getElementById("editProfileModal");
-        modal.classList.toggle("hidden");
+        $("#editProfileModal").toggleClass("hidden");
     }
 
     function submitEditForm() {
-        const form = document.getElementById("editProfileForm");
-        const formData = new FormData(form);
+        const $form = $("#editProfileForm");
+        const formData = new FormData($form[0]);
 
-        fetch(form.action, {
-            method: 'POST',
+        $.ajax({
+            url: $form.attr("action"),
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+                'X-CSRFToken': $form.find('[name=csrfmiddlewaretoken]').val(),
             },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                document.getElementById("profileEmail").value = data.data.email || 'N/A';
-                document.getElementById("profilePhoneNumber").value = data.data.phone_number || 'N/A';
-                document.getElementById("profileDateOfBirth").value = data.data.date_of_birth || 'N/A';
-                document.getElementById("profileAddress").value = data.data.address || 'N/A';
+            success: function(data) {
+                if (data.status === 'success') {
+                    $("#profileEmail").val(data.data.email || 'N/A');
+                    $("#profilePhoneNumber").val(data.data.phone_number || 'N/A');
+                    $("#profileDateOfBirth").val(data.data.date_of_birth || 'N/A');
+                    $("#profileAddress").val(data.data.address || 'N/A');
 
-                toggleEditProfileModal();
-            } else {
-                console.log(data.errors);
-                alert("Failed to update profile. Please check the form fields.");
+                    toggleEditProfileModal();
+                } else {
+                    console.log(data.errors);
+                    alert("Failed to update profile. Please check the form fields.");
+                }
+            },
+            error: function(error) {
+                console.error('Error:', error);
+                alert("An error occurred. Please try again.");
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("An error occurred. Please try again.");
         });
     }
 </script>
