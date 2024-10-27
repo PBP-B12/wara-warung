@@ -28,7 +28,7 @@ def show_main(request):
 
 def edit_menu(request, id):
     # Get the menu entry based on the id
-    menu = get_object_or_404(Menu, pk=id)
+    menu = Menu.objects.get(pk = id)
     
     # Set the menu entry as an instance of the form
     form = MenuForm(request.POST or None, instance=menu)
@@ -37,7 +37,6 @@ def edit_menu(request, id):
     warungs = Warung.objects.all()
 
     if form.is_valid() and request.method == "POST":
-        # Save form and redirect to the main page
         form.save()
         return HttpResponseRedirect(reverse('homepage:show_main'))
 
@@ -48,11 +47,8 @@ def edit_menu(request, id):
     return render(request, "edit_menu.html", context)
 
 def delete_menu(request, id):
-    # Get mood berdasarkan id
     menus = Menu.objects.get(pk = id)
-    # Hapus mood
     menus.delete()
-    # Kembali ke halaman awal
     return HttpResponseRedirect(reverse('homepage:show_main'))
 
 def show_xml(request):

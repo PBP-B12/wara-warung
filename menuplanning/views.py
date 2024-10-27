@@ -21,7 +21,7 @@ def get_user_cart(user):
     )
     return cart
 
-@login_required
+@login_required(login_url='/login')
 def show_main(request):
     cart = get_user_cart(request.user)
     cart_items = CartItem.objects.filter(cart=cart).exclude(quantity=0)

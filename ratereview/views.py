@@ -19,7 +19,6 @@ def menu_detail(request, menu_id):
         'form': form
     })
 
-
 @login_required
 def submit_review(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
@@ -28,15 +27,18 @@ def submit_review(request, menu_id):
 
     if request.method == 'POST':
         form = ReviewForm(request.POST)
-        review = form.save(commit=False)
-        review.rating = rating
-        review.comment = comment
-        review.menu = menu
-        review.user = request.user
-        review.save()
-        
-        # JSON response for successful submission
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.rating = rating
+            review.comment = comment
+            review.menu = menu
+            review.user = request.user
+            review.save()
+
+            # Calculate the new average rating
+            avg_rating = Review.objects.filter(menu=menu).aggregate(Avg('rating'))['rating__avg'] or 0
+            
+            # JSON response for successful submission, including the updated average rating
             return JsonResponse({
                 'success': True,
                 'message': "Review submitted successfully!",
@@ -45,10 +47,11 @@ def submit_review(request, menu_id):
                     'comment': review.comment,
                     'user': review.user.username,
                     'created_at': review.created_at.strftime('%Y-%m-%d %H:%M:%S')
-                }
+                },
+                'avg_rating': round(avg_rating, 1)  # Rounded to 1 decimal
             })
         
-        # Regular redirect if not an AJAX request
-        return redirect('ratereview:menu_detail', menu_id=menu.id)
+        # Error response for invalid form
+        return JsonResponse({'success': False, 'errors': form.errors}, status=400)
 
     return redirect('ratereview:menu_detail', menu_id=menu.id)
