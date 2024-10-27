@@ -175,12 +175,3 @@ def load_cart(request):
         'updated_cart_html': updated_cart_html,
         'total_price': total_price,
     })
-
-
-
-
-
-
-
-
-

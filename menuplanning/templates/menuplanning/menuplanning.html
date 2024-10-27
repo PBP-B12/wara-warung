@@ -32,15 +32,13 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Main Content Stretching */
         main {
-            flex: 1; /* Allows main content to grow and push footer to the bottom */
-            padding: 2rem; /* Adds padding around main content */
+            flex: 1; 
+            padding: 2rem; 
         }
 
-        /* Extra Spacing Above Footer */
         .content-footer-space {
-            margin-bottom: 20rem; /* Extra space above footer */
+            margin-bottom: 20rem; 
         }
 
         .input-container {
@@ -133,13 +131,13 @@
         }
 
         #cart-view {
-            display: none; /* Hidden initially, shown when 'hidden' is removed */
+            display: none; 
             position: fixed;
             inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            background-color: rgba(0, 0, 0, 0.5); 
             z-index: 50;
         }
 
@@ -149,7 +147,7 @@
             margin-right: 25%;
         }
 
-        /* Fixed Bottom Button Styling */
+
         .fixed-bottom-center { 
             position: fixed; 
             bottom: 40px; 
@@ -163,16 +161,15 @@
             margin-bottom: 40px;
         }
 
-        /* Centered Message Styling */
+
         .no-warung-message { text-align: center; color: gray; font-size: 1.25rem; margin-top: 2rem; }
 
-            /* Floating Box Style */
         .floating-cart-box {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 80%; /* Adjust width as necessary */
+            width: 80%; 
             max-width: 600px;
             max-height: 200px;
             padding: 15px;
@@ -183,7 +180,7 @@
             z-index: 50;
         }
 
-        /* Text Styling */
+    
         .cart-item-count {
             font-size: 1.2rem;
             font-weight: bold;
@@ -196,7 +193,6 @@
             margin: 8px 0;
         }
 
-        /* Button Styling */
         .cart-buttons {
             display: flex;
             justify-content: space-around;
@@ -308,324 +304,198 @@
             
 
         <script>
-        let MAX_BUDGET = parseInt(document.getElementById('budget').value) || 100000; // Set initial MAX_BUDGET
-
-        function updateMaxBudget() {
-            const budgetInput = document.getElementById('budget').value.replace(/\D/g, ''); // Remove non-numeric characters
-            MAX_BUDGET = parseInt(budgetInput) || 100000; // Update MAX_BUDGET with the new value
-        }
-
-        function updateCart(change, itemId, price) {
-            const budgetInput = document.getElementById('budget').value;
-
-            let quantityElement = document.getElementById('quantity-' + itemId);
-            let currentQuantity = parseInt(quantityElement.textContent);
-            let newQuantity = currentQuantity + change;
-
-            if (newQuantity < 0) {
-                newQuantity = 0;
-            }
-
-            // Update the quantity on the page
-            quantityElement.textContent = newQuantity;
-
-            // Send AJAX request to update the cart on the server
-            $.ajax({
-                url: '{% url "menuplanning:update_cart" %}',
-                type: 'POST',
-                data: {
-                    item_id: itemId,
-                    quantity: newQuantity,
-                    price: price,
-                    budget: budgetInput,
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function (response) {
-                    // Update cart items and total price dynamically
-                    $('#cart-items').html(response.updated_cart_html);
-                    $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
-
-                    // Update the floating cart summary box with item count and total price
-                    updateCartSummary(response.item_count, response.total_price);
-
-                    // Check if the total exceeds the maximum budget
-                    if (response.exceeded_budget) {
-                        alert(`Total exceeds your budget of Rp${MAX_BUDGET.toLocaleString()}. Please adjust your menu.`);
-
-                        // Only disable the "Save Menu" button in the modal when budget is exceeded
-                        $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
-                            'background-color': 'red',
-                            color: 'white',
-                            'border-radius': '9999px',
-                            padding: '0.5rem 1.5rem',
-                            'font-weight': 'bold',
-                            cursor: 'not-allowed',
-                        });
-
-                        // Keep "Review & Save" button functional so the user can still view the cart
-                        $('#show-cart-btn').text('Review Cart').prop('disabled', false).css({
-                            'background-color': '#FF6E1F',
-                            color: 'white',
-                            'border-radius': '9999px',
-                            padding: '0.5rem 1.5rem',
-                            'font-weight': 'bold',
-                            cursor: 'pointer',
-                        });
-
-                    } else {
-                        // Reset the total price color and re-enable buttons if under budget
-                        $('#total-price').css('color', 'black');
-
-                        // Re-enable the "Save Menu" button in the modal
-                        $('#save-button').text('Save Menu').prop('disabled', false).css({
-                            'background-color': '#FF6E1F',
-                            color: 'white',
-                            'border-radius': '9999px',
-                            padding: '0.5rem 1.5rem',
-                            'font-weight': 'bold',
-                            cursor: 'pointer',
-                        });
-
-                        // Ensure the "Review & Save" button remains enabled
-                        $('#show-cart-btn').text('Review & Save').prop('disabled', false).css({
-                            'background-color': '#64D16D',
-                            color: 'white',
-                            'border-radius': '9999px',
-                            padding: '0.5rem 1.5rem',
-                            'font-weight': 'bold',
-                            cursor: 'pointer',
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    alert('Error updating cart:', error);
-                },
-            });
-        }
-
-        function saveCart() {
-            const budgetInput = document.getElementById('budget').value;
-            $.ajax({
-                url: '{% url "menuplanning:confirm_save_cart" %}', // Use confirm_save_cart to save directly
-                type: 'POST',
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    budget: budgetInput,
-                },
-                success: function (response) {
-                    alert('Cart saved successfully!'); // Display success message
-                    // Clear the cart display after saving
-                    $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
-                    $('#total-price').text('Total Price: Rp0');
-                    updateCartSummary(0, 0); // Reset the floating cart summary
-
-                    // Reset all quantity displays to zero
-                    document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error saving cart:', error);
-                },
-            });
-        }
-
-
-        function confirmSaveCart() {
-            const budgetInput = document.getElementById('budget').value;
-            $.ajax({
-                url: '{% url "menuplanning:confirm_save_cart" %}',
-                type: 'POST',
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    budget: budgetInput,
-                },
-                success: function (response) {
-                    alert('Cart saved successfully!');
-                    // Clear the cart display after saving
-                    $('#cart-items').html(response.updated_cart_html);
-                    $('#total-price').text('Total Price: Rp0');
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error confirming save:', error);
-                },
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Reset quantities to zero on page load
-            document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
-            $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
-            $('#total-price').text('Total Price: Rp0');
-
-            const warungDropdowns = document.getElementById('warungDropdownss');
-            const menuResults = document.getElementById('menu-results');
-
-            // Populate dropdown with warung options
-            fetch('/menuplanning/api/warungs')
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.warungs) {
-                data.warungs.forEach((warung) => {
-                    const option = document.createElement('option');
-                    option.value = warung.nama;
-                    option.textContent = warung.nama;
-                    warungDropdowns.appendChild(option);
-                });
-                }
-            })
-            .catch((error) => console.error('Error fetching warungs:', error));
-
+            let MAX_BUDGET = parseInt($('#budget').val()) || 100000; // Set initial MAX_BUDGET
         
-            // Fetch menus when a warung is selected
-            warungDropdowns.addEventListener('change', function () {
-            const selectedWarung = warungDropdowns.value;
-            if (selectedWarung) {
-                fetch(`/menuplanning/api/menus/${selectedWarung}/`)
-                .then((response) => response.json())
-                .then((data) => {
-                    menuResults.innerHTML = '';
-                    if (data.menus && data.menus.length > 0) {
-                    data.menus.forEach((menu) => {
-                        const menuCard = `
-                        <div class="card bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-[325px] w-full h-96 rounded-[36px] shadow-lg hover:scale-105 transition-transform duration-300">
-                            <img src="${menu.gambar}" alt="${menu.menu}" class="w-full h-48 object-cover rounded-t-[36px]" />
-                            <div class="p-4 flex flex-col">
-                            <h3 class="font-bold text-xl text-gray-800">${menu.menu}</h3>
-                            <p class="text-lg text-gray-600">Rp${menu.harga.toLocaleString()}</p>
-                            <p class="text-sm text-gray-500">Available at: ${menu.warung}</p>
-                            <div class="quantity-wrapper flex justify-center mt-4">
-                                <button class="quantity-control" onclick="updateCart(-1, ${menu.id}, ${menu.harga})">-</button>
-                                <span class="quantity-display mx-2" id="quantity-${menu.id}">0</span>
-                                <button class="quantity-control" onclick="updateCart(1, ${menu.id}, ${menu.harga})">+</button>
-                            </div>
-                            </div>
-                        </div>
-                        `;
-                        menuResults.innerHTML += menuCard;
-                    });
-                    } else {
-                    menuResults.innerHTML = '<p>No menus available for this warung.</p>';
-                    }
-                })
-                .catch((error) => console.error('Error fetching menus:', error));
-            } else {
-                menuResults.innerHTML = '<p>Select a warung to see menus.</p>';
+            function updateMaxBudget() {
+                const budgetInput = $('#budget').val().replace(/\D/g, ''); // Remove non-numeric characters
+                MAX_BUDGET = parseInt(budgetInput) || 100000; // Update MAX_BUDGET with the new value
             }
-            });
-
-        });
-
-        function emptyCart() {
-            $.ajax({
-                url: '{% url "menuplanning:empty_cart" %}',
-                type: 'POST',
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alert(response.message);
-
-                        // Update cart items and total price to reflect an empty cart
-                        $('#cart-items').html(response.updated_cart_html);
+        
+            function updateCart(change, itemId, price) {
+                const budgetInput = $('#budget').val();
+                const $quantityElement = $(`#quantity-${itemId}`);
+                let currentQuantity = parseInt($quantityElement.text());
+                let newQuantity = currentQuantity + change;
+                if (newQuantity < 0) newQuantity = 0;
+                $quantityElement.text(newQuantity); // Update the quantity on the page
+        
+                // Send AJAX request to update the cart on the server
+                $.ajax({
+                    url: '{% url "menuplanning:update_cart" %}',
+                    type: 'POST',
+                    data: {
+                        item_id: itemId,
+                        quantity: newQuantity,
+                        price: price,
+                        budget: budgetInput,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function(response) {
+                        // Update cart items and total price dynamically
+                        $('#cart-items').html(response.updated_cart_html); 
+                        $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
+                        updateCartSummary(response.item_count, response.total_price);
+        
+                        // Check if the total exceeds the maximum budget
+                        if (response.exceeded_budget) {
+                            // Button changes
+                            alert(`Total exceeds your budget of Rp${MAX_BUDGET.toLocaleString()}. Please adjust your menu.`);
+                            $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
+                                'background-color': 'red',
+                                color: 'white',
+                                'border-radius': '9999px',
+                                padding: '0.5rem 1.5rem',
+                                'font-weight': 'bold',
+                                cursor: 'not-allowed',
+                            });
+                            $('#show-cart-btn').text('Review Cart').prop('disabled', false).css({
+                                'background-color': '#FF6E1F',
+                                color: 'white',
+                                'border-radius': '9999px',
+                                padding: '0.5rem 1.5rem',
+                                'font-weight': 'bold',
+                                cursor: 'pointer',
+                            });
+                        } else {
+                            $('#total-price').css('color', 'black');
+                            $('#save-button').text('Save Menu').prop('disabled', false).css({
+                                'background-color': '#FF6E1F',
+                                color: 'white',
+                                'border-radius': '9999px',
+                                padding: '0.5rem 1.5rem',
+                                'font-weight': 'bold',
+                                cursor: 'pointer',
+                            });
+                            $('#show-cart-btn').text('Review & Save').prop('disabled', false).css({
+                                'background-color': '#64D16D',
+                                color: 'white',
+                                'border-radius': '9999px',
+                                padding: '0.5rem 1.5rem',
+                                'font-weight': 'bold',
+                                cursor: 'pointer',
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error updating cart:', error);
+                    },
+                });
+            }
+        
+            function saveCart() {
+                const budgetInput = $('#budget').val();
+                $.ajax({
+                    url: '{% url "menuplanning:confirm_save_cart" %}',
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        budget: budgetInput,
+                    },
+                    success: function(response) {
+                        alert('Cart saved successfully!');
+                        // Clear the cart display after saving
+                        $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
                         $('#total-price').text('Total Price: Rp0');
-
-                        // Reset all quantity displays to zero
-                        document.querySelectorAll('.quantity-display').forEach(el => el.textContent = '0');
-
-                        // Set the floating cart summary to 0 items and Rp0
                         updateCartSummary(0, 0);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error emptying cart:', error);
-                }
-            });
-        }
-
-        function showCartDetails() {
-            $('#cart-view').removeClass('hidden').css('display', 'flex');  // Show the cart view modal
-
-            $.ajax({
-                url: '{% url "menuplanning:load_cart" %}',  // Confirm URL matches the view name and namespace
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    $('#cart-items').html(response.updated_cart_html);
-                    $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error loading cart details:', xhr.responseText);  // Log any errors
-                }
-            });
-        }
-
-        // Event listener to open the cart when clicking "Review & Save" button
-        $(document).ready(function() {
-            $('#show-cart-btn').on('click', function(event) {
-                event.stopPropagation();  // Prevent click from propagating to document
-                showCartDetails();
-            });
-
-            // Close the cart view if clicking outside the modal content
-            $(document).on('click', function(event) {
-                const $cartView = $('#cart-view');
-                const $modalContent = $cartView.find('.bg-white'); // Modal content selector
-
-                if ($cartView.is(':visible') && !$modalContent.is(event.target) && !$modalContent.has(event.target).length) {
-                    hideCartDetails();
-                }
-            });
-        });
-
-        function hideCartDetails() {
-            $('#cart-view').addClass('hidden').css('display', 'none');
-        }
-
-        $(document).ready(function() {
-            // Show the cart view when "See Cart Details" button is clicked
-            $('#show-cart-btn').on('click', function(event) {
-                event.stopPropagation();  // Prevent click from propagating to document
-                console.log("Button clicked");
-                showCartDetails();
-            });
-
-            // Close the cart view if clicking outside the modal content
-            $(document).on('click', function(event) {
-                const $cartView = $('#cart-view');
-                const $modalContent = $cartView.find('.bg-white'); // Modal content selector
-
-                if ($cartView.is(':visible') && !$modalContent.is(event.target) && !$modalContent.has(event.target).length) {
-                    console.log("Clicked outside modal, hiding cart");
-                    hideCartDetails();
-                }
-            });
-        });
-
-
-        // Function to update item count and total dynamically
-        function updateCartSummary(itemCount = 0, totalPrice = 0) {
-            document.getElementById('cart-item-count').textContent = `${itemCount} Item(s)`;
-            document.getElementById('cart-total').textContent = `Total: Rp${totalPrice.toLocaleString()}`;
-            
-            // Enable or disable the Save Menu button based on the item count
-            const saveButton = document.getElementById('save-button');
-            if (itemCount > 0) {
-                saveButton.disabled = false;
-                saveButton.style.backgroundColor = '#FF6E1F'; // Enable with orange color
-                saveButton.style.cursor = 'pointer';
-            } else {
-                saveButton.disabled = true;
-                saveButton.style.backgroundColor = 'gray'; // Disable with gray color
-                saveButton.style.cursor = 'not-allowed';
+                        $('.quantity-display').text('0');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error saving cart:', error);
+                    },
+                });
             }
-        }
-
-        // Ensure it starts with 0 items and Rp0
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartSummary(0, 0);
-        });
-
+        
+            $(document).ready(function() {
+                $('.quantity-display').text('0');
+                $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
+                $('#total-price').text('Total Price: Rp0');
+        
+                const $warungDropdowns = $('#warungDropdownss');
+                const $menuResults = $('#menu-results');
+        
+                // Populate dropdown with warung options
+                $.get('/menuplanning/api/warungs', function(data) {
+                    if (data.warungs) {
+                        $.each(data.warungs, function(_, warung) {
+                            const option = $('<option>').val(warung.nama).text(warung.nama);
+                            $warungDropdowns.append(option);
+                        });
+                    }
+                }).fail(function(error) {
+                    console.error('Error fetching warungs:', error);
+                });
+        
+                // Fetch menus when a warung is selected
+                $warungDropdowns.on('change', function() {
+                    const selectedWarung = $warungDropdowns.val();
+                    if (selectedWarung) {
+                        $.get(`/menuplanning/api/menus/${selectedWarung}/`, function(data) {
+                            $menuResults.empty();
+                            if (data.menus && data.menus.length > 0) {
+                                $.each(data.menus, function(_, menu) {
+                                    const menuCard = `
+                                        <div class="card bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-[325px] w-full h-96 rounded-[36px] shadow-lg hover:scale-105 transition-transform duration-300">
+                                            <img src="${menu.gambar}" alt="${menu.menu}" class="w-full h-48 object-cover rounded-t-[36px]" />
+                                            <div class="p-4 flex flex-col">
+                                            <h3 class="font-bold text-xl text-gray-800">${menu.menu}</h3>
+                                            <p class="text-lg text-gray-600">Rp${menu.harga.toLocaleString()}</p>
+                                            <p class="text-sm text-gray-500">Available at: ${menu.warung}</p>
+                                            <div class="quantity-wrapper flex justify-center mt-4">
+                                                <button class="quantity-control" onclick="updateCart(-1, ${menu.id}, ${menu.harga})">-</button>
+                                                <span class="quantity-display mx-2" id="quantity-${menu.id}">0</span>
+                                                <button class="quantity-control" onclick="updateCart(1, ${menu.id}, ${menu.harga})">+</button>
+                                            </div>
+                                            </div>
+                                        </div>`;
+                                    $menuResults.append(menuCard);
+                                });
+                            } else {
+                                $menuResults.html('<p>No menus available for this warung.</p>');
+                            }
+                        }).fail(function(error) {
+                            console.error('Error fetching menus:', error);
+                        });
+                    } else {
+                        $menuResults.html('<p>Select a warung to see menus.</p>');
+                    }
+                });
+        
+                $('#show-cart-btn').on('click', function(event) {
+                    event.stopPropagation();
+                    $('#cart-view').removeClass('hidden').css('display', 'flex');
+                    $.getJSON("{% url 'menuplanning:load_cart' %}", function(response) {
+                        $('#cart-items').html(response.updated_cart_html);
+                        $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
+                    }).fail(function(xhr) {
+                        console.error('Error loading cart details:', xhr.responseText);
+                    });
+                });
+        
+                $(document).on('click', function(event) {
+                    const $cartView = $('#cart-view');
+                    if ($cartView.is(':visible') && !$(event.target).closest('.bg-white').length) {
+                        hideCartDetails();
+                    }
+                });
+        
+                $('#cart-view').on('click', '.close-btn', hideCartDetails);
+            });
+        
+            function hideCartDetails() {
+                $('#cart-view').addClass('hidden').css('display', 'none');
+            }
+        
+            function updateCartSummary(itemCount = 0, totalPrice = 0) {
+                $('#cart-item-count').text(`${itemCount} Item(s)`);
+                $('#cart-total').text(`Total: Rp${totalPrice.toLocaleString()}`);
+                const $saveButton = $('#save-button');
+                $saveButton.prop('disabled', itemCount === 0).css({
+                    backgroundColor: itemCount > 0 ? '#FF6E1F' : 'gray',
+                    cursor: itemCount > 0 ? 'pointer' : 'not-allowed'
+                });
+            }
         </script>
+        
     </body>
 </html>
 
