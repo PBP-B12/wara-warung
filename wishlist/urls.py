@@ -1,11 +1,11 @@
+# urls.py
 from django.urls import path
 from . import views
 
 urlpatterns = [
     path('', views.wishlist_view, name='wishlist'),
-    path('add/<int:menu_id>/', views.add_to_wishlist, name='add_to_wishlist'),
-    path('remove/<int:menu_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
-    path('add-section/', views.add_section, name='add_section'),  # Add section URL
-    path('wishlist/section/delete/<int:section_id>/', views.delete_section, name='delete_section'),  # Delete section
-    path('assign-section/<int:item_id>/', views.assign_section_to_wishlist_item, name='assign_section_to_wishlist_item'),
-]
+    path('add/<int:menu_id>/', views.add_to_wishlist, name='add_to_wishlist'),  # Match /wishlist/add/<menu_id>/
+    path('add-category/', views.add_category, name='add_category'),
+    path('assign-category/<int:item_id>/', views.assign_category_to_item, name='assign_category_to_item'),
+    path('wishlist/remove/<int:menu_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+] 

@@ -14,32 +14,31 @@
 
         <title>Menu Planning</title>
 
-        <!-- Import Poppins font from Google Fonts -->
-        <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
-        rel="stylesheet"
-        />
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+    <!-- Import Poppins font from Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background-color: #fffbf2;
-            font-family: 'Poppins', sans-serif;
-        }
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: #fffbf2;
+        font-family: 'Poppins', sans-serif;
+      }
 
-        main {
-            flex: 1; 
-            padding: 2rem; 
-        }
+      main {
+        flex: 1;
+        padding: 2rem;
+      }
 
-        .content-footer-space {
-            margin-bottom: 20rem; 
-        }
+      .content-footer-space {
+        margin-bottom: 20rem;
+      }
 
         .input-container {
             display: flex;
@@ -106,13 +105,12 @@
             font-weight: bold;
         }
 
-        .quantity-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 40px;
-        }
-
+      .quantity-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+      }
 
         .total-price {
             font-size: 1.5rem;
@@ -126,376 +124,626 @@
             padding-top: 6rem;
         }
 
-        .hidden {
-            display: none;
-        }
+      .hidden {
+        display: none;
+      }
 
-        #cart-view {
-            display: none; 
-            position: fixed;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(0, 0, 0, 0.5); 
-            z-index: 50;
-        }
+      #cart-view {
+        display: none;
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 50;
+      }
 
-        .menu-planning {
-            width: 75%;
-            padding: 2rem;
-            margin-right: 25%;
-        }
+      .menu-planning {
+        width: 75%;
+        padding: 2rem;
+        margin-right: 25%;
+      }
 
+      .fixed-bottom-center {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 50;
+      }
 
-        .fixed-bottom-center { 
-            position: fixed; 
-            bottom: 40px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            z-index: 50;
-        }
+      .see-saved-btn {
+        margin-top: 20px;
+        margin-bottom: 40px;
+      }
 
-        .see-saved-btn {
-            margin-top: 20px;
-            margin-bottom: 40px;
-        }
+      .no-warung-message {
+        text-align: center;
+        color: gray;
+        font-size: 1.25rem;
+        margin-top: 2rem;
+      }
 
+      .floating-cart-box {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        max-width: 600px;
+        max-height: 200px;
+        padding: 15px;
+        background-color: #ffffff;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        border-radius: 30px;
+        text-align: center;
+        z-index: 50;
+      }
 
-        .no-warung-message { text-align: center; color: gray; font-size: 1.25rem; margin-top: 2rem; }
+      .cart-item-count {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0;
+      }
 
-        .floating-cart-box {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%; 
-            max-width: 600px;
-            max-height: 200px;
-            padding: 15px;
-            background-color: #ffffff;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-            border-radius: 30px;
-            text-align: center;
-            z-index: 50;
-        }
+      .cart-total {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 8px 0;
+      }
 
-    
-        .cart-item-count {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin: 0;
-        }
+      .cart-buttons {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+      }
 
-        .cart-total {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin: 8px 0;
-        }
+      .cart-button {
+        width: 45%;
+        padding: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 8px;
+        border-radius: 9999px;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+      }
 
-        .cart-buttons {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 10px;
-        }
+      .cart-button:hover {
+        transform: scale(1.05);
+      }
 
-        .cart-button {
-            width: 45%;
-            padding: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            border-radius: 9999px;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
+      .save-button {
+        background-color: #ff6e1f;
+        color: white;
+      }
 
-        .cart-button:hover {
-            transform: scale(1.05);
-        }
+      .empty-button {
+        background-color: #252525;
+        color: white;
+      }
 
-        .save-button {
-            background-color: #FF6E1F;
-            color: white;
-        }
+      #cart-view {
+        display: none;
+      }
+    </style>
+  </head>
 
-        .empty-button {
-            background-color: #252525;
-            color: white;
-        }
+  <body>
+    <!-- Navigation -->
+    <nav class="z-50">{% include 'navbar.html' %}</nav>
 
-        #cart-view {
-            display: none;
-        }
+    <!-- Main Content -->
+    <main class="content-footer-space">
+      <section class="text-center">
+        <h1 class="text-4xl font-bold mt-28 mb-2">Menu Planning</h1>
+        <p class="text-lg text-gray-700 mb-8">Choose your warung and plan your menu with your preferred budget!</p>
 
-        </style>
-
-    </head>
-
-    <body>
-        <!-- Navigation -->
-        <nav class="z-50">{% include 'navbar.html' %}</nav>
-
-        <!-- Main Content -->
-        <main class="content-footer-space">
-            <section class="text-center">
-                <h1 class="text-4xl font-bold mt-28 mb-2">Menu Planning</h1>
-                <p class="text-lg text-gray-700 mb-8">Choose your warung and plan your menu with your preferred budget!</p>
-
-                <!-- "See My Saved Menus" Button -->
-                <div class="see-saved-btn text-center">
-                    <a href="{% url 'menuplanning:saved_menu_planning_page' %}" class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform hover:scale-110 hover:shadow-lg">See My Saved Menus</a>
-                </div>
-
-                <!-- Input Fields and Cards -->
-                <div class="flex flex-col items-center">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 w-full max-w-3xl px-8">
-
-                        <!-- Warung Dropdown -->
-                        <div class="input-container w-full">
-                            <label for="warungDropdownss" class="input-label">Warung:</label>
-                            <select id="warungDropdownss" class="input-field w-full">
-                                <option value="">Select a Warung</option>
-                            </select>
-                        </div>
-
-                        <!-- Budget Input -->
-                        <div class="input-container w-full">
-                            <label for="budget" class="input-label">Budget:</label>
-                            <input type="text" id="budget" value="100000" class="input-field w-full" onchange="updateMaxBudget()" />
-                        </div>
-                    </div>
-
-                    <!-- Card Menu Results -->
-                    <div id="menu-results" class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"></div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Cart View Modal -->
-        <div id="cart-view" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-            <div class="bg-white p-6 rounded-xl shadow-lg w-80 relative">
-                <button onclick="hideCartDetails()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
-                <div class="text-center">
-                    <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
-                    <div id="cart-items"><p class="text-gray-500">Your cart is empty.</p></div>
-                    <p id="total-price" class="total-price">Total Price: Rp0</p>
-
-                    <div class="flex flex-col items-center gap-4 mt-4">
-                        <button id="save-button" onclick="saveCart()" class="text-white font-bold py-1.5 px-4 rounded-full bg-[#64d16d] hover:scale-105 transition-transform duration-300" disabled>Save Menu</button>
-                    </div>
-
-                </div>
-            </div>
+        <!-- "See My Saved Menus" Button -->
+        <div class="see-saved-btn text-center">
+          <a
+            href="{% url 'menuplanning:saved_menu_planning_page' %}"
+            class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform hover:scale-110 hover:shadow-lg"
+            >See My Saved Menus</a
+          >
         </div>
 
-        <div class="floating-cart-box">
-            <p class="cart-item-count" id="cart-item-count">0 Item(s)</p>
-            <p class="cart-total" id="cart-total">Total: Rp0</p>
-        
-            <div class="cart-buttons">
-                <button id="show-cart-btn" class="cart-button save-button">Review & Save</button>
-                <button onclick="emptyCart()" class="cart-button empty-button">Empty Cart</button>
+        <!-- Input Fields and Cards -->
+        <div class="flex flex-col items-center">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 w-full max-w-3xl px-8">
+            <!-- Warung Dropdown -->
+            <div class="input-container w-full">
+              <label
+                for="warungDropdownss"
+                class="input-label"
+                >Warung:</label
+              >
+              <select
+                id="warungDropdownss"
+                class="input-field w-full"
+              >
+                <option value="">Select a Warung</option>
+              </select>
             </div>
+
+            <!-- Budget Input -->
+            <div class="input-container w-full">
+              <label
+                for="budget"
+                class="input-label"
+                >Budget:</label
+              >
+              <input
+                type="text"
+                id="budget"
+                value="100000"
+                class="input-field w-full"
+                onchange="updateMaxBudget()"
+              />
+            </div>
+          </div>
+
+          <!-- Card Menu Results -->
+          <div
+            id="menu-results"
+            class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          ></div>
         </div>
+      </section>
+    </main>
 
-        <!-- Footer -->
-        <footer>{% include 'footer.html' %}</footer>
-            
+    <!-- Cart View Modal -->
+    <div
+      id="cart-view"
+      class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
+    >
+      <div class="bg-white p-6 rounded-xl shadow-lg w-80 relative">
+        <button
+          onclick="hideCartDetails()"
+          class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        >
+          &times;
+        </button>
+        <div class="text-center">
+          <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
+          <div id="cart-items"><p class="text-gray-500">Your cart is empty.</p></div>
+          <p
+            id="total-price"
+            class="total-price"
+          >
+            Total Price: Rp0
+          </p>
 
-        <script>
-            let MAX_BUDGET = parseInt($('#budget').val()) || 100000; // Set initial MAX_BUDGET
-        
-            function updateMaxBudget() {
-                const budgetInput = $('#budget').val().replace(/\D/g, ''); // Remove non-numeric characters
-                MAX_BUDGET = parseInt(budgetInput) || 100000; // Update MAX_BUDGET with the new value
+          <div class="flex flex-col items-center gap-4 mt-4">
+            <button
+              id="save-button"
+              onclick="saveCart()"
+              class="text-white font-bold py-1.5 px-4 rounded-full bg-[#64d16d] hover:scale-105 transition-transform duration-300"
+              disabled
+            >
+              Save Menu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="floating-cart-box">
+      <p
+        class="cart-item-count"
+        id="cart-item-count"
+      >
+        0 Item(s)
+      </p>
+      <p
+        class="cart-total"
+        id="cart-total"
+      >
+        Total: Rp0
+      </p>
+
+      <div class="cart-buttons">
+        <button
+          id="show-cart-btn"
+          class="cart-button save-button"
+        >
+          Review & Save
+        </button>
+        <button
+          onclick="emptyCart()"
+          class="cart-button empty-button"
+        >
+          Empty Cart
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>{% include 'footer.html' %}</footer>
+
+    <script>
+      let MAX_BUDGET = parseInt(document.getElementById('budget').value) || 100000; // Set initial MAX_BUDGET
+
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+
+      function updateMaxBudget() {
+        const budgetInput = document.getElementById('budget').value.replace(/\D/g, ''); // Remove non-numeric characters
+        MAX_BUDGET = parseInt(budgetInput) || 100000; // Update MAX_BUDGET with the new value
+      }
+
+      function updateCart(change, itemId, price) {
+        const budgetInput = document.getElementById('budget').value;
+
+        let quantityElement = document.getElementById('quantity-' + itemId);
+        let currentQuantity = parseInt(quantityElement.textContent);
+        let newQuantity = currentQuantity + change;
+
+        if (newQuantity < 0) {
+          newQuantity = 0;
+        }
+
+        // Update the quantity on the page
+        quantityElement.textContent = newQuantity;
+
+        // Send AJAX request to update the cart on the server
+        $.ajax({
+          url: '{% url "menuplanning:update_cart" %}',
+          type: 'POST',
+          data: {
+            item_id: itemId,
+            quantity: newQuantity,
+            price: price,
+            budget: budgetInput,
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function (response) {
+            // Update cart items and total price dynamically
+            $('#cart-items').html(response.updated_cart_html);
+            $('#total-price').text('Total Price: Rp' + formatNumber(response.total_price.toLocaleString()));
+
+            // Update the floating cart summary box with item count and total price
+            updateCartSummary(response.item_count, response.total_price);
+
+            // Check if the total exceeds the maximum budget
+            if (response.exceeded_budget) {
+              alert(`Total exceeds your budget of Rp${MAX_BUDGET.toLocaleString()}. Please adjust your menu.`);
+              emptyCart();
+            } else {
+              // Reset the total price color and re-enable buttons if under budget
+              $('#total-price').css('color', 'black');
+
+              // Re-enable the "Save Menu" button in the modal
+              $('#save-button').text('Save Menu').prop('disabled', false).css({
+                'background-color': '#FF6E1F',
+                color: 'white',
+                'border-radius': '9999px',
+                padding: '0.5rem 1.5rem',
+                'font-weight': 'bold',
+                cursor: 'pointer',
+              });
+
+              // Ensure the "Review & Save" button remains enabled
+              $('#show-cart-btn').text('Review & Save').prop('disabled', false).css({
+                'background-color': '#64D16D',
+                color: 'white',
+                'border-radius': '9999px',
+                padding: '0.5rem 1.5rem',
+                'font-weight': 'bold',
+                cursor: 'pointer',
+              });
             }
-        
-            function updateCart(change, itemId, price) {
-                const budgetInput = $('#budget').val();
-                const $quantityElement = $(`#quantity-${itemId}`);
-                let currentQuantity = parseInt($quantityElement.text());
-                let newQuantity = currentQuantity + change;
-                if (newQuantity < 0) newQuantity = 0;
-                $quantityElement.text(newQuantity); // Update the quantity on the page
-        
-                // Send AJAX request to update the cart on the server
-                $.ajax({
-                    url: '{% url "menuplanning:update_cart" %}',
-                    type: 'POST',
-                    data: {
-                        item_id: itemId,
-                        quantity: newQuantity,
-                        price: price,
-                        budget: budgetInput,
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                    },
-                    success: function(response) {
-                        // Update cart items and total price dynamically
-                        $('#cart-items').html(response.updated_cart_html); 
-                        $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
-                        updateCartSummary(response.item_count, response.total_price);
-        
-                        // Check if the total exceeds the maximum budget
-                        if (response.exceeded_budget) {
-                            // Button changes
-                            alert(`Total exceeds your budget of Rp${MAX_BUDGET.toLocaleString()}. Please adjust your menu.`);
-                            $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
-                                'background-color': 'red',
-                                color: 'white',
-                                'border-radius': '9999px',
-                                padding: '0.5rem 1.5rem',
-                                'font-weight': 'bold',
-                                cursor: 'not-allowed',
-                            });
-                            $('#show-cart-btn').text('Review Cart').prop('disabled', false).css({
-                                'background-color': '#FF6E1F',
-                                color: 'white',
-                                'border-radius': '9999px',
-                                padding: '0.5rem 1.5rem',
-                                'font-weight': 'bold',
-                                cursor: 'pointer',
-                            });
-                        } else {
-                            $('#total-price').css('color', 'black');
-                            $('#save-button').text('Save Menu').prop('disabled', false).css({
-                                'background-color': '#FF6E1F',
-                                color: 'white',
-                                'border-radius': '9999px',
-                                padding: '0.5rem 1.5rem',
-                                'font-weight': 'bold',
-                                cursor: 'pointer',
-                            });
-                            $('#show-cart-btn').text('Review & Save').prop('disabled', false).css({
-                                'background-color': '#64D16D',
-                                color: 'white',
-                                'border-radius': '9999px',
-                                padding: '0.5rem 1.5rem',
-                                'font-weight': 'bold',
-                                cursor: 'pointer',
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Error updating cart:', error);
-                    },
-                });
+          },
+          error: function (xhr, status, error) {
+            alert('Error updating cart:', error);
+          },
+        });
+      }
+
+      function saveCart() {
+        const budgetInput = document.getElementById('budget').value;
+        $.ajax({
+          url: '{% url "menuplanning:confirm_save_cart" %}', // Use confirm_save_cart to save directly
+          type: 'POST',
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            budget: budgetInput,
+          },
+          success: function (response) {
+            alert('Cart saved successfully!'); // Display success message
+            // Clear the cart display after saving
+            $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
+            $('#total-price').text('Total Price: Rp0');
+            updateCartSummary(0, 0); // Reset the floating cart summary
+
+            // Reset all quantity displays to zero
+            document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
+          },
+          error: function (xhr, status, error) {
+            console.error('Error saving cart:', error);
+          },
+        });
+      }
+
+      function confirmSaveCart() {
+        const budgetInput = document.getElementById('budget').value;
+        $.ajax({
+          url: '{% url "menuplanning:confirm_save_cart" %}',
+          type: 'POST',
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            budget: budgetInput,
+          },
+          success: function (response) {
+            alert('Cart saved successfully!');
+            // Clear the cart display after saving
+            $('#cart-items').html(response.updated_cart_html);
+            $('#total-price').text('Total Price: Rp0');
+          },
+          error: function (xhr, status, error) {
+            console.error('Error confirming save:', error);
+          },
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // Reset quantities to zero on page load
+        document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
+        $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
+        $('#total-price').text('Total Price: Rp0');
+
+        const warungDropdowns = document.getElementById('warungDropdownss');
+        const menuResults = document.getElementById('menu-results');
+
+        // Populate dropdown with warung options
+        fetch('/menuplanning/api/warungs')
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.warungs) {
+              data.warungs.forEach((warung) => {
+                const option = document.createElement('option');
+                option.value = warung.nama;
+                option.textContent = warung.nama;
+                warungDropdowns.appendChild(option);
+              });
             }
-        
-            function saveCart() {
-                const budgetInput = $('#budget').val();
-                $.ajax({
-                    url: '{% url "menuplanning:confirm_save_cart" %}',
-                    type: 'POST',
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        budget: budgetInput,
-                    },
-                    success: function(response) {
-                        alert('Cart saved successfully!');
-                        // Clear the cart display after saving
-                        $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
-                        $('#total-price').text('Total Price: Rp0');
-                        updateCartSummary(0, 0);
-                        $('.quantity-display').text('0');
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error saving cart:', error);
-                    },
-                });
+          })
+          .catch((error) => console.error('Error fetching warungs:', error));
+
+        // Fetch menus when a warung is selected
+        warungDropdowns.addEventListener('change', function () {
+          const selectedWarung = warungDropdowns.value;
+          if (selectedWarung) {
+            fetch(`/menuplanning/api/menus/${selectedWarung}/`)
+              .then((response) => response.json())
+              .then((data) => {
+                menuResults.innerHTML = '';
+                if (data.menus && data.menus.length > 0) {
+                  data.menus.forEach((menu) => {
+                    const menuCard = `
+                        <div
+                        class="bg-white relative rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs w-full sm:w-[50vw]"
+                        style="flex-shrink: 0; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)"
+                        >
+                        <!-- Edit and Delete Buttons -->
+                        {% if user.is_authenticated and user.username == 'admin'%}
+                        <div class="absolute top-3 right-3 flex space-x-2 z-40">
+                            <!-- Edit button -->
+                            <a
+                            class="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-blue-600"
+                            href="/menu/edit/${menu.id}"
+                            >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-pencil"
+                                viewBox="0 0 16 16"
+                            >
+                                <path
+                                d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                />
+                            </svg>
+                            </a>
+
+                            <!-- Delete button -->
+                            <a
+                            class="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-red-600"
+                            href="/menu/delete/${menu.id}"
+                            >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-trash"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                <path
+                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+                                />
+                            </svg>
+                            </a>
+                        </div>
+                        {% endif %}
+
+                        <!-- Image Section -->
+                        <img
+                            src="${menu.gambar}"
+                            alt="${menu.menu}"
+                            class="w-full h-48 object-cover rounded-t-[36px]"
+                        />
+
+                        <!-- Content Section -->
+                        <div class="pt-6 pl-6 text-left">
+                            <h2 class="font-bold text-2xl text-gray-800">${menu.menu}</h2>
+                            <p class="text-lg text-gray-800 mt-2">Rp ${formatNumber(menu.harga)}</p>
+                            <div class="flex items-center mt-2">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-geo-alt text-orange-500 h-5 w-5"
+                                viewBox="0 0 16 16"
+                            >
+                                <path
+                                d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"
+                                />
+                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                            </svg>
+                            <p class="ml-2">${menu.warung}</p>
+                            </div>
+                            <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> ${menu.avg_rating.toFixed(1)} out of 5</p>
+                        </div>
+                        <div class="quantity-wrapper flex justify-center mt-5 mb-5 mx-auto">
+                            <button
+                            class="quantity-control"
+                            onclick="updateCart(-1, ${menu.id}, ${menu.harga})"
+                            >
+                            -
+                            </button>
+                            <span
+                            class="quantity-display mx-2"
+                            id="quantity-${menu.id}"
+                            >0</span
+                            >
+                            <button
+                            class="quantity-control"
+                            onclick="updateCart(1, ${menu.id}, ${menu.harga})"
+                            >
+                            +
+                            </button>
+                        </div>
+                        </div>
+                            `;
+                    menuResults.innerHTML += menuCard;
+                  });
+                } else {
+                  menuResults.innerHTML = '<p>No menus available for this warung.</p>';
+                }
+              })
+              .catch((error) => console.error('Error fetching menus:', error));
+          } else {
+            menuResults.innerHTML = '<p>Select a warung to see menus.</p>';
+          }
+        });
+      });
+
+      function emptyCart() {
+        $.ajax({
+          url: '{% url "menuplanning:empty_cart" %}',
+          type: 'POST',
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function (response) {
+            if (response.success) {
+              alert(response.message);
+
+              // Update cart items and total price to reflect an empty cart
+              $('#cart-items').html(response.updated_cart_html);
+              $('#total-price').text('Total Price: Rp0');
+
+              // Reset all quantity displays to zero
+              document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
+
+              // Set the floating cart summary to 0 items and Rp0
+              updateCartSummary(0, 0);
             }
-        
-            $(document).ready(function() {
-                $('.quantity-display').text('0');
-                $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
-                $('#total-price').text('Total Price: Rp0');
-        
-                const $warungDropdowns = $('#warungDropdownss');
-                const $menuResults = $('#menu-results');
-        
-                // Populate dropdown with warung options
-                $.get('/menuplanning/api/warungs', function(data) {
-                    if (data.warungs) {
-                        $.each(data.warungs, function(_, warung) {
-                            const option = $('<option>').val(warung.nama).text(warung.nama);
-                            $warungDropdowns.append(option);
-                        });
-                    }
-                }).fail(function(error) {
-                    console.error('Error fetching warungs:', error);
-                });
-        
-                // Fetch menus when a warung is selected
-                $warungDropdowns.on('change', function() {
-                    const selectedWarung = $warungDropdowns.val();
-                    if (selectedWarung) {
-                        $.get(`/menuplanning/api/menus/${selectedWarung}/`, function(data) {
-                            $menuResults.empty();
-                            if (data.menus && data.menus.length > 0) {
-                                $.each(data.menus, function(_, menu) {
-                                    const menuCard = `
-                                        <div class="card bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-[325px] w-full h-96 rounded-[36px] shadow-lg hover:scale-105 transition-transform duration-300">
-                                            <img src="${menu.gambar}" alt="${menu.menu}" class="w-full h-48 object-cover rounded-t-[36px]" />
-                                            <div class="p-4 flex flex-col">
-                                            <h3 class="font-bold text-xl text-gray-800">${menu.menu}</h3>
-                                            <p class="text-lg text-gray-600">Rp${menu.harga.toLocaleString()}</p>
-                                            <p class="text-sm text-gray-500">Available at: ${menu.warung}</p>
-                                            <div class="quantity-wrapper flex justify-center mt-4">
-                                                <button class="quantity-control" onclick="updateCart(-1, ${menu.id}, ${menu.harga})">-</button>
-                                                <span class="quantity-display mx-2" id="quantity-${menu.id}">0</span>
-                                                <button class="quantity-control" onclick="updateCart(1, ${menu.id}, ${menu.harga})">+</button>
-                                            </div>
-                                            </div>
-                                        </div>`;
-                                    $menuResults.append(menuCard);
-                                });
-                            } else {
-                                $menuResults.html('<p>No menus available for this warung.</p>');
-                            }
-                        }).fail(function(error) {
-                            console.error('Error fetching menus:', error);
-                        });
-                    } else {
-                        $menuResults.html('<p>Select a warung to see menus.</p>');
-                    }
-                });
-        
-                $('#show-cart-btn').on('click', function(event) {
-                    event.stopPropagation();
-                    $('#cart-view').removeClass('hidden').css('display', 'flex');
-                    $.getJSON("{% url 'menuplanning:load_cart' %}", function(response) {
-                        $('#cart-items').html(response.updated_cart_html);
-                        $('#total-price').text('Total Price: Rp' + response.total_price.toLocaleString());
-                    }).fail(function(xhr) {
-                        console.error('Error loading cart details:', xhr.responseText);
-                    });
-                });
-        
-                $(document).on('click', function(event) {
-                    const $cartView = $('#cart-view');
-                    if ($cartView.is(':visible') && !$(event.target).closest('.bg-white').length) {
-                        hideCartDetails();
-                    }
-                });
-        
-                $('#cart-view').on('click', '.close-btn', hideCartDetails);
-            });
-        
-            function hideCartDetails() {
-                $('#cart-view').addClass('hidden').css('display', 'none');
-            }
-        
-            function updateCartSummary(itemCount = 0, totalPrice = 0) {
-                $('#cart-item-count').text(`${itemCount} Item(s)`);
-                $('#cart-total').text(`Total: Rp${totalPrice.toLocaleString()}`);
-                const $saveButton = $('#save-button');
-                $saveButton.prop('disabled', itemCount === 0).css({
-                    backgroundColor: itemCount > 0 ? '#FF6E1F' : 'gray',
-                    cursor: itemCount > 0 ? 'pointer' : 'not-allowed'
-                });
-            }
-        </script>
-        
-    </body>
+          },
+          error: function (xhr, status, error) {
+            console.error('Error emptying cart:', error);
+          },
+        });
+      }
+
+      function showCartDetails() {
+        $('#cart-view').removeClass('hidden').css('display', 'flex'); // Show the cart view modal
+
+        $.ajax({
+          url: '{% url "menuplanning:load_cart" %}', // Confirm URL matches the view name and namespace
+          type: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            $('#cart-items').html(response.updated_cart_html);
+            $('#total-price').text('Total Price: Rp' + formatNumber(response.total_price.toLocaleString()));
+          },
+          error: function (xhr, status, error) {
+            console.error('Error loading cart details:', xhr.responseText); // Log any errors
+          },
+        });
+      }
+
+      // Event listener to open the cart when clicking "Review & Save" button
+      $(document).ready(function () {
+        $('#show-cart-btn').on('click', function (event) {
+          event.stopPropagation(); // Prevent click from propagating to document
+          showCartDetails();
+        });
+
+        // Close the cart view if clicking outside the modal content
+        $(document).on('click', function (event) {
+          const $cartView = $('#cart-view');
+          const $modalContent = $cartView.find('.bg-white'); // Modal content selector
+
+          if ($cartView.is(':visible') && !$modalContent.is(event.target) && !$modalContent.has(event.target).length) {
+            hideCartDetails();
+          }
+        });
+      });
+
+      function hideCartDetails() {
+        $('#cart-view').addClass('hidden').css('display', 'none');
+      }
+
+      $(document).ready(function () {
+        // Show the cart view when "See Cart Details" button is clicked
+        $('#show-cart-btn').on('click', function (event) {
+          event.stopPropagation(); // Prevent click from propagating to document
+          console.log('Button clicked');
+          showCartDetails();
+        });
+
+        // Close the cart view if clicking outside the modal content
+        $(document).on('click', function (event) {
+          const $cartView = $('#cart-view');
+          const $modalContent = $cartView.find('.bg-white'); // Modal content selector
+
+          if ($cartView.is(':visible') && !$modalContent.is(event.target) && !$modalContent.has(event.target).length) {
+            console.log('Clicked outside modal, hiding cart');
+            hideCartDetails();
+          }
+        });
+      });
+
+      // Function to update item count and total dynamically
+      function updateCartSummary(itemCount = 0, totalPrice = 0) {
+        document.getElementById('cart-item-count').textContent = `${itemCount} Item(s)`;
+        document.getElementById('cart-total').textContent = `Total: Rp${formatNumber(totalPrice.toLocaleString())}`;
+
+        // Enable or disable the Save Menu button based on the item count
+        const saveButton = document.getElementById('save-button');
+        if (itemCount > 0) {
+          saveButton.disabled = false;
+          saveButton.style.backgroundColor = '#FF6E1F'; // Enable with orange color
+          saveButton.style.cursor = 'pointer';
+        } else {
+          saveButton.disabled = true;
+          saveButton.style.backgroundColor = 'gray'; // Disable with gray color
+          saveButton.style.cursor = 'not-allowed';
+        }
+      }
+
+      // Ensure it starts with 0 items and Rp0
+      document.addEventListener('DOMContentLoaded', function () {
+        updateCartSummary(0, 0);
+      });
+    </script>
+  </body>
 </html>
 

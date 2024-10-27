@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %} {% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -74,63 +74,67 @@
     </style>
 </head>
 
-<body class="bg-[#fffbf2] font-poppins">
-    
-    <nav class="absolute z-50 w-full">{% include 'navbar.html' %}</nav>
-    <div class="navbar-height"></div>
+  <body class="bg-[#fffbf2] font-poppins">
+    {% include 'navbar.html' %}
 
     <!-- Back Button Container -->
     <div class="container mx-auto mt-32 px-4 text-center md:text-left">
-        <a href="{% url 'menuplanning:show_main' %}" class="back-button inline-block">
-           Add New Menu Plan
-        </a>
+      <a
+        href="{% url 'menuplanning:show_main' %}"
+        class="back-button inline-block"
+      >
+        Add New Menu Plan
+      </a>
     </div>
 
     <section class="container mx-auto mt-6 mb-12 p-4 sm:p-6 md:p-8 shadow-md rounded-lg bg-gradient-to-b from-[#f5e6c5] to-[#ffc5a5] max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold mb-6 text-center">My Saved Menus</h1>
+      <h1 class="text-3xl font-bold mb-6 text-center">My Saved Menus</h1>
 
-        <div class="space-y-6">
-            {% for menu_plan in menu_plans %}
-                <div class="menu-plan mx-auto sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl">
-                    <h2 class="text-2xl font-semibold mb-2">{{ menu_plan.name }}</h2>
-                    <p class="budget-label"><strong>Budget:</strong> Rp{{ menu_plan.budget|floatformat:0 }}</p>
+      <div class="space-y-6">
+        {% for menu_plan in menu_plans %}
+        <div class="menu-plan mx-auto sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl">
+          <h2 class="text-2xl font-semibold mb-2">{{ menu_plan.name }}</h2>
+          <p class="budget-label"><strong>Budget:</strong> Rp{{ menu_plan.budget|floatformat:0|intcomma }}</p>
 
-                    <h3 class="font-bold mt-3">Menu:</h3>
-                    <ul class="list-disc list-inside ml-5">
-                        {% for item in menu_plan.items %}
-                            {% if item.quantity > 0 %}
-                                <li class="menu-item">{{ item.quantity }} x Item {{ item.item_name }} = Rp{{ item.total|floatformat:0 }}</li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
+          <h3 class="font-bold mt-3">Menu:</h3>
+          <ul class="list-disc list-inside ml-5">
+            {% for item in menu_plan.items %} {% if item.quantity > 0 %}
+            <li class="menu-item">{{ item.quantity }} x Item {{ item.item_name }} = Rp{{ item.total|floatformat:0|intcomma }}</li>
+            {% endif %} {% endfor %}
+          </ul>
 
-                    <p class="menu-total font-bold mt-3 text-black">Total = Rp{{ menu_plan.total_price|floatformat:0 }}</p>
-                </div>
-            {% endfor %}
+          <p class="menu-total font-bold mt-3 text-black">Total = Rp{{ menu_plan.total_price|floatformat:0|intcomma }}</p>
         </div>
+        {% endfor %}
+      </div>
 
-        <div class="flex justify-center mt-6">
-            <button class="reset-button" onclick="resetSavedMenus()">Reset All Saved Menus</button>
-        </div>
+      <div class="flex justify-center mt-6">
+        <button
+          class="reset-button"
+          onclick="resetSavedMenus()"
+        >
+          Reset All Saved Menus
+        </button>
+      </div>
     </section>
 
     <script>
-        function resetSavedMenus() {
-            $.ajax({
-                url: '{% url "menuplanning:reset_saved_menus" %}', 
-                type: 'POST',
-                data: {
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function(response) {
-                    alert('All saved menus have been reset.');
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error resetting saved menus:', error);
-                }
-            });
-        }
+      function resetSavedMenus() {
+        $.ajax({
+          url: '{% url "menuplanning:reset_saved_menus" %}',
+          type: 'POST',
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function (response) {
+            alert('All saved menus have been reset.');
+            location.reload();
+          },
+          error: function (xhr, status, error) {
+            console.error('Error resetting saved menus:', error);
+          },
+        });
+      }
     </script>
 </body>
 {% include 'footer.html' %}

@@ -1,0 +1,167 @@
+{% load static %} {% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Menu Details</title>
+    <!-- Import Poppins font from Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-[#fffbf2] w-full overflow-x-hidden font-['Poppins'] h-screen">
+    <div class="flex flex-col w-screen justify-item-center">
+      <!-- Navbar -->
+      <nav class="relative z-50">{% include 'navbar.html' %}</nav>
+
+      <!-- Title Section -->
+      <div class="flex flex-col items-center mt-40 text-center">
+        <h1 class="font-bold text-3xl sm:text-4xl md:text-5xl font-bold">Menu Review</h1>
+      </div>
+
+
+      <!-- Menu Detail Section -->
+      <div class="mt-10 bg-gradient-to-r from-orange-100 to-orange-200 rounded-[36px] p-6 shadow-lg max-w-5xl w-[90%] mx-auto flex flex-col sm:flex-row sm:items-center">
+        <!-- Image Section -->
+        <div class="flex-shrink-0 mb-6 sm:mb-0 sm:mr-8">
+          <img src="{{ menu.gambar }}" alt="{{ menu.menu }}" class="w-56 h-56 rounded-lg object-cover mx-auto sm:mx-0" />
+        </div>
+      
+        <!-- Content Section -->
+        <div class="text-center sm:text-left">
+          <!-- Menu Title and Warung Name -->
+          <h2 class="text-3xl font-bold text-gray-800">
+            {{ menu.menu }}
+          </h2>
+
+          <div class="text-2xl font-medium text-gray-500 my-3">at <span class="text-orange-500">{{ menu.warung }}</span></div>
+      
+          <!-- Price and Rating Section -->
+          <div class="bg-white text-orange-600 font-semibold text-xl py-2 px-6 rounded-full shadow-sm my-5">
+            Price: Rp {{ menu.harga }}
+          </div>
+          <div class="bg-white text-orange-600 font-semibold text-xl py-2 px-6 rounded-full shadow-sm mt-5">
+            Avg. Rate : {{ avg_rating|floatformat:1 }} / 5.0
+          </div>
+        </div>
+      </div>
+
+      <!-- Review submission section -->
+      <div class="w-[90%] max-w-5xl mx-auto mt-8">
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-orange-600 mb-4">Submit a review:</h2>
+        <div class="flex flex-col items-center rounded-[30px]  shadow-lg bg-orange-200 p-8">
+          <form class="w-full space-y-6" action="/ratereview/menu/{{menu.id}}/submit_review/" id="review-form">
+            {% csrf_token %}
+            <!-- Rating -->
+            <div class="flex flex-row space-x-4 items-baseline">
+              <label for="id_rating" class="text-lg sm:text-xl md:text-2xl font-semibold">Rate:</label>
+              <select id="id_rating" class="p-2 rounded-lg bg-orange-300 text-xl font-medium focus:outline-none focus:ring-2 focus:ring-orange-400">
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </div>
+            
+            <!-- Comment -->
+            <div>
+              <label for="id_comment" class="text-lg sm:text-xl md:text-2xl font-semibold">Comment:</label>
+              <textarea id="id_comment" rows="4" class="w-full p-4 rounded-lg bg-white text-lg sm:text-xl focus:outline-none focus:ring-2 focus:ring-orange-400"></textarea>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="w-full py-3 rounded-full text-white font-semibold text-lg bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 transition-transform transform hover:scale-105">Submit</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- All Review Section -->
+      <div class="w-[90%] max-w-5xl mx-auto mt-10">
+        <!-- Left-aligned Title -->
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-orange-600 mb-4 text-left">All Reviews:</h2>
+    
+        <div class="space-y-6 text-left" id="reviews-section">
+            <!-- Review -->
+            {% for review in reviews %}
+            <div class="p-8 bg-white rounded-[36px] shadow-lg w-full">
+                <h3 class="text-lg sm:text-xl md:text-2xl font-semibold text-orange-600 mb-2">{{ review.user.username }}</h3>
+                <p class="text-base sm:text-lg font-semibold text-gray-800">Rate: {{ review.rating }}/5</p>
+                <p class="text-gray-600 text-base mb-4">Published on: {{ review.created_at }}</p>
+                <p class="text-gray-700 text-base sm:text-lg">{{ review.comment }}</p>
+            </div>
+          {% endfor %}
+        </div>
+    </div>
+  </body>
+  <!-- Footer -->
+  {% include 'footer.html' %}
+
+  <script>
+
+$(document).ready(function () {
+    $('#review-form').submit(function (event) {
+        event.preventDefault();  // Prevent default form submission
+
+        // Capture form data
+        const rating = $('#id_rating').val();
+        const comment = $('#id_comment').val();
+        const csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+        const formAction = $(this).attr('action');
+
+        // Basic validation
+        if (!rating || !comment) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // AJAX submission
+        $.ajax({
+            url: formAction,
+            type: 'POST',
+            data: {
+                'rating': rating,
+                'comment': comment,
+                'csrfmiddlewaretoken': csrfToken
+            },
+            success: function (response) {
+                $('#reviews-section').append(`
+                  <div class="p-8 bg-white rounded-[36px] shadow-lg w-full">
+                      <h3 class="text-lg sm:text-xl md:text-2xl font-semibold text-orange-600 mb-2">${response.review.user}</h3>
+                      <p class="text-base sm:text-lg font-semibold text-gray-800">Rate: ${response.review.rating}/5</p>
+                      <p class="text-gray-600 text-base mb-4">Published on: ${response.review.created_at}</p>
+                      <p class="text-gray-700 text-base sm:text-lg">${response.review.comment}</p>
+                  </div>
+                `);
+                    
+                $('#id_rating').val('');
+                $('#id_comment').val('');
+                alert("Review submitted successfully!");
+            },
+            error: function (xhr) {
+                if (xhr.status === 400) {
+                    // Show form validation errors from JSON response
+                    const errors = xhr.responseJSON.errors;
+                    let errorMessages = "Error:\n";
+                    for (let field in errors) {
+                        errorMessages += `${field}: ${errors[field].join(", ")}\n`;
+                    }
+                    alert(errorMessages);
+                } else {
+                    alert("An error occurred while submitting the review.");
+                }
+            }
+        });
+    });
+});
+
+
+  </script>
+</html>

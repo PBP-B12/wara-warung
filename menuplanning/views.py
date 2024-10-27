@@ -4,9 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.template.loader import render_to_string
-from .models import Cart, CartItem, ChosenMenu
+from django.db.models import Avg
+from menuplanning.models import Cart, CartItem, ChosenMenu
 from menu.models import Menu
 from warung.models import Warung
+from ratereview.models import Review
 
 # Helper function to get or create the user's cart
 def get_user_cart(user):
@@ -38,7 +40,22 @@ def warungs_list(request):
 
 def get_menus_by_warung(request, warung):
     menus = Menu.objects.filter(warung=warung).values('id', 'menu', 'harga', 'gambar', 'warung')
-    return JsonResponse({'menus': list(menus)})
+    
+    # Add average rating to each menu item
+    menus_with_ratings = []
+    for menu in menus:
+        avg_rating = Review.objects.filter(menu_id=menu['id']).aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
+        menu_with_rating = {
+            'id': menu['id'],
+            'menu': menu['menu'],
+            'harga': menu['harga'],
+            'gambar': menu['gambar'],
+            'warung': menu['warung'],
+            'avg_rating': round(avg_rating, 1)  # Rounding for display
+        }
+        menus_with_ratings.append(menu_with_rating)
+    
+    return JsonResponse({'menus': menus_with_ratings})
 
 @login_required
 @csrf_exempt

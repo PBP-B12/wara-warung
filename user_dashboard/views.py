@@ -6,8 +6,8 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
-from user_dashboard.models import UserEntry
-from .forms import EditUserProfileForm, EditUsernameForm  # Add a separate form for the username
+from .models import UserEntry
+from .forms import EditUserProfileForm 
 
 @login_required
 def show_user_dashboard(request):
@@ -15,7 +15,7 @@ def show_user_dashboard(request):
 
     context = {
         'username': request.user.username,
-        'email': user_entry.email if user_entry.email else '',
+        'email': request.user.email,
         'phone_number': user_entry.phone_number if user_entry.phone_number else '',
         'address': user_entry.address if user_entry.address else '',
         'date_of_birth': user_entry.date_of_birth if user_entry.date_of_birth else '',
@@ -34,10 +34,9 @@ def edit_user(request, id):
         if form.is_valid():
             form.save()
 
-            # Return JSON response with updated data
             response_data = {
                 'username': request.user.username,
-                'email': user_entry.email,
+                'email': request.user.email,
                 'phone_number': user_entry.phone_number,
                 'address': user_entry.address,
                 'date_of_birth': user_entry.date_of_birth,
@@ -55,9 +54,8 @@ def edit_user(request, id):
 def delete_account(request):
     if request.method == "POST" and request.user.is_authenticated:
         user = request.user
-        user.delete()  # Deletes the user account from the database
+        user.delete()  
 
-        # Log out the user after deletion
         logout(request)
         return JsonResponse({'status': 'success', 'message': 'Account deleted successfully.'})
     

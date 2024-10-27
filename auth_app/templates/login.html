@@ -3,15 +3,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
     <title>Login Page</title>
-    
+
     <!-- Import Poppins font from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Include Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <style>
       body {
         background-image: url("{% static 'images/background02.png' %}");
@@ -20,124 +26,78 @@
         background-repeat: no-repeat;
         font-family: 'Poppins', sans-serif;
         min-height: 100vh;
-        margin: 0;
       }
-
       .form-container {
-        background: linear-gradient(180deg, #F5E6C5 0%, #FFC5A5 100%);
-        border-radius: 24px;
-        padding: 2rem;
-        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        width: 100%;
-      }
-
-      .form-title {
-        font-size: 2rem;
-        font-weight: bold;
-        text-align: center;
-        color: #1F1F1F;
-        margin-bottom: 8px;
-      }
-
-      .form-subtitle {
-        font-size: 1rem;
-        text-align: center;
-        color: #606060;
-        margin-bottom: 20px;
-      }
-
-      .form-input {
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #E0E0E0;
-        margin-bottom: 15px;
-        background-color: white;
-        font-size: 1rem;
-        color: #1F1F1F;
-        transition: all 0.3s ease;
-      }
-
-      .form-input:focus {
-        outline: none;
-        box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-      }
-
-      .login-button {
-        width: 100%;
-        background-color: #FF6E1F;
-        color: white;
-        font-weight: bold;
-        padding: 12px;
-        border-radius: 8px;
-        cursor: pointer;
-        text-align: center;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        font-size: 1rem;
-      }
-
-      .login-button:hover {
-        background-color: #FF9D6B;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .login-link {
-        text-align: center;
-        margin-top: 1rem;
-        color: #606060;
-      }
-
-      .login-link a {
-        color: #1D4ED8;
-        font-weight: bold;
-        text-decoration: none;
-        transition: color 0.3s ease, text-decoration 0.3s ease;
-      }
-
-      .login-link a:hover {
-        color: #3B82F6;
-        text-decoration: underline;
+        background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%);
       }
     </style>
   </head>
-  <body>
+  <body class="flex flex-col items-center justify-center">
+    <!-- Logo Section -->
     <div class="flex justify-center mt-8">
-      <img src="{% static 'images/logo002.png' %}" alt="Logo" class="w-28 h-auto">
-    </div>    
+      <img
+        src="{% static 'images/logo002.png' %}"
+        alt="Logo"
+        class="w-20 h-auto md:w-28"
+      />
+    </div>
 
-    <div class="flex items-center justify-center mt-4">
-      <div class="form-container">
-        <h2 class="form-title">Hello again!</h2>
-        <p class="form-subtitle">Discover the best local flavors with Wara Warung.</p>
+    <!-- Form Container -->
+    <div class="form-container p-6 md:p-8 lg:p-10 rounded-3xl shadow-lg max-w-xs md:max-w-md w-full my-5 h-[55vh]">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Hello again!</h2>
+      <p class="text-center text-gray-600 mb-6">Discover the best local flavors with Wara Warung.</p>
 
-        <!-- Display error messages -->
-        {% if messages %}
-          <div>
-            {% for message in messages %}
-              <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative mt-4" role="alert">
-                {{ message }}
-              </div>
-            {% endfor %}
-          </div>
-        {% endif %}
+      <!-- Display error messages -->
+      {% if messages %}
+      <div>
+        {% for message in messages %} {% if "auth" in message.tags %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mt-4 text-center">{{ message }}</div>
+        {% endif %} {% endfor %}
+      </div>
+      {% endif %}
 
-        <form method="POST" class="space-y-4">
-          {% csrf_token %}
-          
-          <!-- Username Input -->
-          <input type="text" name="username" class="form-input" placeholder="Username" required>
+      <!-- Login Form -->
+      <form
+        method="POST"
+        class="space-y-4"
+      >
+        {% csrf_token %}
 
-          <!-- Password Input -->
-          <input type="password" name="password" class="form-input" placeholder="Password" required>
+        <!-- Username Input -->
+        <input
+          type="text"
+          name="username"
+          class="form-input block w-full py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          placeholder="Username"
+          required
+        />
 
-          <button type="submit" class="login-button">Log In</button>
-        </form>
+        <!-- Password Input -->
+        <input
+          type="password"
+          name="password"
+          class="form-input block w-full py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          placeholder="Password"
+          required
+        />
 
-        <div class="login-link">
-          Don't have an account? <a href="{% url 'auth_app:register' %}">Sign up</a>
-        </div>
+        <!-- Login Button -->
+        <button
+          type="submit"
+          class="login-button w-full bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-400 transition ease-in-out duration-300"
+        >
+          Log In
+        </button>
+      </form>
+
+      <!-- Signup Link -->
+      <div class="text-center text-gray-600 mt-6">
+        Don't have an account?
+        <a
+          href="{% url 'auth_app:register' %}"
+          class="text-blue-600 font-bold hover:text-blue-800"
+          >Sign up</a
+        >
       </div>
     </div>
   </body>

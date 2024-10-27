@@ -7,15 +7,24 @@ from django.core import serializers
 from warung.models import Warung  # Import the Warung model from warung app
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.db.models import Avg
+from ratereview.models import Review
 
-# Create your views here.
 def show_main(request):
-    menu_entries = Menu.objects.all()
-    context={
-        "menu_entries":menu_entries
+    # Fetch all menu entries with their average ratings
+    menu_with_reviews = []
+    for menu in Menu.objects.all():
+        avg_rating = Review.objects.filter(menu=menu).aggregate(Avg('rating'))['rating__avg'] or 0
+        menu_with_reviews.append({
+            'menu': menu,
+            'avg_rating': avg_rating
+        })
+
+    context = {
+        'menu_entries': menu_with_reviews,
     }
 
-    return render(request, "main.html", context)
+    return render(request, "allmenu.html", context)
 
 def edit_menu(request, id):
     # Get the menu entry based on the id
@@ -59,7 +68,7 @@ def add_menu(request):
 
     if form.is_valid() and request.method == "POST":
         form.save()
-        return redirect('main:show_main')
+        return redirect('menu:show_main')
 
     context = {'form': form}
     return render(request, "add_menu.html", context)
