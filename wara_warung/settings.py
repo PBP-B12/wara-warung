@@ -41,10 +41,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.humanize",
     'auth_app', #install app authentication
     'homepage',
+    'auth_app',
     "menu",
     "warung",
+    "search",
+    'menuplanning',
+    "wishlist",
+    "user_dashboard",
+    'ratereview',
     "user_dashboard",
 ]
 
