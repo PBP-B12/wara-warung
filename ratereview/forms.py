@@ -1,7 +1,7 @@
 from django import forms
-from ratereview.models import UserRateReview
+from ratereview.models import Review
 
 class ReviewForm(forms.ModelForm):
     class Meta:
-        model = UserRateReview
-        fields = ['rating', 'review']
+        model = Review
+        fields = ['rating', 'comment']

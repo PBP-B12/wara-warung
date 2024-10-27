@@ -114,7 +114,7 @@
       <h2 class="text-xl sm:text-3xl lg:text-4xl font-bold mb-1 xl:mb-16 sm:mb-3">Menus You Can Find in Bali</h2>
 
       <div class="flex lg:flex-row flex-col md:flex-row xl:space-x-10 md:space-x-4 items-center justify-center">
-        {% for menu in menus %}
+        {% for item in menus %}
         <!-- Card -->
         <div
           class="bg-white relative rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs sm:w-full sm:mt-10 w-[80%] md:w-[30vw] mt-10 lg:mt-3"
@@ -126,7 +126,7 @@
             <!-- Edit button -->
             <a
               class="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-blue-600"
-              href="/menu/edit/{{ menu.id }}"
+              href="/menu/edit/{{ item.menu.id }}"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -145,7 +145,7 @@
             <!-- Delete button -->
             <a
               class="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-red-600"
-              href="/menu/delete/{{ menu.id }}"
+              href="/menu/delete/{{ item.menu.id }}"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -166,15 +166,15 @@
 
           <!-- Image Section -->
           <img
-            src="{{ menu.gambar }}"
-            alt="{{ menu.menu }}"
+            src="{{ item.menu.gambar }}"
+            alt="{{ item.menu.menu }}"
             class="w-full h-48 object-cover rounded-t-[36px]"
           />
 
           <!-- Content Section -->
           <div class="p-6">
-            <h2 class="font-bold text-xl sm:text-2xl text-gray-800">{{ menu.menu }}</h2>
-            <p class="text-lg text-gray-800 mt-2">Rp {{ menu.harga|intcomma }}</p>
+            <h2 class="font-bold text-xl sm:text-2xl text-gray-800">{{ item.menu.menu }}</h2>
+            <p class="text-lg text-gray-800 mt-2">Rp {{ item.menu.harga|intcomma }}</p>
             <div class="flex items-center mt-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -189,22 +189,22 @@
                 />
                 <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
               </svg>
-              <p class="ml-2">{{ menu.warung }}</p>
+              <p class="ml-2">{{ item.menu.warung }}</p>
             </div>
-            <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> 3 out of 5</p>
+            <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> {{ item.avg_rating|floatformat:1 }} out of 5.0</p>
           </div>
 
           <!-- Button Section -->
           <div class="w-full flex justify-center mb-3">
             <a
-              class="bg-[#252525] text-white px-6 py-2 md:px-2 sm:px-1.5 px-1 rounded-full"
-              href="/warung/{{ menu.warung }}"
+              class="bg-[#252525] text-white lg:px-6 lg:py-2 md:px-4 md:py-2 py-2 px-3 rounded-full"
+              href="/ratereview/menu/{{item.menu.id}}"
               >See Details</a
             >
             {% if user.is_authenticated %}
             <a
-              class="bg-[#ff583e] text-white px-6 py-2 ml-3 md:px-2 sm:px-1.5 px-1 rounded-full"
-              href="/wishlist/add/{{menu.id}}/"
+              class="bg-[#ff583e] text-white lg:px-6 lg:py-2 ml-3 md:px-4 md:py-2 py-2 px-3 rounded-full"
+              href="/wishlist/add/{{item.menu.id}}/"
               >Add to list</a
             >
             {% endif %}

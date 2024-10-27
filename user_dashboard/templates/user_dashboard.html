@@ -7,15 +7,16 @@
     name="viewport"
     content="width=device-width, initial-scale=1"
   />
-
   <title>User Dashboard</title>
   {% endblock meta %}
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
     rel="stylesheet"
   />
+
   <style>
     body {
       background-image: url("{% static 'images/background02.png' %}");
@@ -27,236 +28,122 @@
       margin: 0;
     }
 
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      align-items: center;
-      flex-direction: row;
-      padding: 50px;
-      margin: 80px;
-      margin-top: 10px;
-      width: fit-content;
-    }
-
-    .profile-card {
-      display: flex;
-      justify-content: flex-start;
-      width: 100%;
-      max-width: 700px;
-      background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%);
-      border-radius: 24px;
-      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-      padding: 2rem;
-      gap: 1rem;
-    }
-
-    .profile-info {
-      display: flex;
-      flex-direction: column;
-      padding-left: 20px;
-      width: 100%;
-    }
-
-    .profile-info h2 {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
-    .profile-info p {
-      font-size: 1.125rem;
-      margin: 0.5rem 0;
-    }
-
-    .avatar {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .avatar img {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .edit-profile-button,
-    .delete-profile-button {
-      width: auto;
-      padding: 12px;
-      border-radius: 9999px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .edit-profile-button {
-      color: #ff6e1f;
-      background-color: white;
-    }
-
-    .delete-profile-button {
-      background-color: #ff6347;
-      color: white;
-      justify-content: space-between;
-    }
-
-    .edit-profile-button:hover {
-      background-color: #f9f6ee;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .delete-profile-button:hover {
-      background-color: #ff8675;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .info-button {
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      text-align: center;
-      color: #ff6e1f;
-      width: auto;
-    }
-
-    .info-button:hover {
-      transform: translateY(-2px);
-      text-decoration: underline;
-    }
-
-    .info-button::before {
-      font-size: 1.2rem;
-      color: #ff6e1f;
-      margin-right: 8px;
+    .main-content {
+      margin-top: 8rem;
     }
 
     .menu-button::before {
       content: '\2630';
+      margin-right: 0.5rem;
     }
 
     .wishlist-button::before {
       content: '\2665';
-    }
-
-    .button-group {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .detail-title {
-      margin-bottom: 15px;
-    }
-
-    .username {
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .input-field {
-      background-color: white;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      width: 100%;
+      margin-right: 0.5rem;
     }
   </style>
 </head>
 
 {% include 'navbar.html' %}
 
-<div class="form-title">
-  <h1>My Account</h1>
-</div>
-
-<div class="container">
-  <div class="avatar">
-    <img
-      src="{% static 'images/user-avatar.png' %}"
-      alt="Avatar"
-    />
-    <h3>Welcome,</h3>
-    <p class="username">{{ username }}</p>
-    <div class="buttons">
-      <a
-        class="info-button menu-button"
-        href="/menuplanning/saved-menu-plans"
-        >See Menu Plans</a
-      >
-      <a
-        class="info-button wishlist-button"
-        href="/wishlist"
-        >See Wishlist</a
-      >
+<div class="main-content flex flex-col justify-between items-center mt-4">
+  <div class="container flex flex-wrap justify-center items-center mt-20 sm:mt-16 p-4 sm:p-8 w-full lg:flex-row lg:justify-center lg:items-center">
+    <div class="text-center mt-5">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold">My Account</h1>
     </div>
   </div>
 
-  <div class="profile-card">
-    <div class="profile-info">
-      <h2 class="detail-title">Account details</h2>
-      <p><strong>Email:</strong></p>
-      <input
-        type="text"
-        class="input-field"
-        value="{{ email }}"
-        id="profileEmail"
-        readonly
+  <div class="container flex flex-wrap justify-center items-center p-8 w-full lg:flex-row lg:justify-center lg:items-center gap-8">
+    <!-- column kiri: welcome user dan info buttons -->
+    <div class="avatar flex flex-col items-center gap-4 p-4 sm:p-6 rounded-xl">
+      <img
+        src="{% static 'images/user-avatar.png' %}"
+        alt="Avatar"
+        class="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover"
       />
+      <h3 class="text-lg sm:text-xl font-semibold text-center">Welcome,</h3>
+      <p class="text-base sm:text-lg text-center">{{ username }}</p>
 
-      <p><strong>Phone Number:</strong></p>
-      <input
-        type="text"
-        class="input-field"
-        value="{{ phone_number }}"
-        id="profilePhoneNumber"
-        readonly
-      />
-
-      <p><strong>Date of Birth:</strong></p>
-      <input
-        type="text"
-        class="input-field"
-        value="{{ date_of_birth }}"
-        id="profileDateOfBirth"
-        readonly
-      />
-
-      <p><strong>Address:</strong></p>
-      <input
-        type="text"
-        class="input-field full-width"
-        value="{{ address }}"
-        id="profileAddress"
-        readonly
-      />
-      <div class="button-group">
-        <button
-          class="edit-profile-button"
-          onclick="toggleEditProfileModal()"
+      <div class="buttons flex flex-col gap-2">
+        <a
+          class="info-button menu-button px-3 py-2 sm:px-4 sm:py-2 rounded-md font-medium sm:font-semibold text-base sm:text-lg cursor-pointer text-center text-orange-500 hover:translate-y-[-2px] hover:underline"
+          href="/menuplanning/saved-menu-plans/"
         >
-          Edit Details
-        </button>
-        <button
-          class="delete-profile-button"
-          onclick="confirmDeleteAccount()"
+          See Menu Plans
+        </a>
+        <a
+          class="info-button wishlist-button px-3 py-2 sm:px-4 sm:py-2 rounded-md font-medium sm:font-semibold text-base sm:text-lg cursor-pointer text-center text-orange-500 hover:translate-y-[-2px] hover:underline"
+          href="/wishlist/"
         >
-          Delete Account
-        </button>
+          See Wishlist
+        </a>
+      </div>
+    </div>
+
+    <!-- column kanan: profile card -->
+    <div class="profile-card flex justify-start w-full max-w-3xl bg-gradient-to-b from-[#F5E6C5] to-[#FFC5A5] rounded-2xl shadow-md p-8 gap-4 lg:mt-0 lg:w-2/3 lg:flex-col lg:p-4">
+      <div class="profile-info flex flex-col pl-5 w-full">
+        <h2 class="text-xl sm:text-2xl font-bold">Account Details</h2>
+
+        <div class="my-2">
+          <p class="text-base sm:text-lg font-medium"><strong>Email:</strong></p>
+          <input
+            type="text"
+            class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base"
+            value="{{ email }}"
+            id="profileEmail"
+            readonly
+          />
+        </div>
+
+        <div class="my-2">
+          <p class="text-base sm:text-lg font-medium"><strong>Phone Number:</strong></p>
+          <input
+            type="text"
+            class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base"
+            value="{{ phone_number }}"
+            id="profilePhoneNumber"
+            readonly
+          />
+        </div>
+
+        <div class="my-2">
+          <p class="text-base sm:text-lg font-medium"><strong>Date of Birth:</strong></p>
+          <input
+            type="text"
+            class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base"
+            value="{{ date_of_birth }}"
+            id="profileDateOfBirth"
+            readonly
+          />
+        </div>
+
+        <div class="my-2">
+          <p class="text-base sm:text-lg font-medium"><strong>Address:</strong></p>
+          <input
+            type="text"
+            class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base"
+            value="{{ address }}"
+            id="profileAddress"
+            readonly
+          />
+        </div>
+
+        <!-- button group -->
+        <div class="button-group mt-4 flex flex-col sm:flex-row justify-between gap-4">
+          <button
+            class="edit-profile-button bg-white text-orange-500 px-4 py-3 rounded-full font-bold text-lg cursor-pointer hover:bg-[#F9F6EE] hover:shadow-md hover:translate-y-[-2px] w-full sm:w-auto"
+            onclick="toggleEditProfileModal()"
+          >
+            Edit Details
+          </button>
+          <button
+            class="delete-profile-button bg-[#FF6347] text-white px-4 py-3 rounded-full font-bold text-lg cursor-pointer hover:bg-[#FF8675] hover:shadow-md hover:translate-y-[-2px] w-full sm:w-auto"
+            onclick="confirmDeleteAccount()"
+          >
+            Delete Account
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -265,13 +152,12 @@
 {% include 'edit_user.html' %} {% include 'footer.html' %}
 
 <script>
+  //edit profile
   function toggleEditProfileModal() {
     const modal = document.getElementById('editProfileModal');
     modal.classList.toggle('hidden');
   }
-</script>
 
-<script>
   function confirmDeleteAccount() {
     const userConfirmed = confirm('Are you sure you want to delete your account? This action cannot be undone.');
 
@@ -280,6 +166,7 @@
     }
   }
 
+  //delete account
   function deleteUserAccount() {
     fetch("{% url 'user_dashboard:delete_user_account' %}", {
       method: 'POST',
@@ -292,7 +179,7 @@
       .then((data) => {
         if (data.status === 'success') {
           alert(data.message);
-          window.location.href = '{% url "auth_app:login" %}'; // Redirect to login page after logout
+          window.location.href = '{% url "auth_app:login" %}';
         } else {
           alert('Failed to delete account. Please try again.');
         }
