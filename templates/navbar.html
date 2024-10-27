@@ -49,17 +49,6 @@
         </button>
         {% endif %}
       </div>
-        
-        <div class="flex justify-center space-x-8 mr-24">
-          <a href="#" class="text-black text-base">Home</a>
-          <a href="#" class="text-black text-base">Search</a>
-          <a href="{% url 'user_dashboard:show_user_dashboard' %}" class="text-black text-base">My Account</a>
-        </div>
-
-        <!-- Log Out Button -->
-        <div class="hidden lg:flex bg-[#ff583e] rounded-full px-4 py-2">
-          <button class="text-white">Log Out</button>
-        </div>
 
       <!-- Log In/Out Buttons -->
       {% if user.is_authenticated %}

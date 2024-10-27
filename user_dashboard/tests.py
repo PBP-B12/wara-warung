@@ -20,11 +20,13 @@ class userDashboardTest(TestCase):
         )
         self.client = Client()
 
+    #test apakah user bisa mengakses dashboard
     def test_dashboard_url_is_exist(self):
         self.client.login(username='testuser', password='password123')
         response = self.client.get(reverse('user_dashboard:show_user_dashboard'))
         self.assertEqual(response.status_code, 200)
 
+    #test apakah dashboard menggunakan template yang benar
     def test_dashboard_using_dashboard_template(self):
         self.client.login(username='testuser', password='password123')
         response = self.client.get(reverse('user_dashboard:show_user_dashboard'))
@@ -50,7 +52,7 @@ class userDashboardTest(TestCase):
         self.assertEqual(self.profile.address, '456 Depok')
         self.assertEqual(str(self.profile.date_of_birth), '1985-05-05')
 
-    #test apakah user akan log out secar automatis setelah delete account
+    #test apakah user akan log out secara automatis setelah delete account
     def test_logout_after_delete_account(self):
         self.client.login(username='testuser', password='password123')
         response = self.client.post(reverse('user_dashboard:delete_user_account'))

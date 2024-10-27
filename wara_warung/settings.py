@@ -40,10 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.contrib.humanize",
-<<<<<<< HEAD
-    'auth_app', #install app authentication
-=======
->>>>>>> fa3f21fd4a94e448f2fdb89f470950fc0882791e
     'homepage',
     'auth_app',
     "menu",
@@ -53,7 +49,6 @@ INSTALLED_APPS = [
     "wishlist",
     "user_dashboard",
     'ratereview',
-    "user_dashboard",
 ]
 
 MIDDLEWARE = [

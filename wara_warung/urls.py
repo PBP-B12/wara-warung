@@ -28,12 +28,4 @@ urlpatterns = [
     path('wishlist/', include('wishlist.urls')),
     path('user_dashboard/', include('user_dashboard.urls')),
     path('ratereview/', include('ratereview.urls')),
-<<<<<<< HEAD
-    path("menu/", include('menu.urls')),
-    path("warung/", include('warung.urls')),
-    path('user_dashboard/', include('user_dashboard.urls')),
-    path('', include('auth_app.urls', namespace='auth_app')),
 ]
-=======
-]
->>>>>>> fa3f21fd4a94e448f2fdb89f470950fc0882791e
