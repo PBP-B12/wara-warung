@@ -24,7 +24,7 @@
       <!-- Search Menu Section -->
       <div class="flex flex-col items-center mt-40 text-center">
         <h1 class="font-bold text-3xl sm:text-4xl md:text-5xl font-bold">Search Menu</h1>
-        <h2 class="text-xl sm:text-2xl mt-2">What you want to eat?</h2>
+        <h2 class="text-xl sm:text-2xl mt-2">What do you want to eat?</h2>
       </div>
 
       <!-- Search Bar -->
@@ -284,14 +284,14 @@
                         </svg>
                         <p class="ml-2">${menu.warung}</p>
                       </div>
-                      <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> 3 out of 5</p>
+                      <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> ${menu.avg_rating.toFixed(1)} out of 5.0</p>
                     </div>
 
                     <!-- Button Section -->
                     <div class="w-full flex justify-center mb-3">
                       <a
                         class="bg-[#252525] text-white px-6 py-2 rounded-full"
-                        href="/warung/${menu.warung}"
+                        href="/ratereview/menu/${menu.id}"
                         >See Details</a
                       >
                       {% if user.is_authenticated %}

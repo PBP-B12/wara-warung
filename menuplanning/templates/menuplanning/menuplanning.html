@@ -24,8 +24,20 @@
 
     <style>
       body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
         background-color: #fffbf2;
         font-family: 'Poppins', sans-serif;
+      }
+
+      main {
+        flex: 1;
+        padding: 2rem;
+      }
+
+      .content-footer-space {
+        margin-bottom: 20rem;
       }
 
       .input-container {
@@ -100,10 +112,6 @@
         margin-top: 40px;
       }
 
-      main {
-        flex: 1;
-      }
-
       .total-price {
         font-size: 1.5rem;
         font-weight: bold;
@@ -116,21 +124,18 @@
         padding-top: 6rem;
       }
 
-      .cart-view {
+      .hidden {
+        display: none;
+      }
+
+      #cart-view {
+        display: none;
         position: fixed;
-        top: calc(4rem + 3rem); /* Adjusted to start just below the navbar */
-        bottom: 2vh;
-        right: 0;
-        width: 25%;
-        background: #fff;
-        border-radius: 48px 0 0 48px;
-        box-shadow: -4px 0px 20.5px 4px rgba(0, 0, 0, 0.2);
-        padding: 1.5rem;
+        inset: 0;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: center;
-        overflow-y: auto;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.5);
         z-index: 50;
       }
 
@@ -139,93 +144,218 @@
         padding: 2rem;
         margin-right: 25%;
       }
+
+      .fixed-bottom-center {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 50;
+      }
+
+      .see-saved-btn {
+        margin-top: 20px;
+        margin-bottom: 40px;
+      }
+
+      .no-warung-message {
+        text-align: center;
+        color: gray;
+        font-size: 1.25rem;
+        margin-top: 2rem;
+      }
+
+      .floating-cart-box {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        max-width: 600px;
+        max-height: 200px;
+        padding: 15px;
+        background-color: #ffffff;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        border-radius: 30px;
+        text-align: center;
+        z-index: 50;
+      }
+
+      .cart-item-count {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0;
+      }
+
+      .cart-total {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 8px 0;
+      }
+
+      .cart-buttons {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+      }
+
+      .cart-button {
+        width: 45%;
+        padding: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 8px;
+        border-radius: 9999px;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+      }
+
+      .cart-button:hover {
+        transform: scale(1.05);
+      }
+
+      .save-button {
+        background-color: #ff6e1f;
+        color: white;
+      }
+
+      .empty-button {
+        background-color: #252525;
+        color: white;
+      }
+
+      #cart-view {
+        display: none;
+      }
     </style>
   </head>
 
-  <body class="flex flex-col min-h-screen bg-[#fffbf2] font-poppins">
+  <body>
+    <!-- Navigation -->
     <nav class="z-50">{% include 'navbar.html' %}</nav>
-    <div class="flex flex-1 w-full mt-10">
-      <!-- Menu Planning Section -->
-      <div class="w-3/4 p-10 mt-10">
-        <section class="text-center">
-          <h1 class="text-4xl font-bold mb-2">Menu Planning</h1>
-          <p class="text-lg text-gray-700 mb-8">Choose your warung and plan your menu with your preferred budget!</p>
 
-          <!-- Input Fields and Cards -->
-          <div class="flex flex-col items-center">
-            <div class="flex justify-center">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 w-full max-w-3xl px-8">
-                <div class="input-container warung-container w-full">
-                  <label
-                    for="warung"
-                    class="input-label"
-                    >Warung:</label
-                  >
-                  <input
-                    type="text"
-                    id="search-input"
-                    class="input-field w-full"
-                  />
-                </div>
+    <!-- Main Content -->
+    <main class="content-footer-space">
+      <section class="text-center">
+        <h1 class="text-4xl font-bold mt-28 mb-2">Menu Planning</h1>
+        <p class="text-lg text-gray-700 mb-8">Choose your warung and plan your menu with your preferred budget!</p>
 
-                <div class="input-container budget-container w-full">
-                  <label
-                    for="budget"
-                    class="input-label"
-                    >Budget:</label
-                  >
-                  <input
-                    type="text"
-                    id="budget"
-                    value="100000"
-                    class="input-field w-full"
-                    onchange="updateMaxBudget()"
-                  />
-                </div>
-              </div>
+        <!-- "See My Saved Menus" Button -->
+        <div class="see-saved-btn text-center">
+          <a
+            href="{% url 'menuplanning:saved_menu_planning_page' %}"
+            class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform hover:scale-110 hover:shadow-lg"
+            >See My Saved Menus</a
+          >
+        </div>
+
+        <!-- Input Fields and Cards -->
+        <div class="flex flex-col items-center">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 w-full max-w-3xl px-8">
+            <!-- Warung Dropdown -->
+            <div class="input-container w-full">
+              <label
+                for="warungDropdownss"
+                class="input-label"
+                >Warung:</label
+              >
+              <select
+                id="warungDropdownss"
+                class="input-field w-full"
+              >
+                <option value="">Select a Warung</option>
+              </select>
             </div>
 
-            <!-- Cards Section untuk menampilkan menus di warung (masih data manual dummy)-->
-            <div
-              class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-              id="menu-results"
-            ></div>
+            <!-- Budget Input -->
+            <div class="input-container w-full">
+              <label
+                for="budget"
+                class="input-label"
+                >Budget:</label
+              >
+              <input
+                type="text"
+                id="budget"
+                value="100000"
+                class="input-field w-full"
+                onchange="updateMaxBudget()"
+              />
+            </div>
           </div>
-        </section>
-      </div>
 
-      <!-- Cart view  -->
-      <div class="cart-view">
-        <div class="text-center w-full">
+          <!-- Card Menu Results -->
+          <div
+            id="menu-results"
+            class="mt-10 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          ></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Cart View Modal -->
+    <div
+      id="cart-view"
+      class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
+    >
+      <div class="bg-white p-6 rounded-xl shadow-lg w-80 relative">
+        <button
+          onclick="hideCartDetails()"
+          class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        >
+          &times;
+        </button>
+        <div class="text-center">
           <h2 class="text-2xl font-bold mb-4">Your Cart</h2>
-          <div id="cart-items">{% include 'menuplanning/cart_items.html' %}</div>
+          <div id="cart-items"><p class="text-gray-500">Your cart is empty.</p></div>
           <p
-            class="total-price"
             id="total-price"
+            class="total-price"
           >
             Total Price: Rp0
           </p>
 
-          <!-- Button Container with Vertical Layout -->
-          <div class="flex flex-col items-center gap-4 justify-center mt-4">
+          <div class="flex flex-col items-center gap-4 mt-4">
             <button
               id="save-button"
               onclick="saveCart()"
-              class="text-white font-bold py-1.5 px-4 rounded-full cursor-pointer transform hover:scale-105 transition-transform duration-300"
-              style="background-color: #64d16d; min-width: 100px"
+              class="text-white font-bold py-1.5 px-4 rounded-full bg-[#64d16d] hover:scale-105 transition-transform duration-300"
+              disabled
             >
               Save Menu
             </button>
-
-            <a
-              href="{% url 'menuplanning:saved_menu_planning_page' %}"
-              class="bg-[#252525] text-white font-bold py-2 px-6 rounded-full transform transition-transform duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
-              style="min-width: 100px"
-            >
-              See My Saved Menus
-            </a>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="floating-cart-box">
+      <p
+        class="cart-item-count"
+        id="cart-item-count"
+      >
+        0 Item(s)
+      </p>
+      <p
+        class="cart-total"
+        id="cart-total"
+      >
+        Total: Rp0
+      </p>
+
+      <div class="cart-buttons">
+        <button
+          id="show-cart-btn"
+          class="cart-button save-button"
+        >
+          Review & Save
+        </button>
+        <button
+          onclick="emptyCart()"
+          class="cart-button empty-button"
+        >
+          Empty Cart
+        </button>
       </div>
     </div>
 
@@ -233,138 +363,11 @@
     <footer>{% include 'footer.html' %}</footer>
 
     <script>
-      $(document).ready(function () {
-        // Function to fetch menus based on query and budget
-        function fetchMenus(query) {
-          $.ajax({
-            url: '/menuplanning/',
-            data: {
-              query: query,
-            },
-            dataType: 'json',
-            success: function (data) {
-              $('#menu-results').empty();
-              if (data.results.length > 0) {
-                // $('#space-container').addClass('hidden');
-                // $('#results-title').removeClass('hidden');
-                // $('#no-results').addClass('hidden');
-                data.results.forEach(function (menu) {
-                  $('#menu-results').append(`
-                    <div
-                    class="bg-white relative rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300 w-[20vw]"
-                    style="flex-shrink: 0; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)"
-                    >
-                    <!-- Edit and Delete Buttons -->
-                    {% if user.is_authenticated and user.username == 'admin'%}
-                    <div class="absolute top-3 right-3 flex space-x-2 z-40">
-                        <!-- Edit button -->
-                        <a
-                        class="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-blue-600"
-                        href="/menu/edit/${menu.id}"
-                        >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            class="bi bi-pencil"
-                            viewBox="0 0 16 16"
-                        >
-                            <path
-                            d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
-                            />
-                        </svg>
-                        </a>
-
-                        <!-- Delete button -->
-                        <a
-                        class="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-red-600"
-                        href="/menu/delete/${menu.id}"
-                        >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            class="bi bi-trash"
-                            viewBox="0 0 16 16"
-                        >
-                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                            <path
-                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                            />
-                        </svg>
-                        </a>
-                    </div>
-                    {% endif %}
-
-                    <!-- Image Section -->
-                    <img
-                        src="${menu.gambar}"
-                        alt="${menu.menu}"
-                        class="w-full h-48 object-cover rounded-t-[36px]"
-                    />
-
-                    <!-- Content Section -->
-                    <div class="pt-6 pl-6 text-left">
-                        <h2 class="font-bold text-2xl text-gray-800">${menu.menu}</h2>
-                        <p class="text-lg text-gray-800 mt-2">Rp ${menu.harga}</p>
-                        <div class="flex items-center mt-2">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            class="bi bi-geo-alt text-orange-500 h-5 w-5"
-                            viewBox="0 0 16 16"
-                        >
-                            <path
-                            d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"
-                            />
-                            <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                        </svg>
-                        <p class="ml-2">${menu.warung}</p>
-                        </div>
-                        <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> 3 out of 5</p>
-                    </div>
-                    <div class="quantity-wrapper flex justify-center mt-5 mb-5 mx-auto">
-                        <button
-                        class="quantity-control"
-                        onclick="updateCart(-1, ${menu.id}, ${menu.harga})"
-                        >
-                        -
-                        </button>
-                        <span
-                        class="quantity-display mx-2"
-                        id="quantity-${menu.id}"
-                        >0</span
-                        >
-                        <button
-                        class="quantity-control"
-                        onclick="updateCart(1, ${Number(menu.id)}, ${Number(menu.harga)})"
-                        >
-                        +
-                        </button>
-                    </div>
-                    </div>
-                      `);
-                });
-              } else {
-                // $('#results-title').addClass('hidden');
-                // $('#no-results').removeClass('hidden');
-              }
-            },
-          });
-        }
-
-        // Search input keyup event
-        $('#search-input').on('keyup', function () {
-          var query = $(this).val();
-          fetchMenus(query);
-        });
-      });
-
       let MAX_BUDGET = parseInt(document.getElementById('budget').value) || 100000; // Set initial MAX_BUDGET
+
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
 
       function updateMaxBudget() {
         const budgetInput = document.getElementById('budget').value.replace(/\D/g, ''); // Remove non-numeric characters
@@ -372,6 +375,8 @@
       }
 
       function updateCart(change, itemId, price) {
+        const budgetInput = document.getElementById('budget').value;
+
         let quantityElement = document.getElementById('quantity-' + itemId);
         let currentQuantity = parseInt(quantityElement.textContent);
         let newQuantity = currentQuantity + change;
@@ -391,37 +396,37 @@
             item_id: itemId,
             quantity: newQuantity,
             price: price,
-            budget: MAX_BUDGET,
+            budget: budgetInput,
             csrfmiddlewaretoken: '{{ csrf_token }}',
           },
           success: function (response) {
             // Update cart items and total price dynamically
             $('#cart-items').html(response.updated_cart_html);
-            $('#total-price').text('Total Price: Rp' + response.total_price);
+            $('#total-price').text('Total Price: Rp' + formatNumber(response.total_price.toLocaleString()));
+
+            // Update the floating cart summary box with item count and total price
+            updateCartSummary(response.item_count, response.total_price);
 
             // Check if the total exceeds the maximum budget
-            if (response.total_price > MAX_BUDGET) {
-              // Display an error popup if over budget
+            if (response.exceeded_budget) {
               alert(`Total exceeds your budget of Rp${MAX_BUDGET.toLocaleString()}. Please adjust your menu.`);
+              emptyCart();
+            } else {
+              // Reset the total price color and re-enable buttons if under budget
+              $('#total-price').css('color', 'black');
 
-              // Clear the cart items display
-              $('#cart-items').empty();
-              $('#total-price').text('Total Price: Rp0');
-              newQuantity = 0;
-              quantityElement.textContent = newQuantity;
-
-              // Update the save button text and disable it
-              $('#save-button').text('Exceeded Budget!').prop('disabled', true).css({
-                'background-color': 'red',
+              // Re-enable the "Save Menu" button in the modal
+              $('#save-button').text('Save Menu').prop('disabled', false).css({
+                'background-color': '#FF6E1F',
                 color: 'white',
                 'border-radius': '9999px',
                 padding: '0.5rem 1.5rem',
                 'font-weight': 'bold',
-                cursor: 'not-allowed',
+                cursor: 'pointer',
               });
-            } else {
-              // Re-enable the save button if the total is within the budget
-              $('#save-button').text('Save Menu').prop('disabled', false).css({
+
+              // Ensure the "Review & Save" button remains enabled
+              $('#show-cart-btn').text('Review & Save').prop('disabled', false).css({
                 'background-color': '#64D16D',
                 color: 'white',
                 'border-radius': '9999px',
@@ -440,84 +445,26 @@
       function saveCart() {
         const budgetInput = document.getElementById('budget').value;
         $.ajax({
-          url: '{% url "menuplanning:save_cart" %}',
+          url: '{% url "menuplanning:confirm_save_cart" %}', // Use confirm_save_cart to save directly
           type: 'POST',
           data: {
             csrfmiddlewaretoken: '{{ csrf_token }}',
             budget: budgetInput,
           },
           success: function (response) {
-            displayConfirmationPopup(response.saved_cart_html);
+            alert('Cart saved successfully!'); // Display success message
+            // Clear the cart display after saving
+            $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
+            $('#total-price').text('Total Price: Rp0');
+            updateCartSummary(0, 0); // Reset the floating cart summary
+
+            // Reset all quantity displays to zero
+            document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
           },
           error: function (xhr, status, error) {
             console.error('Error saving cart:', error);
           },
         });
-      }
-
-      function displayConfirmationPopup(cartHtml) {
-        // Create the overlay for the confirmation popup
-        let overlay = document.createElement('div');
-        overlay.id = 'cart-overlay';
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-        overlay.style.display = 'flex';
-        overlay.style.justifyContent = 'center';
-        overlay.style.alignItems = 'center';
-        overlay.style.zIndex = '1000';
-
-        // Create the modal container for the cart confirmation
-        let modal = document.createElement('div');
-        modal.id = 'saved-cart-modal';
-        modal.style.backgroundColor = 'white';
-        modal.style.padding = '20px';
-        modal.style.borderRadius = '10px';
-        modal.style.width = '50%';
-
-        // Add the cart content to the modal (this is dynamically passed HTML from the server)
-        modal.innerHTML = cartHtml;
-
-        // Add the Save and Edit buttons with the updated styles
-        let buttonsContainer = document.createElement('div');
-        buttonsContainer.style.marginTop = '20px';
-
-        let saveButton = document.createElement('button');
-        saveButton.textContent = 'Save';
-        saveButton.classList.add('bg-[#ff6e1f]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
-
-        let editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.classList.add('bg-[#252525]', 'text-white', 'font-bold', 'py-2', 'px-6', 'rounded-full', 'cursor-pointer', 'ml-4', 'transform', 'hover:scale-105', 'transition-transform', 'duration-300');
-
-        buttonsContainer.appendChild(saveButton);
-        buttonsContainer.appendChild(editButton);
-
-        modal.appendChild(buttonsContainer);
-
-        // Append the modal to the overlay
-        overlay.appendChild(modal);
-
-        // Append the overlay to the body
-        document.body.appendChild(overlay);
-
-        // Handle Save and Edit button actions
-        saveButton.onclick = function () {
-          confirmSaveCart(); // Call the function to confirm save
-
-          // After saving, reset all quantity displays to zero
-          document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
-
-          // Remove the popup overlay
-          document.body.removeChild(overlay);
-        };
-
-        editButton.onclick = function () {
-          document.body.removeChild(overlay); // Close the popup and allow editing
-        };
       }
 
       function confirmSaveCart() {
@@ -531,24 +478,12 @@
           },
           success: function (response) {
             alert('Cart saved successfully!');
-
-            // Reset the cart overlay if it exists
-            const overlay = document.getElementById('cart-overlay');
-            if (overlay) {
-              document.body.removeChild(overlay);
-            }
-
-            // Reset the quantity displays to zero
-            document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
-
-            // Reset the cart items view to empty
-            $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
-
-            // Reset the total price display to zero
+            // Clear the cart display after saving
+            $('#cart-items').html(response.updated_cart_html);
             $('#total-price').text('Total Price: Rp0');
           },
           error: function (xhr, status, error) {
-            console.error('Error confirming cart save:', error);
+            console.error('Error confirming save:', error);
           },
         });
       }
@@ -558,6 +493,255 @@
         document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
         $('#cart-items').html('<p class="text-gray-500">Your cart is empty.</p>');
         $('#total-price').text('Total Price: Rp0');
+
+        const warungDropdowns = document.getElementById('warungDropdownss');
+        const menuResults = document.getElementById('menu-results');
+
+        // Populate dropdown with warung options
+        fetch('/menuplanning/api/warungs')
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.warungs) {
+              data.warungs.forEach((warung) => {
+                const option = document.createElement('option');
+                option.value = warung.nama;
+                option.textContent = warung.nama;
+                warungDropdowns.appendChild(option);
+              });
+            }
+          })
+          .catch((error) => console.error('Error fetching warungs:', error));
+
+        // Fetch menus when a warung is selected
+        warungDropdowns.addEventListener('change', function () {
+          const selectedWarung = warungDropdowns.value;
+          if (selectedWarung) {
+            fetch(`/menuplanning/api/menus/${selectedWarung}/`)
+              .then((response) => response.json())
+              .then((data) => {
+                menuResults.innerHTML = '';
+                if (data.menus && data.menus.length > 0) {
+                  data.menus.forEach((menu) => {
+                    const menuCard = `
+                        <div
+                        class="bg-white relative rounded-[36px] shadow-md overflow-hidden flex flex-col items-start shadow-lg transform hover:scale-105 transition-transform duration-300 max-w-xs w-full sm:w-[50vw]"
+                        style="flex-shrink: 0; background: linear-gradient(180deg, #f5e6c5 0%, #ffc5a5 100%), #f5e6c5; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)"
+                        >
+                        <!-- Edit and Delete Buttons -->
+                        {% if user.is_authenticated and user.username == 'admin'%}
+                        <div class="absolute top-3 right-3 flex space-x-2 z-40">
+                            <!-- Edit button -->
+                            <a
+                            class="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-blue-600"
+                            href="/menu/edit/${menu.id}"
+                            >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-pencil"
+                                viewBox="0 0 16 16"
+                            >
+                                <path
+                                d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                />
+                            </svg>
+                            </a>
+
+                            <!-- Delete button -->
+                            <a
+                            class="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-300 hover:bg-red-600"
+                            href="/menu/delete/${menu.id}"
+                            >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-trash"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                <path
+                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+                                />
+                            </svg>
+                            </a>
+                        </div>
+                        {% endif %}
+
+                        <!-- Image Section -->
+                        <img
+                            src="${menu.gambar}"
+                            alt="${menu.menu}"
+                            class="w-full h-48 object-cover rounded-t-[36px]"
+                        />
+
+                        <!-- Content Section -->
+                        <div class="pt-6 pl-6 text-left">
+                            <h2 class="font-bold text-2xl text-gray-800">${menu.menu}</h2>
+                            <p class="text-lg text-gray-800 mt-2">Rp ${formatNumber(menu.harga)}</p>
+                            <div class="flex items-center mt-2">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-geo-alt text-orange-500 h-5 w-5"
+                                viewBox="0 0 16 16"
+                            >
+                                <path
+                                d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"
+                                />
+                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                            </svg>
+                            <p class="ml-2">${menu.warung}</p>
+                            </div>
+                            <p class="mt-2"><span class="text-orange-500 font-bold">Rate :</span> ${menu.avg_rating.toFixed(1)} out of 5</p>
+                        </div>
+                        <div class="quantity-wrapper flex justify-center mt-5 mb-5 mx-auto">
+                            <button
+                            class="quantity-control"
+                            onclick="updateCart(-1, ${menu.id}, ${menu.harga})"
+                            >
+                            -
+                            </button>
+                            <span
+                            class="quantity-display mx-2"
+                            id="quantity-${menu.id}"
+                            >0</span
+                            >
+                            <button
+                            class="quantity-control"
+                            onclick="updateCart(1, ${menu.id}, ${menu.harga})"
+                            >
+                            +
+                            </button>
+                        </div>
+                        </div>
+                            `;
+                    menuResults.innerHTML += menuCard;
+                  });
+                } else {
+                  menuResults.innerHTML = '<p>No menus available for this warung.</p>';
+                }
+              })
+              .catch((error) => console.error('Error fetching menus:', error));
+          } else {
+            menuResults.innerHTML = '<p>Select a warung to see menus.</p>';
+          }
+        });
+      });
+
+      function emptyCart() {
+        $.ajax({
+          url: '{% url "menuplanning:empty_cart" %}',
+          type: 'POST',
+          data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function (response) {
+            if (response.success) {
+              alert(response.message);
+
+              // Update cart items and total price to reflect an empty cart
+              $('#cart-items').html(response.updated_cart_html);
+              $('#total-price').text('Total Price: Rp0');
+
+              // Reset all quantity displays to zero
+              document.querySelectorAll('.quantity-display').forEach((el) => (el.textContent = '0'));
+
+              // Set the floating cart summary to 0 items and Rp0
+              updateCartSummary(0, 0);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('Error emptying cart:', error);
+          },
+        });
+      }
+
+      function showCartDetails() {
+        $('#cart-view').removeClass('hidden').css('display', 'flex'); // Show the cart view modal
+
+        $.ajax({
+          url: '{% url "menuplanning:load_cart" %}', // Confirm URL matches the view name and namespace
+          type: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            $('#cart-items').html(response.updated_cart_html);
+            $('#total-price').text('Total Price: Rp' + formatNumber(response.total_price.toLocaleString()));
+          },
+          error: function (xhr, status, error) {
+            console.error('Error loading cart details:', xhr.responseText); // Log any errors
+          },
+        });
+      }
+
+      // Event listener to open the cart when clicking "Review & Save" button
+      $(document).ready(function () {
+        $('#show-cart-btn').on('click', function (event) {
+          event.stopPropagation(); // Prevent click from propagating to document
+          showCartDetails();
+        });
+
+        // Close the cart view if clicking outside the modal content
+        $(document).on('click', function (event) {
+          const $cartView = $('#cart-view');
+          const $modalContent = $cartView.find('.bg-white'); // Modal content selector
+
+          if ($cartView.is(':visible') && !$modalContent.is(event.target) && !$modalContent.has(event.target).length) {
+            hideCartDetails();
+          }
+        });
+      });
+
+      function hideCartDetails() {
+        $('#cart-view').addClass('hidden').css('display', 'none');
+      }
+
+      $(document).ready(function () {
+        // Show the cart view when "See Cart Details" button is clicked
+        $('#show-cart-btn').on('click', function (event) {
+          event.stopPropagation(); // Prevent click from propagating to document
+          console.log('Button clicked');
+          showCartDetails();
+        });
+
+        // Close the cart view if clicking outside the modal content
+        $(document).on('click', function (event) {
+          const $cartView = $('#cart-view');
+          const $modalContent = $cartView.find('.bg-white'); // Modal content selector
+
+          if ($cartView.is(':visible') && !$modalContent.is(event.target) && !$modalContent.has(event.target).length) {
+            console.log('Clicked outside modal, hiding cart');
+            hideCartDetails();
+          }
+        });
+      });
+
+      // Function to update item count and total dynamically
+      function updateCartSummary(itemCount = 0, totalPrice = 0) {
+        document.getElementById('cart-item-count').textContent = `${itemCount} Item(s)`;
+        document.getElementById('cart-total').textContent = `Total: Rp${formatNumber(totalPrice.toLocaleString())}`;
+
+        // Enable or disable the Save Menu button based on the item count
+        const saveButton = document.getElementById('save-button');
+        if (itemCount > 0) {
+          saveButton.disabled = false;
+          saveButton.style.backgroundColor = '#FF6E1F'; // Enable with orange color
+          saveButton.style.cursor = 'pointer';
+        } else {
+          saveButton.disabled = true;
+          saveButton.style.backgroundColor = 'gray'; // Disable with gray color
+          saveButton.style.cursor = 'not-allowed';
+        }
+      }
+
+      // Ensure it starts with 0 items and Rp0
+      document.addEventListener('DOMContentLoaded', function () {
+        updateCartSummary(0, 0);
       });
     </script>
   </body>

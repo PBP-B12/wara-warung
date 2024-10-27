@@ -56,7 +56,7 @@
       "warung": "Warung Made",
       "menu": "Nasi Ayam Panggang",
       "harga": 16000,
-      "gambar": "https://cdns.klimg.com/dream.co.id/resources/news/2022/08/28/207691/1200x600-menunya-komplet-paket-nasi-ayam-bakar-di-jakarta-ini-sanggup-obati-rasa-lapar-2208287.jpg"
+      "gambar": "https://img-global.cpcdn.com/recipes/e380312ccf370cc9/680x482cq70/nasi-ayam-bakar-foto-resep-utama.jpg"
     }
   },
   {
@@ -442,7 +442,7 @@
       "warung": "Warung Ibu Kadek",
       "menu": "Laklak",
       "harga": 7000,
-      "gambar": "https://www.google.com/url?sa=i&url=https%3A%2F%2Ffood.detik.com%2Fkue%2Fd-6986956%2Fresep-jaje-laklak-serabi-khas-bali-yang-empuk-legit-yang-cocok-buat-ngopi&psig=AOvVaw0sPmsgC_hdIenv54kjscZc&ust=1728367802079000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIiDhfrN-4gDFQAAAAAdAAAAABAE"
+      "gambar": "https://asset.kompas.com/crops/WECXzQYhmuMSQH4mEWyRcsaoeqA=/0x134:1000x801/750x500/data/photo/2020/09/17/5f6340bfa9341.jpg"
     }
   },
   {
@@ -452,7 +452,7 @@
       "warung": "Warung Ibu Kadek",
       "menu": "Lukis",
       "harga": 7000,
-      "gambar": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.piesusubliman.com%2Fjajanan-khas-bali%2Fmakanan-ringan-khas-bali-jaja-lukis%2F&psig=AOvVaw0ZIJNo5QJH1sEtPcQa6NOT&ust=1728367828295000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLizooXO-4gDFQAAAAAdAAAAABAE"
+      "gambar": "https://img-global.cpcdn.com/recipes/e7ce5b8986ce00a7/680x482cq70/jaje-lukis-foto-resep-utama.jpg"
     }
   },
   {
@@ -462,7 +462,7 @@
       "warung": "Warung Ibu Kadek",
       "menu": "Bubur Sumsum",
       "harga": 20000,
-      "gambar": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.shutterstock.com%2Fid%2Fimage-photo%2Fbubuh-bubur-sumsum-ijo-bali-marrow-1192479928&psig=AOvVaw20Cmr8jzxa_SlriDZVfweh&ust=1728367863866000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCODsnZbO-4gDFQAAAAAdAAAAABAQ"
+      "gambar": "https://www.kintamani.id/wp-content/uploads/Bubur-Sumsum-Bali-1-1024x1024.jpg"
     }
   },
   {
@@ -950,47 +950,70 @@
     "pk": 260,
     "fields": { "warung": "Warung Made Wati", "menu": "Tipat Cantok", "harga": 10000, "gambar": "https://img-global.cpcdn.com/recipes/7242f9c4e6534c23/680x482cq70/tipat-cantok-khas-bali-foto-resep-utama.jpg" }
   },
+  { "model": "menu.Menu", "pk": 261, "fields": { "warung": "Warung Made Wati", "menu": "Kopi Luwak", "harga": 50000, "gambar": "https://www.tasteatlas.com/images/ingredients/b442cec2da1d451f834f013ae36b360d.jpg" } },
   {
     "model": "menu.Menu",
-    "pk": 261,
-    "fields": { "warung": "Warung Made Wati", "menu": "Kopi Luwak", "harga": 50000, "gambar": "https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/nawacitapost/2023/06/srombotan-Klungkung.jpg" }
+    "pk": 262,
+    "fields": { "warung": "Warung Dadi Astiti", "menu": "Kopi Arabika", "harga": 25000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2018/09/26/b07d55a3-c1cc-4502-b137-5bcc79c4b266.jpeg?w=1200" }
   },
-  { "model": "menu.Menu", "pk": 262, "fields": { "warung": "Warung Dadi Astiti", "menu": "Kopi Arabika", "harga": 25000, "gambar": "https://media-cdn.tripadvisor.com/media/photo-s/13/a9/a3/bc/luwak-coffee.jpg" } },
   {
     "model": "menu.Menu",
     "pk": 263,
-    "fields": { "warung": "Warung Dadi Astiti", "menu": "Ribs", "harga": 40000, "gambar": "https://www.nescafe.com/id/sites/default/files/2023-08/Kopi%20Kintamani%20Kopi%20Arabika%20dengan%20Cita%20Rasa%20yang%20Unik_desk.jpg" }
+    "fields": { "warung": "Warung Dadi Astiti", "menu": "Ribs", "harga": 40000, "gambar": "https://static01.nyt.com/images/2023/05/26/multimedia/MP:-Barbecue-Ribs-jfch/MP:-Barbecue-Ribs-jfch-superJumbo.jpg" }
   },
-  { "model": "menu.Menu", "pk": 264, "fields": { "warung": "Warung Ria", "menu": "Sosis Panggang", "harga": 20000, "gambar": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/e7/43/4c/nuri-s-signature-pork.jpg?w=600&h=-1&s=1" } },
-  { "model": "menu.Menu", "pk": 265, "fields": { "warung": "Warung Ria", "menu": "Chicken Wings", "harga": 30000, "gambar": "https://img-global.cpcdn.com/recipes/6dfffa3fda4a0805/400x400cq70/photo.jpg" } },
+  {
+    "model": "menu.Menu",
+    "pk": 264,
+    "fields": { "warung": "Warung Ria", "menu": "Sosis Panggang", "harga": 20000, "gambar": "https://asset.kompas.com/crops/ds4Hf-N9DQa0WzEY2WIaBAvbNiI=/0x0:940x626/750x500/data/photo/2021/06/18/60cc1f2da64db.jpg" }
+  },
+  {
+    "model": "menu.Menu",
+    "pk": 265,
+    "fields": {
+      "warung": "Warung Ria",
+      "menu": "Chicken Wings",
+      "harga": 30000,
+      "gambar": "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2019/2/19/1/FN_Air-Fryer-Chicken-Wings-H_s4x3.jpg.rend.hgtvcom.1280.720.suffix/1550611553388.webp"
+    }
+  },
   {
     "model": "menu.Menu",
     "pk": 266,
     "fields": {
       "warung": "Warung Ria",
-      "menu": "French Fries (Kentang Goreng)",
+      "menu": "French Fries (kentang goreng)",
       "harga": 15000,
-      "gambar": "https://www.allrecipes.com/thmb/AtViolcfVtInHgq_mRtv4tPZASQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/ALR-187822-baked-chicken-wings-4x3-5c7b4624c8554f3da5aabb7d3a91a209.jpg"
+      "gambar": "https://cdn0-production-images-kly.akamaized.net/Yx6dPW57rDRi9Azzv7cLjtl5dOw=/0x303:5526x3418/800x450/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3620039/original/046217800_1635823665-shutterstock_1553734442.jpg"
     }
   },
-  { "model": "menu.Menu", "pk": 267, "fields": { "warung": "Warung Ria", "menu": "Bulu Babi", "harga": 35000, "gambar": "https://www.prb.co.id/uploads/ngc_global_images/11565-20230613152506.jpg" } },
-  { "model": "menu.Menu", "pk": 268, "fields": { "warung": "Warung Serangan", "menu": "Sate Lilit", "harga": 25000, "gambar": "https://rri-assets.s3.ap-southeast-3.amazonaws.com/berita/73/o/bulu-babi/gsahlwkq6cqn719.jpeg" } },
-  { "model": "menu.Menu", "pk": 269, "fields": { "warung": "Warung Serangan", "menu": "Plecing", "harga": 18000, "gambar": "https://img-global.cpcdn.com/recipes/7242f9c4e6534c23/680x482cq70/tipat-cantok-khas-bali-foto-resep-utama.jpg" } },
-  { "model": "menu.Menu", "pk": 270, "fields": { "warung": "Warung Serangan", "menu": "Soup Ikan", "harga": 25000, "gambar": "https://www.masakapahariini.com/wp-content/uploads/2018/04/ikan-nila-bakar-kecap-pedas-MAHI-2.jpg" } },
+  {
+    "model": "menu.Menu",
+    "pk": 267,
+    "fields": {
+      "warung": "Warung Ria",
+      "menu": "Bulu Babi",
+      "harga": 35000,
+      "gambar": "https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/indizone/2020/11/18/Q8snxzb/bulu-babi-jadi-makanan-lezat-dan-mahal-di-banyak-bagian-dunia62.jpg"
+    }
+  },
+  { "model": "menu.Menu", "pk": 268, "fields": { "warung": "Warung Serangan", "menu": "Sate Lilit", "harga": 25000, "gambar": "https://enimekspres.bacakoran.co/upload/6440a5ee4ffd8223cc72feb780e4c9db.jpg" } },
+  { "model": "menu.Menu", "pk": 269, "fields": { "warung": "Warung Serangan", "menu": "Plecing", "harga": 18000, "gambar": "https://img-global.cpcdn.com/recipes/0f070c2e48adc757/1200x630cq70/photo.jpg" } },
+  { "model": "menu.Menu", "pk": 270, "fields": { "warung": "Warung Serangan", "menu": "Soup Ikan", "harga": 25000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2021/09/02/resep-sup-ikan-gurame.jpeg?w=1200" } },
   {
     "model": "menu.Menu",
     "pk": 271,
-    "fields": { "warung": "Warung Baruna", "menu": "Nasi Goreng Sambal Mentah", "harga": 20000, "gambar": "https://www.masakapahariini.com/wp-content/uploads/2018/04/ikan-nila-bakar-kecap-pedas-MAHI-2.jpg" }
+    "fields": {
+      "warung": "Warung Baruna",
+      "menu": "Nasi Goreng sambal mentah",
+      "harga": 20000,
+      "gambar": "https://www.maggi.id/sites/default/files/styles/home_stage_944_531/public/srh_recipes/fe1452d2c9173b7a8489c4eff9d197c3.jpg?h=4f5b30f1&itok=jkeRXJ52"
+    }
   },
-  {
-    "model": "menu.Menu",
-    "pk": 272,
-    "fields": { "warung": "Warung Baruna", "menu": "Pisang Goreng Gula Bali", "harga": 12000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2020/09/17/sate-lilit-ayam-khas-bali-1.jpeg?w=600&q=90" }
-  },
+  { "model": "menu.Menu", "pk": 272, "fields": { "warung": "Warung Baruna", "menu": "Pisang Goreng Gula Bali", "harga": 12000, "gambar": "https://beritapasundan.com/wp-content/uploads/2024/03/images-2024-03-14T233053.490.jpeg" } },
   {
     "model": "menu.Menu",
     "pk": 273,
-    "fields": { "warung": "Warung Baruna", "menu": "Rujak Buleleng", "harga": 10000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2021/11/30/resep-plecing-kangkung-khas-lombok.jpeg?w=600&q=90" }
+    "fields": { "warung": "Warung Baruna", "menu": "Rujak Buleleng", "harga": 10000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2016/08/24/f200b8d1-a6bf-4b9e-b1db-1721b33e5cdf_169.jpg?w=600&q=90" }
   },
   {
     "model": "menu.Menu",
@@ -999,42 +1022,33 @@
       "warung": "Warung Baruna",
       "menu": "Es Campur",
       "harga": 15000,
-      "gambar": "https://img.kurio.network/EuNyiFNz_ySZx7LNk9gl1l6PJEg=/1200x900/filters:quality(80)/https://kurio-img.kurioapps.com/21/11/11/a14431ee-7506-47f3-ad23-6375ca11eb39.jpe"
-    }
-  },
-  {
-    "model": "menu.Menu",
-    "pk": 275,
-    "fields": { "warung": "Warung Baruna", "menu": "Lumpia", "harga": 10000, "gambar": "https://cdn.idntimes.com/content-images/post/20200923/72925415-2421445228107130-7738097424693867984-n-d9fe58bdd71a35ed583035b614c46758_600x400.jpg" }
-  },
-  {
-    "model": "menu.Menu",
-    "pk": 276,
-    "fields": { "warung": "Warung Baruna", "menu": "Sudang Lepet", "harga": 18000, "gambar": "https://img-global.cpcdn.com/recipes/c00b64ec2566e5ba/680x482cq70/pisang-goreng-gula-bali-foto-resep-utama.jpg" }
-  },
-  { "model": "menu.Menu", "pk": 277, "fields": { "warung": "Warung Mira", "menu": "Lawar Cumi", "harga": 28000, "gambar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5rJqKbxnBebPrredhSqRU37rxbMgEs1clNg&s" } },
-  { "model": "menu.Menu", "pk": 278, "fields": { "warung": "Warung Mira", "menu": "Sate Languan", "harga": 22000, "gambar": "https://www.aca.co.id/cmsprd/uploads/jaja-bali%201540011228.jpg" } },
-  {
-    "model": "menu.Menu",
-    "pk": 279,
-    "fields": {
-      "warung": "Warung Mira",
-      "menu": "Sup Kepala Ikan",
-      "harga": 35000,
       "gambar": "https://cdn0-production-images-kly.akamaized.net/qSxIa6DhH4tSfPQdtDo-0vS-6R8=/0x2180:3999x4434/1200x675/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/3981507/original/061819300_1648783740-shutterstock_1969134643.jpg"
     }
   },
+  { "model": "menu.Menu", "pk": 275, "fields": { "warung": "Warung Baruna", "menu": "Lumpia", "harga": 10000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2023/03/15/resep-lumpia-goreng-isi-sayuran_43.jpeg?w=1200" } },
+  {
+    "model": "menu.Menu",
+    "pk": 276,
+    "fields": { "warung": "Warung Baruna", "menu": "Sudang Lepet", "harga": 18000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2022/06/10/kuliner-khas-desa-sangsit-sudang-lepet_169.jpeg?w=1200" }
+  },
+  { "model": "menu.Menu", "pk": 277, "fields": { "warung": "Warung Mira", "menu": "Lawar Cumi", "harga": 28000, "gambar": "https://media-cdn.yummyadvisor.com/store/d2d39d94-297d-47d1-af73-a3537037fca1.jpg" } },
+  { "model": "menu.Menu", "pk": 278, "fields": { "warung": "Warung Mira", "menu": "Sate Languan", "harga": 22000, "gambar": "https://enimekspres.bacakoran.co/upload/6440a5ee4ffd8223cc72feb780e4c9db.jpg" } },
+  { "model": "menu.Menu", "pk": 279, "fields": { "warung": "Warung Mira", "menu": "Sup Kepala Ikan", "harga": 35000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2021/09/02/resep-sup-ikan-gurame.jpeg?w=1200" } },
   {
     "model": "menu.Menu",
     "pk": 280,
-    "fields": { "warung": "Warung Mira", "menu": "Udang Goreng", "harga": 40000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2023/03/15/resep-lumpia-goreng-isi-sayuran_43.jpeg?w=1200" }
+    "fields": { "warung": "Warung Mira", "menu": "Udang Goreng", "harga": 40000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2021/12/03/resep-udang-goreng-ketumbar-bawang_43.jpeg?w=650" }
   },
-  { "model": "menu.Menu", "pk": 281, "fields": { "warung": "Warung Mira", "menu": "Sayur Kacang", "harga": 8000, "gambar": "https://assets-a1.kompasiana.com/items/album/2020/12/17/sudang-lepet-5fdacf3dd541df752b707253.jpg" } },
+  {
+    "model": "menu.Menu",
+    "pk": 281,
+    "fields": { "warung": "Warung Mira", "menu": "Sayur Kacang", "harga": 8000, "gambar": "https://img-global.cpcdn.com/recipes/d491491efd0e7e9e/680x482cq70/sayur-kacang-merah-sunda-foto-resep-utama.jpg" }
+  },
   { "model": "menu.Menu", "pk": 282, "fields": { "warung": "Warung Cumi", "menu": "Nasi Campur", "harga": 18000, "gambar": "https://media-cdn.tripadvisor.com/media/photo-s/13/f8/37/e2/lawar-cumi.jpg" } },
   {
     "model": "menu.Menu",
     "pk": 283,
-    "fields": { "warung": "Warung Cumi", "menu": "Nasi Soto", "harga": 20000, "gambar": "https://asset.kompas.com/crops/Kfx_1EoD9iosPLN1AjKlEmC9Kms=/0x16:1000x683/750x500/data/photo/2021/03/09/6046d1c9bb796.jpg" }
+    "fields": { "warung": "Warung Cumi", "menu": "Nasi Soto", "harga": 20000, "gambar": "https://asset.kompas.com/crops/uKBF7EnR2gcF4btwn_Iwlw9TZd4=/0x0:1000x667/750x500/data/photo/2020/07/20/5f15325e9dc87.jpg" }
   },
   {
     "model": "menu.Menu",

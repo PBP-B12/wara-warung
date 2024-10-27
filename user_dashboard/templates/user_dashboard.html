@@ -2,160 +2,195 @@
 {% load static %}
 
 <head>
-    {% block meta %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>User Dashboard</title>
-    {% endblock meta %}
+  {% block meta %}
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+  <title>User Dashboard</title>
+  {% endblock meta %}
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
 
-    <style>
-        body {
-            background-image: url("{% static 'images/background02.png' %}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
-            margin: 0;
-        }
+  <style>
+    body {
+      background-image: url("{% static 'images/background02.png' %}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+    }
 
-        .main-content {
-            margin-top: 8rem; 
-        }
+    .main-content {
+      margin-top: 8rem;
+    }
 
-        .menu-button::before {
-            content: '\2630'; 
-            margin-right: 0.5rem; 
-        }
+    .menu-button::before {
+      content: '\2630';
+      margin-right: 0.5rem;
+    }
 
-        .wishlist-button::before {
-            content: '\2665'; 
-            margin-right: 0.5rem; 
-        }
-    </style>
+    .wishlist-button::before {
+      content: '\2665';
+      margin-right: 0.5rem;
+    }
+  </style>
 </head>
 
 {% include 'navbar.html' %}
 
 <div class="main-content flex flex-col justify-between items-center mt-4">
-    <div class="container flex flex-wrap justify-center items-center mt-20 sm:mt-16 p-4 sm:p-8 w-full lg:flex-row lg:justify-center lg:items-center">
-        <div class="text-center mt-5">
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold">My Account</h1>
-        </div>
-    </div>    
-
-    <div class="container flex flex-wrap justify-center items-center p-8 w-full lg:flex-row lg:justify-center lg:items-center gap-8">
-        
-        <!-- column kiri: welcome user dan info buttons -->
-        <div class="avatar flex flex-col items-center gap-4 p-4 sm:p-6 rounded-xl">
-            <img src="{% static 'images/user-avatar.png' %}" alt="Avatar" class="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover">
-            <h3 class="text-lg sm:text-xl font-semibold text-center">Welcome,</h3> 
-            <p class="text-base sm:text-lg text-center">{{ username }}</p>
-            
-            <div class="buttons flex flex-col gap-2">
-                <button class="info-button menu-button px-3 py-2 sm:px-4 sm:py-2 rounded-md font-medium sm:font-semibold text-base sm:text-lg cursor-pointer text-center text-orange-500 hover:translate-y-[-2px] hover:underline">
-                    See Menu Plans
-                </button>
-                <button class="info-button wishlist-button px-3 py-2 sm:px-4 sm:py-2 rounded-md font-medium sm:font-semibold text-base sm:text-lg cursor-pointer text-center text-orange-500 hover:translate-y-[-2px] hover:underline">
-                    See Wishlist
-                </button>
-            </div>
-        </div>
-        
-
-        <!-- column kanan: profile card -->
-        <div class="profile-card flex justify-start w-full max-w-3xl bg-gradient-to-b from-[#F5E6C5] to-[#FFC5A5] rounded-2xl shadow-md p-8 gap-4 lg:mt-0 lg:w-2/3 lg:flex-col lg:p-4">
-            <div class="profile-info flex flex-col pl-5 w-full">
-                <h2 class="text-xl sm:text-2xl font-bold">Account Details</h2>
-
-                <div class="my-2">
-                    <p class="text-base sm:text-lg font-medium"><strong>Email:</strong></p>
-                    <input type="text" class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base" 
-                        value="{{ email }}" id="profileEmail" readonly>
-                </div>
-
-                <div class="my-2">
-                    <p class="text-base sm:text-lg font-medium"><strong>Phone Number:</strong></p>
-                    <input type="text" class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base" 
-                        value="{{ phone_number }}" id="profilePhoneNumber" readonly>
-                </div>
-
-                <div class="my-2">
-                    <p class="text-base sm:text-lg font-medium"><strong>Date of Birth:</strong></p>
-                    <input type="text" class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base" 
-                        value="{{ date_of_birth }}" id="profileDateOfBirth" readonly>
-                </div>
-
-                <div class="my-2">
-                    <p class="text-base sm:text-lg font-medium"><strong>Address:</strong></p>
-                    <input type="text" class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base" 
-                        value="{{ address }}" id="profileAddress" readonly>
-                </div>
-
-
-                <!-- button group -->
-                <div class="button-group mt-4 flex flex-col sm:flex-row justify-between gap-4">
-                    <button class="edit-profile-button bg-white text-orange-500 px-4 py-3 rounded-full font-bold text-lg cursor-pointer hover:bg-[#F9F6EE] hover:shadow-md hover:translate-y-[-2px] w-full sm:w-auto"
-                        onclick="toggleEditProfileModal()">
-                        Edit Details
-                    </button>
-                    <button class="delete-profile-button bg-[#FF6347] text-white px-4 py-3 rounded-full font-bold text-lg cursor-pointer hover:bg-[#FF8675] hover:shadow-md hover:translate-y-[-2px] w-full sm:w-auto"
-                        onclick="confirmDeleteAccount()">
-                        Delete Account
-                    </button>
-                </div>
-                
-            </div>
-        </div>
+  <div class="container flex flex-wrap justify-center items-center mt-20 sm:mt-16 p-4 sm:p-8 w-full lg:flex-row lg:justify-center lg:items-center">
+    <div class="text-center mt-5">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold">My Account</h1>
     </div>
+  </div>
+
+  <div class="container flex flex-wrap justify-center items-center p-8 w-full lg:flex-row lg:justify-center lg:items-center gap-8">
+    <!-- column kiri: welcome user dan info buttons -->
+    <div class="avatar flex flex-col items-center gap-4 p-4 sm:p-6 rounded-xl">
+      <img
+        src="{% static 'images/user-avatar.png' %}"
+        alt="Avatar"
+        class="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover"
+      />
+      <h3 class="text-lg sm:text-xl font-semibold text-center">Welcome,</h3>
+      <p class="text-base sm:text-lg text-center">{{ username }}</p>
+
+      <div class="buttons flex flex-col gap-2">
+        <a
+          class="info-button menu-button px-3 py-2 sm:px-4 sm:py-2 rounded-md font-medium sm:font-semibold text-base sm:text-lg cursor-pointer text-center text-orange-500 hover:translate-y-[-2px] hover:underline"
+          href="/menuplanning/saved-menu-plans/"
+        >
+          See Menu Plans
+        </a>
+        <a
+          class="info-button wishlist-button px-3 py-2 sm:px-4 sm:py-2 rounded-md font-medium sm:font-semibold text-base sm:text-lg cursor-pointer text-center text-orange-500 hover:translate-y-[-2px] hover:underline"
+          href="/wishlist/"
+        >
+          See Wishlist
+        </a>
+      </div>
+    </div>
+
+    <!-- column kanan: profile card -->
+    <div class="profile-card flex justify-start w-full max-w-3xl bg-gradient-to-b from-[#F5E6C5] to-[#FFC5A5] rounded-2xl shadow-md p-8 gap-4 lg:mt-0 lg:w-2/3 lg:flex-col lg:p-4">
+      <div class="profile-info flex flex-col pl-5 w-full">
+        <h2 class="text-xl sm:text-2xl font-bold">Account Details</h2>
+
+        <div class="my-2">
+          <p class="text-base sm:text-lg font-medium"><strong>Email:</strong></p>
+          <input
+            type="text"
+            class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base"
+            value="{{ email }}"
+            id="profileEmail"
+            readonly
+          />
+        </div>
+
+        <div class="my-2">
+          <p class="text-base sm:text-lg font-medium"><strong>Phone Number:</strong></p>
+          <input
+            type="text"
+            class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base"
+            value="{{ phone_number }}"
+            id="profilePhoneNumber"
+            readonly
+          />
+        </div>
+
+        <div class="my-2">
+          <p class="text-base sm:text-lg font-medium"><strong>Date of Birth:</strong></p>
+          <input
+            type="text"
+            class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base"
+            value="{{ date_of_birth }}"
+            id="profileDateOfBirth"
+            readonly
+          />
+        </div>
+
+        <div class="my-2">
+          <p class="text-base sm:text-lg font-medium"><strong>Address:</strong></p>
+          <input
+            type="text"
+            class="input-field bg-white p-3 rounded-md border border-gray-300 w-full text-sm sm:text-base"
+            value="{{ address }}"
+            id="profileAddress"
+            readonly
+          />
+        </div>
+
+        <!-- button group -->
+        <div class="button-group mt-4 flex flex-col sm:flex-row justify-between gap-4">
+          <button
+            class="edit-profile-button bg-white text-orange-500 px-4 py-3 rounded-full font-bold text-lg cursor-pointer hover:bg-[#F9F6EE] hover:shadow-md hover:translate-y-[-2px] w-full sm:w-auto"
+            onclick="toggleEditProfileModal()"
+          >
+            Edit Details
+          </button>
+          <button
+            class="delete-profile-button bg-[#FF6347] text-white px-4 py-3 rounded-full font-bold text-lg cursor-pointer hover:bg-[#FF8675] hover:shadow-md hover:translate-y-[-2px] w-full sm:w-auto"
+            onclick="confirmDeleteAccount()"
+          >
+            Delete Account
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% include 'edit_user.html' %} 
 {% include 'footer.html' %}
 
 <script>
+  //edit profile
+  function toggleEditProfileModal() {
+    const modal = document.getElementById('editProfileModal');
+    modal.classList.toggle('hidden');
+  }
 
-    //edit profile
-    function toggleEditProfileModal() {
-        const modal = document.getElementById('editProfileModal');
-        modal.classList.toggle('hidden');
-    }
-
-    function confirmDeleteAccount() {
-        const userConfirmed = confirm('Are you sure you want to delete your account? This action cannot be undone.');
+  function confirmDeleteAccount() {
+    const userConfirmed = confirm('Are you sure you want to delete your account? This action cannot be undone.');
 
         if (userConfirmed) {
         deleteUserAccount();
         }
     }
 
-    //delete account
-    function deleteUserAccount() {
-        fetch("{% url 'user_dashboard:delete_user_account' %}", {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-            'X-Requested-With': 'XMLHttpRequest',
-        },
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.status === 'success') {
-            alert(data.message);
-            window.location.href = '{% url "auth_app:login" %}';
-            } else {
-            alert('Failed to delete account. Please try again.');
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('An error occurred. Please try again.');
-        });
-    }
+  //delete account
+  function deleteUserAccount() {
+    fetch("{% url 'user_dashboard:delete_user_account' %}", {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 'success') {
+          alert(data.message);
+          window.location.href = '{% url "auth_app:login" %}';
+        } else {
+          alert('Failed to delete account. Please try again.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+      });
+  }
 </script>
 
 {% endblock content %}
