@@ -20,9 +20,7 @@
         background-repeat: no-repeat;
         font-family: 'Poppins', sans-serif;
         min-height: 100vh;
-        margin: 0;
       }
-
       .form-container {
         background: linear-gradient(180deg, #F5E6C5 0%, #FFC5A5 100%);
         border-radius: 24px;
@@ -102,16 +100,27 @@
       }
     </style>
   </head>
+  <body class="flex flex-col items-center justify-center p-4 md:p-0">
+    
+    <!-- Logo Section -->
+    <div class="flex justify-center mt-8 md:mt-0">
+      <img src="{% static 'images/logo002.png' %}" alt="Logo" class="w-20 h-auto md:w-28">
   <body>
     <div class="flex justify-center mt-8">
       <img src="{% static 'images/logo002.png' %}" alt="Logo" class="w-28 h-auto">
     </div>    
 
-    <div class="flex items-center justify-center mt-4">
-      <div class="form-container">
-        <h2 class="form-title">Hello again!</h2>
-        <p class="form-subtitle">Discover the best local flavors with Wara Warung.</p>
+    <!-- Form Container -->
+    <div class="form-container p-6 md:p-8 lg:p-10 rounded-3xl shadow-lg max-w-xs md:max-w-md w-full mt-4 md:mt-8">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Hello again!</h2>
+      <p class="text-center text-gray-600 mb-6">Discover the best local flavors with Wara Warung.</p>
 
+      <!-- Display error messages -->
+      {% if messages %}
+        <div>
+          {% for message in messages %}
+            {% if "auth" in message.tags %}
+              <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mt-4 text-center">
         <!-- Display error messages -->
         {% if messages %}
           <div>
@@ -119,27 +128,44 @@
               <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative mt-4" role="alert">
                 {{ message }}
               </div>
-            {% endfor %}
-          </div>
-        {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
 
+      <!-- Login Form -->
+      <form method="POST" class="space-y-4">
+        {% csrf_token %}
+        
+        <!-- Username Input -->
+        <input type="text" name="username" class="form-input block w-full py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400" placeholder="Username" required>
         <form method="POST" class="space-y-4">
           {% csrf_token %}
           
           <!-- Username Input -->
           <input type="text" name="username" class="form-input" placeholder="Username" required>
 
+        <!-- Password Input -->
+        <input type="password" name="password" class="form-input block w-full py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400" placeholder="Password" required>
+
+        <!-- Login Button -->
+        <button type="submit" class="login-button w-full bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-400 transition ease-in-out duration-300">Log In</button>
+      </form>
           <!-- Password Input -->
           <input type="password" name="password" class="form-input" placeholder="Password" required>
 
           <button type="submit" class="login-button">Log In</button>
         </form>
 
+      <!-- Signup Link -->
+      <div class="text-center text-gray-600 mt-6">
+        Don't have an account? <a href="{% url 'auth_app:register' %}" class="text-blue-600 font-bold hover:text-blue-800">Sign up</a>
         <div class="login-link">
           Don't have an account? <a href="{% url 'auth_app:register' %}">Sign up</a>
         </div>
       </div>
     </div>
+
   </body>
   {% include 'footer.html' %}
 </html>
