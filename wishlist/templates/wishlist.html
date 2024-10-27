@@ -261,7 +261,7 @@
     </div>
     {% else %}
     <!-- Display this if no items in the wishlist -->
-    <div id="empty-wishlist-message" class="flex flex-col items-center mt-16">
+    <div id="empty-wishlist-message" class="flex flex-col items-center mt-16 text-center">
         <img src="{% static 'images/empty_wishlist.png' %}" alt="Empty Wishlist" class="empty-state mb-4">
         <p class="text-xl text-gray-600 mb-10">Your wishlist is empty. Start adding your favorite items!</p>
     </div>
@@ -337,6 +337,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.error("Error:", error));
     });
+    // For removing
     $(document).on("click", ".remove-btn", function (e) {
     e.preventDefault();
 
@@ -364,6 +365,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     if ($(".wishlist-card").length === 0) {
                         // Show the empty wishlist message
                         $("#empty-wishlist-message").removeClass("hidden");
+                        $("#wishlist-container").html(`
+                            <div id="empty-wishlist-message" class="flex flex-col items-center mt-16">
+                                <img src="{% static 'images/empty_wishlist.png' %}" alt="Empty Wishlist" class="empty-state mb-4">
+                                <p class="text-xl text-gray-600 mb-10">Your wishlist is empty. Start adding your favorite items!</p>
+                            </div>
+                        `);
                     }
                 });
             } else {
