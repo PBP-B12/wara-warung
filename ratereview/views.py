@@ -19,7 +19,7 @@ def menu_detail(request, menu_id):
         'form': form
     })
 
-@login_required
+@login_required(login_url='/login')
 def submit_review(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
     rating = request.POST.get('rating')

@@ -1,5 +1,6 @@
 from django.urls import path
 from ratereview.views import menu_detail,submit_review
+from auth_app.views import login_view
 
 app_name = 'ratereview'
 
