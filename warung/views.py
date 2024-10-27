@@ -14,7 +14,7 @@ def show_main(request):
     return render(request, "allwarung.html", context)
 
 def show_warung(request, namawarung):
-    warung_shown = Warung.objects.filter(warung__nama=namawarung)
+    warung_shown = Warung.objects.filter(nama=namawarung)
     menus=Menu.objects.filter(warung=namawarung)
     context={
         "warung_entries":warung_shown,
