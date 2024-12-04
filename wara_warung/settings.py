@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "user_dashboard",
     'ratereview',
     'corsheaders',
+    'authenticationdummy',
 ]
 
 MIDDLEWARE = [
