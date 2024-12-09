@@ -19,7 +19,7 @@ def menu_detail(request, menu_id):
         'form': form
     })
 
-@login_required
+@login_required(login_url='/login')
 def submit_review(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
     rating = request.POST.get('rating')
@@ -55,3 +55,22 @@ def submit_review(request, menu_id):
         return JsonResponse({'success': False, 'errors': form.errors}, status=400)
 
     return redirect('ratereview:menu_detail', menu_id=menu.id)
+
+def menu_review_json(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.GET.get('json') != None:
+        menu_id = request.GET.get('id', '')  # Get search query
+
+        menu = get_object_or_404(Menu, id=menu_id)
+        reviews = Review.objects.filter(menu=menu)
+
+        data = []
+
+        for review in reviews:
+            data.append({
+                'user': review.user.username,
+                'rating': review.rating,
+                'comment': review.comment,
+                'created_at': review.created_at
+            })
+
+        return JsonResponse({'results': data})

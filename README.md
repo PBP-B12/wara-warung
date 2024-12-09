@@ -66,6 +66,11 @@ Untuk itulah WaraWarung hadir, memberikan solusi bagi wisatawan yang ingin meras
 
 *  Melihat *review* dan *rating* menu pada warung yang sudah dikunjungi
 
+####  🧑‍💻 User yang Belum Terautentikasi :
+
+*  Melakukan edit menu
+
+*  Melakukan add menu
 
 ## 🔗 Tautan Deployment Aplikasi
 Website dari aplikasi kami dapat diakses di [http://jeremia-rangga-warawarung.pbp.cs.ui.ac.id/](http://jeremia-rangga-warawarung.pbp.cs.ui.ac.id/)
