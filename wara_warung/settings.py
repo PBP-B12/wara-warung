@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ess_9920vk5z1stsyvcsuwooe(lx-6uu#v+i4*cze4n5n!jrya
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "jeremia-rangga-warawarung.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", '10.0.2.2', "jeremia-rangga-warawarung.pbp.cs.ui.ac.id"]
 
 
 # Application definition
@@ -152,4 +152,4 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
 
-CSRF_TRUSTED_ORIGINS = ['https://jeremia-rangga-warawarung.pbp.cs.ui.ac.id']
+CSRF_TRUSTED_ORIGINS = ['https://jeremia-rangga-warawarung.pbp.cs.ui.ac.id', "http://127.0.0.1:8000"]
