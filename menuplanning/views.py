@@ -22,6 +22,11 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.contrib.auth.models import User  # For user reference
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+
 # Helper function to get or create the user's cart
 def get_user_cart(user):
     cart, created = Cart.objects.get_or_create(
@@ -256,6 +261,7 @@ def show_chosen_menus_json(request):
 #             return JsonResponse({"status": "error", "message": str(e)}, status=400)
 #     else:
 #         return JsonResponse({"status": "error", "message": "Invalid request method"}, status=405)
+@login_required
 @csrf_exempt
 def create_menu_flutter(request):
     if request.method == 'POST':
@@ -286,3 +292,5 @@ def create_menu_flutter(request):
 
 def get_csrf_token(request):
     return JsonResponse({'csrfToken': get_token(request)})
+
+
