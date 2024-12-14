@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from menu.models import Menu  # Import Menu from the menu app
@@ -5,6 +6,7 @@ from django.db.models import Avg
 from .models import Review
 from .forms import ReviewForm
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 def menu_detail(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
@@ -56,9 +58,43 @@ def submit_review(request, menu_id):
 
     return redirect('ratereview:menu_detail', menu_id=menu.id)
 
+@csrf_exempt
+def menu_data_flutter(request):
+    if request.method == 'POST':
+        data_req = json.loads(request.body)
+        username = request.user.username
+        query = data_req['query']
+        budget = data_req['budget']
+        warung = data_req['warung']
+        results = Menu.objects.all()
+        if query:
+            results = results.filter(menu__icontains=query)
+
+        if budget:
+            results = results.filter(harga__lte=int(budget))
+        
+        if warung:
+            results = results.filter(warung__icontains=warung)
+        
+        data = []
+        for menu in results:
+            avg_rating = Review.objects.filter(menu=menu).aggregate(Avg('rating'))['rating__avg'] or 0
+            data.append({
+                'menu': menu.menu,
+                'harga': menu.harga,
+                'warung': menu.warung,
+                'gambar': menu.gambar,
+                'id': menu.id,
+                'avg_rating': round(avg_rating, 1)  # One decimal place
+            })
+        response = JsonResponse({'results': data, 'username': username})
+        return response
+
+@csrf_exempt 
 def menu_review_json(request):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.GET.get('json') != None:
-        menu_id = request.GET.get('id', '')  # Get search query
+    if request.method == 'POST':
+        data_req = json.loads(request.body)
+        menu_id = data_req['id']
 
         menu = get_object_or_404(Menu, id=menu_id)
         reviews = Review.objects.filter(menu=menu)
@@ -74,3 +110,19 @@ def menu_review_json(request):
             })
 
         return JsonResponse({'results': data})
+    
+@csrf_exempt
+def submit_review_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        menu = get_object_or_404(Menu, id=int(data['id']))
+        new_review = Review.objects.create(
+            menu=menu,
+            user=request.user,
+            rating=int(data['rating']),
+            comment=data['comment'],
+        )
+        new_review.save()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)

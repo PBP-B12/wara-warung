@@ -52,9 +52,12 @@ def edit_menu(request, id):
 def delete_menu(request, id):
     menus = Menu.objects.get(pk = id)
     menus.delete()
-    if request.GET.get('json') != None:
-        return JsonResponse({"status" : 200})
     return HttpResponseRedirect(reverse('homepage:show_main'))
+
+def delete_menu_json(request,id):
+    menus = Menu.objects.get(pk = id)
+    menus.delete()
+    return JsonResponse({"status" : 200})
 
 def show_xml(request):
     data = Menu.objects.all()
@@ -63,6 +66,23 @@ def show_xml(request):
 def show_json(request):
     data = Menu.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_flutter(request):
+    results = Menu.objects.all()
+    username = request.user.username
+    data = []
+    for menu in results:
+        avg_rating = Review.objects.filter(menu=menu).aggregate(Avg('rating'))['rating__avg'] or 0
+        data.append({
+            'menu': menu.menu,
+            'harga': menu.harga,
+            'warung': menu.warung,
+            'gambar': menu.gambar,
+            'id': menu.id,
+            'avg_rating': round(avg_rating, 1)  # One decimal place
+        })
+    response = JsonResponse({'results': data, 'username': username})
+    return response
 
 def add_menu(request):
     form = MenuForm(request.POST or None)
