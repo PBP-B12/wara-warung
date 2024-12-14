@@ -20,6 +20,7 @@ from django.http import JsonResponse
 from menuplanning.models import ChosenMenu
 from django.contrib.auth.decorators import login_required
 import json
+from django.contrib.auth.models import User  # For user reference
 
 # Helper function to get or create the user's cart
 def get_user_cart(user):
@@ -219,34 +220,61 @@ def show_chosen_menus_json(request):
 
 
 
-@csrf_exempt  # Remove this if CSRF middleware is configured properly
+# @csrf_exempt  # Remove this if CSRF middleware is configured properly
+# def create_menu_flutter(request):
+#     if request.method == 'POST':
+#         try:
+#             # Parse the JSON request body
+#             data = json.loads(request.body)
+
+#             # Extract data
+#             warung = data.get("warung")
+#             budget = int(data.get("budget", 0))
+#             cart_items = data.get("cart_items", {})
+
+#             save_session_id = int(timezone.now().timestamp())
+#             # Loop through the cart items and save them to the database
+#             for item_name, quantity in cart_items.items():
+#                 ChosenMenu.objects.create(
+#                     user=request.user,  # Use the currently authenticated user
+#                     item_name=item_name,
+#                     quantity=quantity,
+#                     price=budget,  
+#                     save_session=save_session_id,
+#                     budget=budget,
+#                     # user=request.user,
+#                     # item_name=item["item_name"],
+#                     # quantity=item["quantity"],
+#                     # price=item["price"],
+#                     # save_session=item["save_session"],
+#                     # budget=item["budget"],
+#                 )
+
+#             return JsonResponse({"status": "success"}, status=200)
+#         except Exception as e:
+#             print(f"Error: {e}")
+#             return JsonResponse({"status": "error", "message": str(e)}, status=400)
+#     else:
+#         return JsonResponse({"status": "error", "message": "Invalid request method"}, status=405)
+@csrf_exempt
 def create_menu_flutter(request):
     if request.method == 'POST':
         try:
-            # Parse the JSON request body
+            # Parse JSON body into Python list
             data = json.loads(request.body)
+            if not isinstance(data, list):
+                return JsonResponse({"status": "error", "message": "Invalid JSON format, expected a list."}, status=400)
 
-            # Extract data
-            warung = data.get("warung")
-            budget = int(data.get("budget", 0))
-            cart_items = data.get("cart_items", {})
-
-            save_session_id = int(timezone.now().timestamp())
-            # Loop through the cart items and save them to the database
-            for item_name, quantity in cart_items.items():
+            # Loop through the list of items
+            for item in data:
+                fields = item.get("fields", {})
                 ChosenMenu.objects.create(
-                    user=request.user,  # Use the currently authenticated user
-                    item_name=item_name,
-                    quantity=quantity,
-                    price=budget,  
-                    save_session=save_session_id,
-                    budget=budget,
-                    # user=request.user,
-                    # item_name=item["item_name"],
-                    # quantity=item["quantity"],
-                    # price=item["price"],
-                    # save_session=item["save_session"],
-                    # budget=item["budget"],
+                    user=request.user,  # Replace with actual user object
+                    item_name=fields.get("item_name"),
+                    quantity=fields.get("quantity"),
+                    price=fields.get("price"),
+                    save_session=fields.get("save_session"),
+                    budget=fields.get("budget"),
                 )
 
             return JsonResponse({"status": "success"}, status=200)
@@ -255,7 +283,6 @@ def create_menu_flutter(request):
             return JsonResponse({"status": "error", "message": str(e)}, status=400)
     else:
         return JsonResponse({"status": "error", "message": "Invalid request method"}, status=405)
-
 
 def get_csrf_token(request):
     return JsonResponse({'csrfToken': get_token(request)})
