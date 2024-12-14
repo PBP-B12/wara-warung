@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -28,7 +29,7 @@ def show_main(request):
 
 def edit_menu(request, id):
     # Get the menu entry based on the id
-    menu = get_object_or_404(Menu, pk=id)
+    menu = Menu.objects.get(pk = id)
     
     # Set the menu entry as an instance of the form
     form = MenuForm(request.POST or None, instance=menu)
@@ -37,7 +38,6 @@ def edit_menu(request, id):
     warungs = Warung.objects.all()
 
     if form.is_valid() and request.method == "POST":
-        # Save form and redirect to the main page
         form.save()
         return HttpResponseRedirect(reverse('homepage:show_main'))
 
@@ -45,14 +45,15 @@ def edit_menu(request, id):
         'form': form,
         'warungs': warungs,  # Pass warungs to the template
     }
+    if request.GET.get('json') != None:
+        return JsonResponse({"status" : 200})
     return render(request, "edit_menu.html", context)
 
 def delete_menu(request, id):
-    # Get mood berdasarkan id
     menus = Menu.objects.get(pk = id)
-    # Hapus mood
     menus.delete()
-    # Kembali ke halaman awal
+    if request.GET.get('json') != None:
+        return JsonResponse({"status" : 200})
     return HttpResponseRedirect(reverse('homepage:show_main'))
 
 def show_xml(request):
@@ -83,3 +84,57 @@ def add_menu_ajax(request):
             return JsonResponse({"message": "Menu added successfully!"}, status=200)
         return JsonResponse({"error": form.errors}, status=400)
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+@csrf_exempt
+def get_warungs(request):
+    if request.method == "GET":
+        warungs = Warung.objects.all()
+        data = [
+            {
+                "id": warung.id,
+                "nama": warung.nama,
+            }
+            for warung in warungs
+        ]
+        return JsonResponse({"dropdown_warungs": data}, safe=False)
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+@csrf_exempt
+def add_menu_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        new_menu = Menu.objects.create(
+            warung=data["warung"],
+            menu=data["menu"],
+            harga=int(data["harga"]),
+            gambar=data["gambar"],
+        )
+
+        new_menu.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+@csrf_exempt
+def edit_menu_flutter(request, id):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+
+        # Get the existing menu item
+        menu = Menu.objects.get(pk=id)
+
+        # Update the fields directly on the instance
+        menu.warung = data["warung"]
+        menu.menu = data["menu"]
+        menu.harga = int(data["harga"])
+        menu.gambar = data["gambar"]
+
+        # Save the updated instance
+        menu.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)

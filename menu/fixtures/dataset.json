@@ -289,7 +289,7 @@
   {
     "model": "menu.Menu",
     "pk": 89,
-    "fields": { "warung": "Warung Bunga", "menu": "Aneka Jus", "harga": 10000, "gambar": "https://cdn.idntimes.com/content-images/community/2023/05/screenshot-20230506-132036-instagram-9fbefbd363d8c19160b33f46b0c581f7.jpg" }
+    "fields": { "warung": "Warung Bunga", "menu": "Aneka Jus", "harga": 10000, "gambar": "https://images.tokopedia.net/img/cache/700/product-1/2017/6/12/0/0_aa9bb660-98fa-426e-b5a5-8e2d799359c3_988_657.jpg" }
   },
   { "model": "menu.Menu", "pk": 90, "fields": { "warung": "Warung Bunga", "menu": "Rujak", "harga": 8000, "gambar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3oADc3OblYUo3enLV4D4_eK2TS-EyIcXWuA&s" } },
   { "model": "menu.Menu", "pk": 91, "fields": { "warung": "Warung Bunga", "menu": "Belayag", "harga": 7000, "gambar": "https://cdn.idntimes.com/content-images/community/2022/03/fromandroid-719d358588c683a5c1a541812d7d6281_600x400.jpg" } },
@@ -422,7 +422,7 @@
   {
     "model": "menu.Menu",
     "pk": 123,
-    "fields": { "warung": "Warung Intan", "menu": "Jus", "harga": 10000, "gambar": "https://cdn.idntimes.com/content-images/community/2023/05/screenshot-20230506-132036-instagram-9fbefbd363d8c19160b33f46b0c581f7.jpg" }
+    "fields": { "warung": "Warung Intan", "menu": "Jus", "harga": 10000, "gambar": "https://media-cdn.tripadvisor.com/media/photo-s/03/81/67/95/ikan-bakar-cianjur.jpg" }
   },
   {
     "model": "menu.Menu",
@@ -730,7 +730,7 @@
   { "model": "menu.Menu", "pk": 201, "fields": { "warung": "Warung Widiasari", "menu": "Es Rujak Tibah", "harga": 12000, "gambar": "https://pdbifiles.nos.jkt-1.neo.id/files/2017/08/10/wulan_RujakTibah.jpg" } },
   { "model": "menu.Menu", "pk": 202, "fields": { "warung": "Warung Sukana", "menu": "Nasi Bali", "harga": 19000, "gambar": "https://lh5.googleusercontent.com/p/AF1QipM-QE5dJgmgukLUJigIwbPuMOpNPao9DJ0fMJOs=w143-h143-n-k-no" } },
   { "model": "menu.Menu", "pk": 203, "fields": { "warung": "Warung Sukana", "menu": "Tipat Kuah", "harga": 15000, "gambar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp1XHGJ0vwK5KjHno8i6l47a8xcozlasxhXA&s" } },
-  { "model": "menu.Menu", "pk": 204, "fields": { "warung": "Warung Sukana", "menu": "Bubur Bali", "harga": 10000, "gambar": "https://kurio-img.kurioapps.com/22/03/31/59841638-dc2d-4a31-b477-1aa64dec5323.jpe" } },
+  { "model": "menu.Menu", "pk": 204, "fields": { "warung": "Warung Sukana", "menu": "Bubur Bali", "harga": 10000, "gambar": "https://awsimages.detik.net.id/community/media/visual/2021/01/14/bubur-mengguh-bali-2.jpeg?w=600&q=90" } },
   { "model": "menu.Menu", "pk": 205, "fields": { "warung": "Warung Langon", "menu": "Nasi Ayam Betutu", "harga": 37000, "gambar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv3YKhN_3AU8p9nFc_rqfgnJlppq42f8XLPQ&s" } },
   { "model": "menu.Menu", "pk": 206, "fields": { "warung": "Warung Langon", "menu": "Es Teh", "harga": 5000, "gambar": "https://inakoran.com/uploads/2022/10/27/1666861719-pe88cd7a490b1f47131f19c8e740394ef.jpg" } },
   { "model": "menu.Menu", "pk": 207, "fields": { "warung": "Warung Langon", "menu": "Es Sirup", "harga": 6000, "gambar": "https://www.jagel.id/api/listimage/v/Es-Sirup-0-5025f7694705c703.jpg" } },
@@ -808,7 +808,16 @@
     }
   },
   { "model": "menu.Menu", "pk": 225, "fields": { "warung": "Warung Gula Bali", "menu": "Es Daluman", "harga": 10000, "gambar": "https://kurio-img.kurioapps.com/22/03/31/59841638-dc2d-4a31-b477-1aa64dec5323.jpe" } },
-  { "model": "menu.Menu", "pk": 226, "fields": { "warung": "Warung Gula Bali", "menu": "Bubur Bali", "harga": 10000, "gambar": "https://kurio-img.kurioapps.com/22/03/31/59841638-dc2d-4a31-b477-1aa64dec5323.jpe" } },
+  {
+    "model": "menu.Menu",
+    "pk": 226,
+    "fields": {
+      "warung": "Warung Gula Bali",
+      "menu": "Bubur Bali",
+      "harga": 10000,
+      "gambar": "https://cdn.yummy.co.id/content-images/images/20201104/5mBV8KDEhVVCotoQKGDpz8rKRvNWfNx8-31363034343630343835d41d8cd98f00b204e9800998ecf8427e.jpg?x-oss-process=image/resize,w_600,h_600,m_fixed,image/format,webp"
+    }
+  },
   { "model": "menu.Menu", "pk": 227, "fields": { "warung": "Warung Kamandalu", "menu": "Babi Kukus", "harga": 57000, "gambar": "https://cdn.idntimes.com/content-images/post/20210616/imgp1621-d68c4001fbb52d9eeefe368777dba0a3.jpg" } },
   { "model": "menu.Menu", "pk": 228, "fields": { "warung": "Warung Kamandalu", "menu": "Sop Kikil Babi", "harga": 82000, "gambar": "https://images.tokopedia.net/img/cache/700/VqbcmM/2020/12/6/c34f707a-7462-41c6-8f4e-11e7cf24afda.jpg" } },
   { "model": "menu.Menu", "pk": 229, "fields": { "warung": "Warung Mi BabiDalung", "menu": "Babi Kecap", "harga": 49000, "gambar": "https://images.tokopedia.net/img/cache/700/VqbcmM/2023/1/31/df9edbc2-9db6-4142-9fae-18b218d9f4a3.jpg" } },

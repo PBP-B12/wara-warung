@@ -47,13 +47,14 @@
           <div class="bg-white text-orange-600 font-semibold text-xl py-2 px-6 rounded-full shadow-sm my-5">
             Price: Rp {{ menu.harga }}
           </div>
-          <div class="bg-white text-orange-600 font-semibold text-xl py-2 px-6 rounded-full shadow-sm mt-5">
+          <div class="avg-rating-display bg-white text-orange-600 font-semibold text-xl py-2 px-6 rounded-full shadow-sm mt-5">
             Avg. Rate : {{ avg_rating|floatformat:1 }} / 5.0
           </div>
         </div>
       </div>
 
       <!-- Review submission section -->
+      {% if user.is_authenticated %}
       <div class="w-[90%] max-w-5xl mx-auto mt-8">
         <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-orange-600 mb-4">Submit a review:</h2>
         <div class="flex flex-col items-center rounded-[30px]  shadow-lg bg-orange-200 p-8">
@@ -82,6 +83,7 @@
           </form>
         </div>
       </div>
+      {% endif %}
 
       <!-- All Review Section -->
       <div class="w-[90%] max-w-5xl mx-auto mt-10">
@@ -105,63 +107,65 @@
   {% include 'footer.html' %}
 
   <script>
+    $(document).ready(function () {
+        $('#review-form').submit(function (event) {
+            event.preventDefault();  // Prevent default form submission
 
-$(document).ready(function () {
-    $('#review-form').submit(function (event) {
-        event.preventDefault();  // Prevent default form submission
+            // Capture form data
+            const rating = $('#id_rating').val();
+            const comment = $('#id_comment').val();
+            const csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+            const formAction = $(this).attr('action');
 
-        // Capture form data
-        const rating = $('#id_rating').val();
-        const comment = $('#id_comment').val();
-        const csrfToken = $('[name="csrfmiddlewaretoken"]').val();
-        const formAction = $(this).attr('action');
-
-        // Basic validation
-        if (!rating || !comment) {
-            alert("Please fill in all fields.");
-            return;
-        }
-
-        // AJAX submission
-        $.ajax({
-            url: formAction,
-            type: 'POST',
-            data: {
-                'rating': rating,
-                'comment': comment,
-                'csrfmiddlewaretoken': csrfToken
-            },
-            success: function (response) {
-                $('#reviews-section').append(`
-                  <div class="p-8 bg-white rounded-[36px] shadow-lg w-full">
-                      <h3 class="text-lg sm:text-xl md:text-2xl font-semibold text-orange-600 mb-2">${response.review.user}</h3>
-                      <p class="text-base sm:text-lg font-semibold text-gray-800">Rate: ${response.review.rating}/5</p>
-                      <p class="text-gray-600 text-base mb-4">Published on: ${response.review.created_at}</p>
-                      <p class="text-gray-700 text-base sm:text-lg">${response.review.comment}</p>
-                  </div>
-                `);
-                    
-                $('#id_rating').val('');
-                $('#id_comment').val('');
-                alert("Review submitted successfully!");
-            },
-            error: function (xhr) {
-                if (xhr.status === 400) {
-                    // Show form validation errors from JSON response
-                    const errors = xhr.responseJSON.errors;
-                    let errorMessages = "Error:\n";
-                    for (let field in errors) {
-                        errorMessages += `${field}: ${errors[field].join(", ")}\n`;
-                    }
-                    alert(errorMessages);
-                } else {
-                    alert("An error occurred while submitting the review.");
-                }
+            // Basic validation
+            if (!rating || !comment) {
+                alert("Please fill in all fields.");
+                return;
             }
+
+            // AJAX submission
+            $.ajax({
+                url: formAction,
+                type: 'POST',
+                data: {
+                    'rating': rating,
+                    'comment': comment,
+                    'csrfmiddlewaretoken': csrfToken
+                },
+                success: function (response) {
+                    // Add the new review to the reviews section
+                    $('#reviews-section').append(`
+                      <div class="p-8 bg-white rounded-[36px] shadow-lg w-full">
+                          <h3 class="text-lg sm:text-xl md:text-2xl font-semibold text-orange-600 mb-2">${response.review.user}</h3>
+                          <p class="text-base sm:text-lg font-semibold text-gray-800">Rate: ${response.review.rating}/5</p>
+                          <p class="text-gray-600 text-base mb-4">Published on: ${response.review.created_at}</p>
+                          <p class="text-gray-700 text-base sm:text-lg">${response.review.comment}</p>
+                      </div>
+                    `);
+
+                    // Update the average rating display
+                    $('.avg-rating-display').text(`Avg. Rate : ${response.avg_rating.toFixed(1)} / 5.0`);
+
+                    // Clear form fields and display a success message
+                    $('#id_rating').val('');
+                    $('#id_comment').val('');
+                    alert("Review submitted successfully!");
+                },
+                error: function (xhr) {
+                    if (xhr.status === 400) {
+                        // Show form validation errors from JSON response
+                        const errors = xhr.responseJSON.errors;
+                        let errorMessages = "Error:\n";
+                        for (let field in errors) {
+                            errorMessages += `${field}: ${errors[field].join(", ")}\n`;
+                        }
+                        alert(errorMessages);
+                    } else {
+                        alert("An error occurred while submitting the review.");
+                    }
+                }
+            });
         });
     });
-});
-
-
   </script>
 </html>

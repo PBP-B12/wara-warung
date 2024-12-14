@@ -3,11 +3,15 @@ from django.shortcuts import render
 from menu.models import Menu
 from ratereview.models import Review
 from django.db.models import Avg
+from django.contrib.auth.models import User
 
 def search_menu(request):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.GET.get('json') != None:
+        username = request.user.username  # Accessing the 'username' directly from the User object
+
         query = request.GET.get('query', '')  # Get search query
         budget = request.GET.get('budget', '')  # Get selected budget
+        warung = request.GET.get('warung', '')
         
         # Filter menus by name
         results = Menu.objects.all()
@@ -17,6 +21,9 @@ def search_menu(request):
         # Filter by budget if provided
         if budget:
             results = results.filter(harga__lte=int(budget))
+        
+        if warung:
+            results = results.filter(warung__icontains=warung)
         
         data = []
         for menu in results:
@@ -30,5 +37,5 @@ def search_menu(request):
                 'avg_rating': round(avg_rating, 1)  # One decimal place
             })
         
-        return JsonResponse({'results': data})
+        return JsonResponse({'results': data, 'username': username})
     return render(request, 'search.html')

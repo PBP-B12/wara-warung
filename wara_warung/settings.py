@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ess_9920vk5z1stsyvcsuwooe(lx-6uu#v+i4*cze4n5n!jrya
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "jeremia-rangga-warawarung.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", '10.0.2.2', "jeremia-rangga-warawarung.pbp.cs.ui.ac.id"]
 
 # Application definition
 LOGIN_REDIRECT_URL = '/'
@@ -49,16 +49,20 @@ INSTALLED_APPS = [
     "wishlist",
     "user_dashboard",
     'ratereview',
+    'corsheaders',
+    'authenticationdummy',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'wara_warung.urls'
@@ -136,7 +140,19 @@ if DEBUG:
 else:
     STATIC_ROOT = BASE_DIR / 'static' # merujuk ke /static root project pada mode production
 
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
+
+CSRF_TRUSTED_ORIGINS = ['https://jeremia-rangga-warawarung.pbp.cs.ui.ac.id', "http://127.0.0.1:8000"]

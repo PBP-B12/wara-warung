@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from menuplanning import views
+from .views import get_csrf_token
 
 app_name = 'menuplanning'
 
@@ -14,4 +16,9 @@ urlpatterns = [
     path('api/menus/<str:warung>/', views.get_menus_by_warung, name='get_menus_by_warung'), 
     path('api/load-cart/', views.load_cart, name='load_cart'),
     path('empty_cart/', views.empty_cart, name='empty_cart'),
+    path('carts/json/', views.show_carts_json, name='show_carts_json'),
+    path('cart-items/json/', views.show_cart_items_json, name='show_cart_items_json'),
+    path('chosen-menus/json/', views.show_chosen_menus_json, name='show_chosen_menus_json'),
+    path('api/get-csrf-token/', get_csrf_token, name='get_csrf_token'),
+    path('create-menu-flutter/', views.create_menu_flutter, name='create_menu_flutter'),
 ]

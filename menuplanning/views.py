@@ -9,6 +9,17 @@ from menuplanning.models import Cart, CartItem, ChosenMenu
 from menu.models import Menu
 from warung.models import Warung
 from ratereview.models import Review
+from django.core.serializers import serialize
+from django.http import HttpResponse
+from django.core import serializers
+from menuplanning.models import Cart, CartItem, ChosenMenu
+from django.middleware.csrf import get_token
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from menuplanning.models import ChosenMenu
+from django.contrib.auth.decorators import login_required
+import json
 
 # Helper function to get or create the user's cart
 def get_user_cart(user):
@@ -21,7 +32,7 @@ def get_user_cart(user):
     )
     return cart
 
-@login_required
+@login_required(login_url='/login')
 def show_main(request):
     cart = get_user_cart(request.user)
     cart_items = CartItem.objects.filter(cart=cart).exclude(quantity=0)
@@ -192,3 +203,59 @@ def load_cart(request):
         'updated_cart_html': updated_cart_html,
         'total_price': total_price,
     })
+
+
+def show_carts_json(request):
+    data = ChosenMenu.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_cart_items_json(request):
+    data = ChosenMenu.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_chosen_menus_json(request):
+    data = ChosenMenu.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+
+
+@csrf_exempt  # Remove this if CSRF middleware is configured properly
+def create_menu_flutter(request):
+    if request.method == 'POST':
+        try:
+            # Parse the JSON request body
+            data = json.loads(request.body)
+
+            # Extract data
+            warung = data.get("warung")
+            budget = int(data.get("budget", 0))
+            cart_items = data.get("cart_items", {})
+
+            save_session_id = int(timezone.now().timestamp())
+            # Loop through the cart items and save them to the database
+            for item_name, quantity in cart_items.items():
+                ChosenMenu.objects.create(
+                    user=request.user,  # Use the currently authenticated user
+                    item_name=item_name,
+                    quantity=quantity,
+                    price=budget,  
+                    save_session=save_session_id,
+                    budget=budget,
+                    # user=request.user,
+                    # item_name=item["item_name"],
+                    # quantity=item["quantity"],
+                    # price=item["price"],
+                    # save_session=item["save_session"],
+                    # budget=item["budget"],
+                )
+
+            return JsonResponse({"status": "success"}, status=200)
+        except Exception as e:
+            print(f"Error: {e}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid request method"}, status=405)
+
+
+def get_csrf_token(request):
+    return JsonResponse({'csrfToken': get_token(request)})
