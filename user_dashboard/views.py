@@ -61,18 +61,28 @@ def delete_account(request):
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
 
+
+def get_user_dashboard_data(request):
+    user_entry, created = UserEntry.objects.get_or_create(user=request.user)
+    
+    user_data = {
+        'username': request.user.username,
+        'email': request.user.email,
+        'phone_number': user_entry.phone_number if user_entry.phone_number else '',
+        'address': user_entry.address if user_entry.address else '',
+        'date_of_birth': user_entry.date_of_birth if user_entry.date_of_birth else '',
+    }
+
+    return JsonResponse(user_data, status=200, safe=False)
+
 @csrf_exempt
 def update_user_flutter(request):
     if request.method == 'POST':
         try:
-            # Parse JSON from request body
             data = json.loads(request.body)
-
-            # Get the authenticated user
             user = request.user
             user_entry, _ = UserEntry.objects.get_or_create(user=user)
 
-            # Update fields
             user.email = data.get('email', user.email)
             user.save()
 

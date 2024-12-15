@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-ess_9920vk5z1stsyvcsuwooe(lx-6uu#v+i4*cze4n5n!jrya
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", '10.0.2.2', "jeremia-rangga-warawarung.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", '10.0.2.2', "jeremia-rangga-warawarung.pbp.cs.ui.ac.id", "localhost"]
 
 
 # Application definition
@@ -154,4 +154,18 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
 
-CSRF_TRUSTED_ORIGINS = ['https://jeremia-rangga-warawarung.pbp.cs.ui.ac.id', "http://127.0.0.1:8000"]
+CSRF_TRUSTED_ORIGINS = ['https://jeremia-rangga-warawarung.pbp.cs.ui.ac.id', "http://127.0.0.1:8000", "http://10.0.2.2:8000", "http://localhost"]
+
+CSRF_TRUSTED_ORIGINS_REGEXES = ['https://jeremia-rangga-warawarung.pbp.cs.ui.ac.id', "http://127.0.0.1:8000", "http://10.0.2.2:8000", "http://localhost"]
+
+CORS_ALLOW_HEADERS = [
+'accept',
+'accept-encoding',
+'authorization',
+'content-type',
+'dnt',
+'origin',
+'user-agent',
+'x-csrftoken',
+'x-requested-with',
+]
