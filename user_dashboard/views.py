@@ -49,7 +49,7 @@ def edit_user(request, id):
     context = {'form': form, 'user_entry': user_entry}
     return render(request, "edit_user.html", context)
 
-
+@csrf_exempt
 @login_required(login_url='/login/')
 def delete_account(request):
     if request.method == "POST" and request.user.is_authenticated:
