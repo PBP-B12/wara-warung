@@ -223,59 +223,19 @@ def show_chosen_menus_json(request):
     data = ChosenMenu.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-
-
-# @csrf_exempt  # Remove this if CSRF middleware is configured properly
-# def create_menu_flutter(request):
-#     if request.method == 'POST':
-#         try:
-#             # Parse the JSON request body
-#             data = json.loads(request.body)
-
-#             # Extract data
-#             warung = data.get("warung")
-#             budget = int(data.get("budget", 0))
-#             cart_items = data.get("cart_items", {})
-
-#             save_session_id = int(timezone.now().timestamp())
-#             # Loop through the cart items and save them to the database
-#             for item_name, quantity in cart_items.items():
-#                 ChosenMenu.objects.create(
-#                     user=request.user,  # Use the currently authenticated user
-#                     item_name=item_name,
-#                     quantity=quantity,
-#                     price=budget,  
-#                     save_session=save_session_id,
-#                     budget=budget,
-#                     # user=request.user,
-#                     # item_name=item["item_name"],
-#                     # quantity=item["quantity"],
-#                     # price=item["price"],
-#                     # save_session=item["save_session"],
-#                     # budget=item["budget"],
-#                 )
-
-#             return JsonResponse({"status": "success"}, status=200)
-#         except Exception as e:
-#             print(f"Error: {e}")
-#             return JsonResponse({"status": "error", "message": str(e)}, status=400)
-#     else:
-#         return JsonResponse({"status": "error", "message": "Invalid request method"}, status=405)
 @login_required
 @csrf_exempt
 def create_menu_flutter(request):
     if request.method == 'POST':
         try:
-            # Parse JSON body into Python list
             data = json.loads(request.body)
             if not isinstance(data, list):
                 return JsonResponse({"status": "error", "message": "Invalid JSON format, expected a list."}, status=400)
 
-            # Loop through the list of items
             for item in data:
                 fields = item.get("fields", {})
                 ChosenMenu.objects.create(
-                    user=request.user,  # Replace with actual user object
+                    user=request.user,  
                     item_name=fields.get("item_name"),
                     quantity=fields.get("quantity"),
                     price=fields.get("price"),
