@@ -7,10 +7,6 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
     <title>Home Page</title>
 
     <!-- Import Poppins font from Google Fonts -->
@@ -35,8 +31,7 @@
     </style>
   </head>
   <body class="relative overflow-x-hidden">
-    {% include 'modal.html' %}
-    <nav class="absolute z-40">{% include 'navbar.html' %}</nav>
+    <nav class="absolute z-50">{% include 'navbar.html' %}</nav>
 
     <!-- Main Content -->
     <main class="relative w-full h-screen flex items-center justify-between px-4 lg:px-10">
@@ -217,6 +212,8 @@
         </div>
 
         {% endfor %}
+
+        
       </div>
 
       <a

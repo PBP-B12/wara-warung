@@ -9,6 +9,23 @@ from menuplanning.models import Cart, CartItem, ChosenMenu
 from menu.models import Menu
 from warung.models import Warung
 from ratereview.models import Review
+from django.core.serializers import serialize
+from django.http import HttpResponse
+from django.core import serializers
+from menuplanning.models import Cart, CartItem, ChosenMenu
+from django.middleware.csrf import get_token
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from menuplanning.models import ChosenMenu
+from django.contrib.auth.decorators import login_required
+import json
+from django.contrib.auth.models import User  # For user reference
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
 
 # Helper function to get or create the user's cart
 def get_user_cart(user):
@@ -192,3 +209,47 @@ def load_cart(request):
         'updated_cart_html': updated_cart_html,
         'total_price': total_price,
     })
+
+
+def show_carts_json(request):
+    data = ChosenMenu.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_cart_items_json(request):
+    data = ChosenMenu.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_chosen_menus_json(request):
+    data = ChosenMenu.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@login_required
+@csrf_exempt
+def create_menu_flutter(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            if not isinstance(data, list):
+                return JsonResponse({"status": "error", "message": "Invalid JSON format, expected a list."}, status=400)
+
+            for item in data:
+                fields = item.get("fields", {})
+                ChosenMenu.objects.create(
+                    user=request.user,  
+                    item_name=fields.get("item_name"),
+                    quantity=fields.get("quantity"),
+                    price=fields.get("price"),
+                    save_session=fields.get("save_session"),
+                    budget=fields.get("budget"),
+                )
+
+            return JsonResponse({"status": "success"}, status=200)
+        except Exception as e:
+            print(f"Error: {e}")
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid request method"}, status=405)
+
+def get_csrf_token(request):
+    return JsonResponse({'csrfToken': get_token(request)})
+

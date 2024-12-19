@@ -2,24 +2,15 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <meta
-      name="csrf-token"
-      content="{{ csrf_token }}"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token }}">
 
     <title>My Saved Menus</title>
 
     <!-- Import Poppins font from Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -43,7 +34,7 @@
         font-weight: bold;
         margin-top: 1rem;
       }
-
+      
       .menu-plan {
         background-color: #ffffff;
         padding: 1.5rem;
@@ -55,10 +46,8 @@
       .menu-plan h2 {
         color: #333333;
       }
-
-      .budget-label,
-      .menu-item,
-      .menu-total {
+      
+      .budget-label, .menu-item, .menu-total {
         color: #666666;
         font-weight: bold;
       }
@@ -72,7 +61,7 @@
         cursor: pointer;
         transition: background-color 0.3s ease;
       }
-
+      
       .reset-button:hover {
         background-color: #cc1f1a;
       }
@@ -97,7 +86,7 @@
         text-align: center;
       }
     </style>
-  </head>
+</head>
 
   <body>
     {% include 'navbar.html' %}
