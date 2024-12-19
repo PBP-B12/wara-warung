@@ -6,8 +6,11 @@ from .models import Wishlist, Category, Menu
 from .forms import CategoryForm
 from django.http import JsonResponse  # Add this import
 from django.template.loader import render_to_string  # Ensure render_to_string is imported here
-
-
+from django.http import HttpResponse
+from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
+import json
+    
 @login_required
 def wishlist_view(request):
     category_name = request.GET.get('category_name')
@@ -122,3 +125,75 @@ def remove_from_wishlist(request, menu_id):
     
     # Redirect if not an AJAX request
     return redirect('wishlist')
+
+@login_required  # Pastikan hanya pengguna yang login yang dapat mengakses API ini
+def show_json(request):
+    data = []
+    
+    # Filter hanya wishlist yang terkait dengan pengguna yang sedang login
+    wishlists = Wishlist.objects.filter(user=request.user).select_related('user', 'menu').prefetch_related('categories')
+
+    for wishlist in wishlists:
+        data.append({
+            'id': wishlist.id,
+            'user': wishlist.user.username,
+            'menu': {
+                'id': wishlist.menu.id,
+                'name': wishlist.menu.menu,  # Sesuaikan dengan field model Menu
+                'harga': wishlist.menu.harga,
+                'warung' : wishlist.menu.warung,
+                'gambar' : wishlist.menu.gambar,
+            },
+            'categories': [
+                {'id': category.id, 'name': category.name} 
+                for category in wishlist.categories.all()
+            ],
+        })
+    
+    return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def remove_from_wishlist_flutter(request):
+    if request.method == "POST":
+        try:
+            # Parsing JSON request body
+            data = json.loads(request.body)
+            menu_id = data.get("menu_id")
+
+            if not menu_id:
+                return JsonResponse(
+                    {"status": "error", "message": "menu_id is required."},
+                    status=400
+                )
+
+            # Mendapatkan menu item berdasarkan ID
+            menu_item = get_object_or_404(Menu, id=menu_id)
+            wishlist_item = Wishlist.objects.filter(user=request.user, menu=menu_item).first()
+
+            if wishlist_item:
+                wishlist_item.delete()
+                response = {
+                    "status": "success",
+                    "menu_id": menu_id,
+                    "message": f"{menu_item.menu} has been removed from your wishlist."
+                }
+            else:
+                response = {
+                    "status": "error",
+                    "message": "Item not found in wishlist."
+                }
+            
+            return JsonResponse(response, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"status": "error", "message": "Invalid JSON format."},
+                status=400
+            )
+        except Exception as e:
+            return JsonResponse(
+                {"status": "error", "message": f"An error occurred: {str(e)}"},
+                status=500
+            )
+
+    return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)

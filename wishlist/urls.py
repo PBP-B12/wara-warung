@@ -8,4 +8,7 @@ urlpatterns = [
     path('add-category/', views.add_category, name='add_category'),
     path('assign-category/<int:item_id>/', views.assign_category_to_item, name='assign_category_to_item'),
     path('wishlist/remove/<int:menu_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+    path('json/', views.show_json, name='show_json'),
+    path('remove-wishlist/', views.remove_from_wishlist_flutter, name='remove_from_wihslist_flutter'),
+
 ] 
