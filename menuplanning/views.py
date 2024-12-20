@@ -154,9 +154,13 @@ def saved_menu_planning_page(request):
     menu_plans_dict = {}
 
     for menu in chosen_menus:
+        menu_entry = Menu.objects.filter(menu=menu.item_name).first()
+        warung_name = menu_entry.warung
+
         if menu.save_session not in menu_plans_dict:
             menu_plans_dict[menu.save_session] = {
                 'name': f"Menu Planning {menu.save_session}",
+                'warung_name': warung_name,
                 'budget': menu.budget,
                 'items': [],
                 'total_price': 0,
@@ -220,8 +224,29 @@ def show_cart_items_json(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_chosen_menus_json(request):
-    data = ChosenMenu.objects.filter(user=request.user)
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    chosen_menus = ChosenMenu.objects.filter(user=request.user).exclude(quantity=0)
+    result = []
+
+    for chosen_menu in chosen_menus:
+        menu_entry = Menu.objects.filter(menu=chosen_menu.item_name).first()
+        warung_name = menu_entry.warung if menu_entry else "Unknown Warung"
+
+        result.append({
+            "model": "menuplanning.chosenmenu",
+            "pk": chosen_menu.pk,
+            "fields": {
+                "user": chosen_menu.user.id,
+                "item_name": chosen_menu.item_name,
+                "quantity": chosen_menu.quantity,
+                "price": str(chosen_menu.price),
+                "save_session": chosen_menu.save_session,
+                "budget": str(chosen_menu.budget),
+                "warung_name": warung_name  
+            }
+        })
+
+    return JsonResponse(result, safe=False)
+
 
 @login_required
 @csrf_exempt

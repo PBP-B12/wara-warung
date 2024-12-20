@@ -110,6 +110,8 @@
           {% for menu_plan in menu_plans %}
           <div class="menu-plan mx-auto sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl">
             <h2 class="text-2xl font-semibold mb-2">{{ menu_plan.name }}</h2>
+            <p class="text-xl font-semibold"> {{ menu_plan.warung_name }}</p>
+
             <p class="budget-label"><strong>Budget:</strong> Rp{{ menu_plan.budget|floatformat:0|intcomma }}</p>
 
             <h3 class="font-bold mt-3">Menu:</h3>
