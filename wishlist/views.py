@@ -6,8 +6,11 @@ from .models import Wishlist, Category, Menu
 from .forms import CategoryForm
 from django.http import JsonResponse  # Add this import
 from django.template.loader import render_to_string  # Ensure render_to_string is imported here
-
-
+from django.http import HttpResponse
+from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
+import json
+    
 @login_required
 def wishlist_view(request):
     category_name = request.GET.get('category_name')
@@ -79,7 +82,7 @@ def assign_category_to_item(request, item_id):
             # Return JSON response without messages
             response = {
                 'status': 'success',
-                'category_name': category.name  # Send the category name to update the UI
+                'category_name': category.name
             }
             return JsonResponse(response)
         
@@ -122,3 +125,164 @@ def remove_from_wishlist(request, menu_id):
     
     # Redirect if not an AJAX request
     return redirect('wishlist')
+
+# FLUTTER
+
+@login_required  # Pastikan hanya pengguna yang login yang dapat mengakses API ini
+def show_json(request):
+    data = []
+    
+    # Filter hanya wishlist yang terkait dengan pengguna yang sedang login
+    wishlists = Wishlist.objects.filter(user=request.user).select_related('user', 'menu').prefetch_related('categories')
+
+    for wishlist in wishlists:
+        data.append({
+            'id': wishlist.id,
+            'user': wishlist.user.username,
+            'menu': {
+                'id': wishlist.menu.id,
+                'name': wishlist.menu.menu, 
+                'harga': wishlist.menu.harga,
+                'warung' : wishlist.menu.warung,
+                'gambar' : wishlist.menu.gambar,
+            },
+            'categories': [
+                {'id': category.id, 'name': category.name} 
+                for category in wishlist.categories.all()
+            ],
+        })
+    return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def remove_from_wishlist_flutter(request):
+    if request.method == "POST":
+        try:
+            # Parsing JSON request body
+            data = json.loads(request.body)
+            menu_id = int(data['menu_id'])
+
+            if not menu_id:
+                return JsonResponse(
+                    {"status": "error", "message": "menu_id is required."},
+                    status=400
+                )
+
+            # Mendapatkan menu item berdasarkan ID
+            menu_item = get_object_or_404(Menu, id=menu_id)
+            wishlist_item = Wishlist.objects.filter(user=request.user, menu=menu_item).first()
+
+            if wishlist_item:
+                wishlist_item.delete()
+                response = {
+                    "status": "success",
+                    "menu_id": menu_id,
+                    "message": f"{menu_item.menu} has been removed from your wishlist."
+                }
+            else:
+                response = {
+                    "status": "error",
+                    "message": "Item not found in wishlist."
+                }
+            
+            return JsonResponse(response, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"status": "error", "message": "Invalid JSON format."},
+                status=400
+            )
+        except Exception as e:
+            return JsonResponse(
+                {"status": "error", "message": f"An error occurred: {str(e)}"},
+                status=500
+            )
+
+    return JsonResponse({"status": "error", "message": "Invalid request method."}, status=405)
+
+def show_all_categories(request):
+    categories = Category.objects.filter(user=request.user).values('id', 'name')
+    return JsonResponse({'categories': list(categories)})
+
+@csrf_exempt
+def add_category_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        category_name = data['category_name']
+        category, created = Category.objects.get_or_create(
+                name=category_name, user=request.user
+            )
+        if created:
+                return JsonResponse({"status":"success", "message": "New Category Added"}, status=200)
+        else:
+            return JsonResponse({"status":"failed", "message": "New Category Already Exist"}, status=400)
+
+@csrf_exempt
+def show_wishlist_by_category(request):
+    if request.method == 'POST':
+        data_req = json.loads(request.body)
+        user = request.user
+        category_name = data_req['category_name']
+        category =  get_object_or_404(Category, name=category_name, user=user)
+        results = Wishlist.objects.filter(user=user, categories=category)
+
+        data = []
+        for wishlist in results:
+            data.append({
+                'id': wishlist.id,
+                'user': wishlist.user.username,
+                'menu': {
+                    'id': wishlist.menu.id,
+                    'name': wishlist.menu.menu, 
+                    'harga': wishlist.menu.harga,
+                    'warung' : wishlist.menu.warung,
+                    'gambar' : wishlist.menu.gambar,
+                },
+                'categories': [
+                    {'id': category.id, 'name': category.name} 
+                    for category in wishlist.categories.all()
+                ],
+            })
+        return JsonResponse(data, safe=False)
+
+@csrf_exempt   
+def assign_category_to_item_flutter(request):
+    if request.method == 'POST':
+        data_req = json.loads(request.body)
+        user = request.user
+        category_name = data_req['category_name']
+        menu_id = data_req['menu_id']
+        
+        if category_name:
+            menu_item = get_object_or_404(Menu, id=menu_id)
+            wishlist_item = get_object_or_404(Wishlist, menu=menu_item, user=user)
+            category = get_object_or_404(Category, name=category_name, user=user)
+            
+            # Clear existing categories and add the selected category
+            wishlist_item.categories.clear()
+            wishlist_item.categories.add(category)
+
+            # Return JSON response without messages
+            response = {
+                'status': 'success',
+                'category_name': category.name
+            }
+            return JsonResponse(response)
+        
+        # Return JSON error response without messages
+        return JsonResponse({'status': 'error', 'message': 'Please select a category.'})
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=400)
+
+@csrf_exempt
+def add_to_wishlist_flutter(request):
+    if request.method == 'POST':
+        data_req = json.loads(request.body)
+        user = request.user
+        menu_id = data_req['menu_id']
+        menu_item = get_object_or_404(Menu, id=menu_id)
+        print(menu_item)
+        wishlist_item, created = Wishlist.objects.get_or_create(user=user, menu=menu_item)
+        if created:
+            return JsonResponse({"status":"success", "message": "Menu Added to Wishlist"}, status=200)
+        else:
+            return JsonResponse({"status":"failed", "message": "Failed Add Menu to Wishlist"}, status=400)
