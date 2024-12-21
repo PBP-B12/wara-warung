@@ -1,5 +1,5 @@
 from django.urls import path
-from ratereview.views import menu_detail,submit_review, menu_review_json, submit_review_flutter
+from ratereview.views import menu_detail,submit_review, menu_review_json, submit_review_flutter 
 from auth_app.views import login_view
 
 app_name = 'ratereview'
