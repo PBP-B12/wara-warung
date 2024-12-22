@@ -126,14 +126,3 @@ def submit_review_flutter(request):
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
-
-@csrf_exempt
-def avg_rate_flutter(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        menu = get_object_or_404(Menu, id=int(data['id']))
-        reviews = Review.objects.filter(menu=menu)
-        avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
-
-        return JsonResponse({'avg_rating': round(avg_rating, 1)})
-

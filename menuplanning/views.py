@@ -223,6 +223,7 @@ def show_cart_items_json(request):
     data = ChosenMenu.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@csrf_exempt
 def show_chosen_menus_json(request):
     chosen_menus = ChosenMenu.objects.filter(user=request.user).exclude(quantity=0)
     result = []
@@ -245,7 +246,7 @@ def show_chosen_menus_json(request):
             }
         })
 
-    return JsonResponse(result, safe=False)
+    return JsonResponse({"status": 200, "body": result})
 
 @csrf_exempt
 def create_menu_flutter(request):
@@ -276,4 +277,28 @@ def create_menu_flutter(request):
 def get_csrf_token(request):
     return JsonResponse({'csrfToken': get_token(request)})
 
+@csrf_exempt
+def warungs_list_flutter(request):
+    warungs = Warung.objects.all().values('id', 'nama')
+    return JsonResponse({"status": 200, 'body':{'warungs': list(warungs)}})
+
+@csrf_exempt
+def get_menus_by_warung_flutter(request, warung):
+    menus = Menu.objects.filter(warung=warung).values('id', 'menu', 'harga', 'gambar', 'warung')
+    
+    # Add average rating to each menu item
+    menus_with_ratings = []
+    for menu in menus:
+        avg_rating = Review.objects.filter(menu_id=menu['id']).aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
+        menu_with_rating = {
+            'id': menu['id'],
+            'menu': menu['menu'],
+            'harga': menu['harga'],
+            'gambar': menu['gambar'],
+            'warung': menu['warung'],
+            'avg_rating': round(avg_rating, 1)  # Rounding for display
+        }
+        menus_with_ratings.append(menu_with_rating)
+    
+    return JsonResponse({"status":200, "body":{'menus': menus_with_ratings}})
 
